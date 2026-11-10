@@ -4,7 +4,7 @@
     <!-- Critical Dark Frame Initialization (Zero White Flash) -->
     <style id="rg-critical-base">
       html, body {
-        background-color: #06111c !important;
+        background-color: #080d14 !important;
         color: #f5f5f5 !important;
         margin: 0 !important;
         padding: 0 !important;
@@ -56,7 +56,7 @@
       position: fixed;
       inset: 0;
       z-index: 999999;
-      background: radial-gradient(circle at center, #0d2137 0%, #06111c 100%);
+      background: radial-gradient(circle at center, #101a28 0%, #080d14 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -134,13 +134,13 @@
       unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
     }
     :root {
-      --bg-primary: #05101c;
-      --bg-surface: #0b1c2d;
-      --bg-card: rgba(14, 30, 48, 0.75);
-      --accent-main: #dfb35d;
-      --accent-light: #f4d08a;
-      --text-primary: #f0f4f8;
-      --text-secondary: #9cb1c9;
+      --bg-primary: #080d14;
+      --bg-surface: #0e1622;
+      --bg-card: rgba(16, 25, 38, 0.82);
+      --accent-main: #c9a050;
+      --accent-light: #ebd8a6;
+      --text-primary: #fcfbf9;
+      --text-secondary: #a2b2c4;
       --font-serif: 'Cormorant Garamond', Georgia, serif;
       --font-sans: 'Montserrat', system-ui, -apple-system, sans-serif;
       --title-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
@@ -1119,6 +1119,7 @@
     <nav id="main-nav" class="site-nav">
             <div class="nav-container">
                 <a href="/" data-target="#home" data-page="index.html" class="logo" aria-label="RG Chambers - Home">
+                <span class="next-pill">NEXT EDITION</span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 28px; height: 28px; max-width: 28px; fill: none; stroke: #d4af37; color: #d4af37; flex-shrink: 0;" aria-hidden="true">
                     <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
                     <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
@@ -1215,7 +1216,7 @@
                 <!-- Service 1 -->
                 <div class="service-card glass-panel reveal reveal-flip">
                     <div class="accordion-header">
-                        <span class="accordion-title serif">Property Deeds and Agreements &amp; Survey on Due Diligence</span>
+                        <div class="accordion-header-lead"><span class="service-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span><span class="accordion-title serif">Property Deeds and Agreements &amp; Survey on Due Diligence</span></div>
                         <div class="interaction-icon"><span class="arrow-icon">&#9660;</span></div>
                     </div>
                     <div class="accordion-content">
@@ -1233,7 +1234,7 @@
                 <!-- Service 2 -->
                 <div class="service-card glass-panel reveal reveal-flip" style="transition-delay: 0.1s;">
                     <div class="accordion-header">
-                        <span class="accordion-title serif">Company &amp; Commercial</span>
+                        <div class="accordion-header-lead"><span class="service-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span><span class="accordion-title serif">Company &amp; Commercial</span></div>
                         <div class="interaction-icon"><span class="arrow-icon">&#9660;</span></div>
                     </div>
                     <div class="accordion-content">
@@ -1253,7 +1254,7 @@
                 <!-- Service 3 -->
                 <div class="service-card glass-panel reveal reveal-flip" style="transition-delay: 0.2s;">
                     <div class="accordion-header">
-                        <span class="accordion-title serif">Notarial Services</span>
+                        <div class="accordion-header-lead"><span class="service-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span><span class="accordion-title serif">Notarial Services</span></div>
                         <div class="interaction-icon"><span class="arrow-icon">&#9660;</span></div>
                     </div>
                     <div class="accordion-content">
@@ -1273,7 +1274,7 @@
                 <!-- Service 4 -->
                 <div class="service-card glass-panel reveal reveal-flip" style="transition-delay: 0.3s;">
                     <div class="accordion-header">
-                        <span class="accordion-title serif">Criminal &amp; Civil Litigation</span>
+                        <div class="accordion-header-lead"><span class="service-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></span><span class="accordion-title serif">Criminal &amp; Civil Litigation</span></div>
                         <div class="interaction-icon"><span class="arrow-icon">&#9660;</span></div>
                     </div>
                     <div class="accordion-content">
@@ -1293,7 +1294,7 @@
                 <!-- Service 5 -->
                 <div class="service-card glass-panel reveal reveal-flip" style="transition-delay: 0.4s;">
                     <div class="accordion-header">
-                        <span class="accordion-title serif">Labour &amp; Employment</span>
+                        <div class="accordion-header-lead"><span class="service-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="accordion-title serif">Labour &amp; Employment</span></div>
                         <div class="interaction-icon"><span class="arrow-icon">&#9660;</span></div>
                     </div>
                     <div class="accordion-content">
@@ -1311,7 +1312,7 @@
                 <!-- Service 6 -->
                 <div class="service-card glass-panel reveal reveal-flip" style="transition-delay: 0.5s;">
                     <div class="accordion-header">
-                        <span class="accordion-title serif">Foreign Investment Consultancy in Sri Lanka</span>
+                        <div class="accordion-header-lead"><span class="service-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span><span class="accordion-title serif">Foreign Investment Consultancy in Sri Lanka</span></div>
                         <div class="interaction-icon"><span class="arrow-icon">&#9660;</span></div>
                     </div>
                     <div class="accordion-content">
@@ -2090,11 +2091,11 @@
 
             <div class="central-contact-banner glass-panel reveal reveal-scale">
                 <div class="contact-pill">
-                    <span class="contact-icon">&#9993;&#65039;</span>
+                    <span class="contact-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
                     <!--email_off--><a href="mailto:ramyachandra&#64;sltnet&#46;lk" class="protected-email" data-user="ramyachandra" data-domain="sltnet.lk">ramyachandra&#64;sltnet&#46;lk</a><!--/email_off-->
                 </div>
                 <div class="contact-pill">
-                    <span class="contact-icon">&#128241;</span>
+                    <span class="contact-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span>
                     <a href="tel:+94714236429">071 4236429</a>
                     <span class="whatsapp-badge">
                         <svg viewBox="0 0 24 24"><path d="M12.031 0C5.383 0 0 5.383 0 12.031c0 2.128.552 4.195 1.6 6.009L.416 22.188l4.28-1.121a11.968 11.968 0 005.735 1.455c6.647 0 12.03-5.383 12.03-12.031S18.678 0 12.031 0zm0 20.485c-1.802 0-3.568-.484-5.116-1.401l-.367-.218-3.181.834.848-3.1-2.4-.383a9.98 9.98 0 01-1.528-5.286c0-5.513 4.49-10.003 10.003-10.003 5.514 0 10.003 4.49 10.003 10.003s-4.489 10.003-10.003 10.003zm5.498-7.518c-.302-.151-1.785-.882-2.062-.983-.277-.101-.479-.151-.68.151-.201.302-.78 1.007-.957 1.209-.176.201-.353.226-.655.075-.302-.151-1.275-.47-2.428-1.5-.898-.802-1.503-1.794-1.68-2.096-.176-.302-.019-.465.132-.616.136-.136.302-.353.453-.529.151-.176.201-.302.302-.504.101-.201.05-.378-.025-.529-.075-.151-.68-1.637-.932-2.242-.244-.59-.493-.51-.68-.52-.176-.01-.378-.01-.58-.01-.201 0-.529.076-.806.378-.277.302-1.058 1.033-1.058 2.518 0 1.486 1.083 2.922 1.234 3.123.151.201 2.128 3.25 5.156 4.557.719.31 1.28.495 1.718.634.721.23 1.378.197 1.895.12.578-.087 1.785-.729 2.037-1.434.252-.705.252-1.31.176-1.434-.075-.124-.277-.2-.579-.351z"/></svg>
@@ -2113,13 +2114,13 @@
                         <a href="https://www.google.com/search?q=ramyachandra+gunasekera" target="_blank" rel="noopener noreferrer" aria-label="4.6 · 22 Google reviews for Matara Fort Office">4.6 &middot; 22 Google reviews</a>
                     </div>
                     <div class="office-detail">
-                        &#128205; <span>No. 33, Sri Dharmarama Mawatha, Fort (Court Road), Matara 81000<br>Plus code: WGVW+J3</span>
+                        <span class="office-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span> <span>No. 33, Sri Dharmarama Mawatha, Fort (Court Road), Matara 81000<br>Plus code: WGVW+J3</span>
                     </div>
                     <div class="office-detail">
-                        &#128222; <a href="tel:+94412239429">+94 41 22 39 429</a>
+                        <span class="office-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span> <a href="tel:+94412239429">+94 41 22 39 429</a>
                     </div>
                     <div class="office-detail">
-                        &#128338; <span>Monday to Friday, 8.00 a.m. to 5.00 p.m.</span>
+                        <span class="office-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span> <span>Monday to Friday, 8.00 a.m. to 5.00 p.m.</span>
                     </div>
                     
                     <div class="fort-gallery">
@@ -2147,16 +2148,16 @@
                         <a href="https://maps.google.com/maps?cid=16869560020899983859" target="_blank" rel="noopener noreferrer" aria-label="5.0 · 15 Google reviews for Kamburugamuwa Branch Office">5.0 &middot; 15 Google reviews</a>
                     </div>
                     <div class="office-detail">
-                        &#128205; <span>Labima Road, Kamburugamuwa, Southern Province<br>Plus code: XF8W+RPQ</span>
+                        <span class="office-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span> <span>Labima Road, Kamburugamuwa, Southern Province<br>Plus code: XF8W+RPQ</span>
                     </div>
                     <div class="office-detail">
-                        &#128222; <a href="tel:+94412239429">+94 41 22 39 429</a>
+                        <span class="office-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span> <a href="tel:+94412239429">+94 41 22 39 429</a>
                     </div>
                     <div class="office-detail">
-                        &#128338; <span>Monday to Friday, 8.00 a.m. to 5.00 p.m.</span>
+                        <span class="office-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span> <span>Monday to Friday, 8.00 a.m. to 5.00 p.m.</span>
                     </div>
                     <div class="office-detail">
-                        &#127754; <span>Convenient for Mirissa, Weligama &amp; the coastal belt</span>
+                        <span class="office-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/><path d="M2 17c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg></span> <span>Convenient for Mirissa, Weligama &amp; the coastal belt</span>
                     </div>
                     
                     <div class="kotavila-gallery">
