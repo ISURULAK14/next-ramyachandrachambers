@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en" translate="yes" data-theme="dark">
+<head>
+    <!-- Critical Dark Frame Initialization (Zero White Flash) -->
+    <style id="rg-critical-base">
+      html, body {
+        background-color: #06111c !important;
+        color: #f5f5f5 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: hidden !important;
+      }
+    </style>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
+    <!-- Preconnect to critical domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="preload" href="css/style.min.css?v=9.9.5" as="style">
+    <link rel="preload" href="https://fonts.gstatic.com/s/cormorantgaramond/v21/co3bmX5slCNuHLi8bLeY9MK7whWMhyjYqXtKky2F7g.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://fonts.gstatic.com/s/montserrat/v31/JTUSjIg1_i6t8kCHKm459WlhyyTh89Y.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="css/style.min.css?v=9.9.5">
+
+    <!-- Optimized Non-Blocking Google Fonts with display=swap -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'" crossorigin>
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap">
+    </noscript>
+
+          <!-- Optimized Non-Blocking Google Analytics (Zero TBT Penalty) -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-C0KRJZFKLM');
+    function loadGtag() {
+      if (window.__gtagLoaded) return;
+      window.__gtagLoaded = true;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-C0KRJZFKLM';
+      document.head.appendChild(s);
+    }
+    if ('requestIdleCallback' in window) {
+      window.addEventListener('load', function() { requestIdleCallback(loadGtag, { timeout: 10000 }); });
+    } else {
+      window.addEventListener('load', function() { setTimeout(loadGtag, 1500); });
+    }
+    ['pointerdown', 'pointermove', 'scroll', 'touchstart', 'keydown'].forEach(function(ev) {
+      window.addEventListener(ev, loadGtag, { once: true, passive: true });
+    });
+  </script>
+
+    <meta name="author" content="Ramyachandra Gunasekera Chambers">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="language" content="en">
+    <meta name="revisit-after" content="7 days">
+    <meta name="theme-color" content="#0b1720">
+    <meta name="application-name" content="Ramyachandra Gunasekera Chambers">
+    <meta name="apple-mobile-web-app-title" content="RG Chambers">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <!-- Geographic & Local Business Meta Tags (GEO / Local SEO) -->
+    <meta name="geo.region" content="LK-31">
+    <meta name="geo.placename" content="Matara, Southern Province, Sri Lanka">
+    <meta name="geo.position" content="5.9449;80.5438">
+    <meta name="ICBM" content="5.9449, 80.5438">
+    <meta property="business:contact_data:street_address" content="No. 33, Sri Dharmarama Mawatha, Fort">
+    <meta property="business:contact_data:locality" content="Matara">
+    <meta property="business:contact_data:region" content="Southern Province">
+    <meta property="business:contact_data:postal_code" content="81000">
+    <meta property="business:contact_data:country_name" content="Sri Lanka">
+    <meta property="business:contact_data:email" content="ramyachandra@sltnet.lk">
+    <meta property="business:contact_data:phone_number" content="+94412239429">
+    <meta property="business:contact_data:website" content="https://ramyachandrachambers.com/">
+    <meta property="place:location:latitude" content="5.9449">
+    <meta property="place:location:longitude" content="80.5438">
+    <meta name="coverage" content="Worldwide (35+ Sovereign Jurisdictions: USA, UK, Australia, Europe, East Asia, Middle East, Africa)">
+    <meta name="distribution" content="Global">
+    <meta name="target_country" content="LK, US, GB, AU, CA, NZ, DE, FR, IT, CH, NL, BE, AT, SE, NO, DK, IE, PT, GR, MT, RO, SK, LU, LV, JP, KR, CN, SG, MY, IN, BD, MV, AE, IL, ML, TZ">
+    <meta name="target" content="all">
+    <meta name="audience" content="Non-Resident Sri Lankans, Expatriates, Foreign Direct Investors, International Diaspora, Global Enterprises across 35+ Countries">
+    <meta name="rating" content="General">
+    <meta name="classification" content="Legal Services, Law Firm, Attorneys, Notaries, Corporate Governance">
+    <meta name="category" content="Legal Services">
+    <!-- OpenRTB & IAB Content Taxonomy 3.1 Categorization -->
+    <meta name="openrtb:cat" content="383">
+    <meta name="openrtb:cattax" content="9">
+    <meta name="iab:category" content="383">
+    <meta name="iab:tax" content="IAB Tech Lab Content Taxonomy 3.1">
+    <meta name="subject" content="Legal, Notarial, Corporate &amp; Litigation Services in Sri Lanka">
+    <meta name="topic" content="Lawyers in Sri Lanka, Court Cases, Property Deeds, Company Registration">
+
+    <!-- Dublin Core Metadata (International Legal & Institutional Discovery) -->
+    <meta name="DC.title" content="Legal FAQs &amp; Consultation | Ramyachandra Chambers">
+    <meta name="DC.creator" content="Ramyachandra Gunasekera">
+    <meta name="DC.subject" content="Sri Lanka Law, Best Lawyer in Matara, Top Attorney-at-Law, Deed Lawyer, Oppu Nithigna (ඔප්පු නීතිඥ), Court Cases (උසාවි නඩු), Civil & Criminal Litigation, Land Partition Actions (බෙදුම් නඩු), Urgent Bail Applications, 30-Year Land Registry Title Investigation, Notary Public, Registered Company Secretary, DRC e-ROC Company Incorporation, Beneficial Ownership BO Registration, Inland Revenue TIN Registration, Non-Resident Power of Attorney Legalization, Foreign Investment Consultancy, Cross-Border Diaspora Legal Practice">
+    <meta name="DC.description" content="Frequently asked questions regarding deed drafting, court cases, notarial attestations, company registrations, and legal fees at Ramyachandra Gunasekera Chambers in Matara.">
+    <meta name="DC.publisher" content="Ramyachandra Gunasekera Chambers">
+    <meta name="DC.type" content="FAQPage">
+    <meta name="DC.format" content="text/html">
+    <meta name="DC.identifier" content="https://ramyachandrachambers.com/faq.html">
+    <meta name="DC.language" content="en">
+    <meta name="DC.coverage" content="Democratic Socialist Republic of Sri Lanka, Worldwide Cross-Border Legal Practice">
+    <meta name="DC.rights" content="Copyright &copy; Ramyachandra Gunasekera Chambers. All rights reserved.">
+    <meta name="DCTERMS.audience" content="Global Sri Lankan Diaspora, International Real Estate Investors, Expatriates, Multinational Corporations, Overseas Heirs">
+
+    <!-- Legal Jurisdictional & Regulatory Authority Metadata -->
+    <meta name="jurisdiction" content="Democratic Socialist Republic of Sri Lanka">
+    <meta name="legal:jurisdiction" content="Supreme Court of Sri Lanka, Court of Appeal, Civil Appellate High Court, Provincial High Court, District Courts, Magistrates Courts, Land Registries, Department of Registrar of Companies (DRC)">
+    <meta name="legal:service_area" content="Sri Lanka Nationwide &amp; Global Cross-Border Clients (United Kingdom, Australia, United States, Canada, New Zealand, European Union, UAE, Singapore)">
+    <meta name="legal:practice_areas" content="All Deeds and Agreements, Deed Lawyer (Oppu / ඔප්පු), Civil & Criminal Court Cases (උසාවි නඩු), District Court & Kotavila Magistrate Court Trial Advocacy, 30-Year Land Registry Title Searches, Survey on Due Diligence, Partition Law Act No 21 of 1977, Urgent Bail Applications & High Court Revisions, Non-Resident Power of Attorney Legalization, Foreign Investment Consultancy, Company Registration & Registered Company Secretary (DRC), Beneficial Ownership Compliance, Testamentary Probate & Last Wills, Family & Divorce Law, Commercial Litigation">
+    <meta name="legal:bar_admission" content="Bar Association of Sri Lanka (BASL), Supreme Court of Sri Lanka, Matara Bar Association">
+    <meta name="legal:notary_warrant" content="Warrant of Notary Public (English &amp; Sinhala), Ministry of Justice Sri Lanka">
+    <meta name="legal:company_secretary" content="Registered Company Secretary, Department of Registrar of Companies (DRC) Sri Lanka">
+    <meta name="color-scheme" content="dark">
+    <meta name="format-detection" content="telephone=yes">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+
+        <!-- Standard Favicons & Web App Manifest -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/svg+xml" sizes="any" href="searchlogo.svg">
+    <link rel="manifest" href="manifest.json">
+    <title>Legal FAQs & Consultation | Ramyachandra Chambers</title>
+    <meta name="title" content="Legal FAQs & Consultation | Ramyachandra Chambers">
+    <meta name="description" content="Frequently asked questions regarding deed drafting, court cases, notarial attestations, company registrations, and legal fees at Ramyachandra Gunasekera Chambers in Matara.">
+    <meta name="keywords" content="lowyer, loyer, loyar, nithiya, neethiya, nithiya sri lanka, matara nithiya, nithignaya, nithigna matara, matara loyer, matara lowyer, loyer contact number, lowyer contact number, loyer matara, lowyer matara, neethignaya, honda nithignayek matara, usaviya, usavi nadu, matara usaviya, kotavila usaviya, oppu liyana than matara, best lawyer, best lawyer in matara, top lawyer matara, best lawyer in Sri Lanka, senior lawyer matara, leading lawyer southern province, best court lawyer matara, best deed lawyer matara, deed lawyer, deed lawyer matara, property deed lawyer, land deed lawyer, title deed lawyer Sri Lanka, oppu, oppu lawyer, oppu nithigna, oppu liyana nithigna, oppu liyana than matara, idam oppu, bedum nadu lawyer, court case, court cases matara, court case lawyer, civil court case, criminal court case, bail lawyer matara, urgent bail kotavila court, kotavila court lawyer, kotavila magistrate court, matara district court case, partition case lawyer, land dispute lawyer, usawi nadu, honda nithigna matara, හොඳම නීතිඥ, මාතර හොඳම නීතිඥ, මාතර නීතිඥවරු, ඔප්පු ලියන නීතිඥ, ඔප්පු නීතිඥ, ඔප්පු නොතාරිස්, උසාවි නඩු, ඉඩම් නඩු, බෙදුම් නඩු, ඇප නීතිඥ, දික්කසාද නීතිඥ, අන්තිම කැමති පත්‍ර, ඇටෝර්නි බලපත්‍ර, සමාගම් ලියාපදිංචිය, සමාගම් ලේකම්, nithigna matara, matara nithigna, oppu nithigna matara, usawi nadu matara, top law firm matara, best law firm southern province, legal counsel matara, notary public matara, deed transfer lawyer, conveyancing lawyer matara, gift deed lawyer, lease deed lawyer, company lawyer, company secretary, registered company secretary, company registration sri lanka, DRC company secretary, beneficial ownership BO registration, inland revenue TIN registration, civil lawyer matara, criminal lawyer matara, divorce lawyer sri lanka, family lawyer, testamentary lawyer, last will drafting, power of attorney lawyer, attorney at law matara, kotavila court lawyer, kamburugamuwa lawyer, mirissa lawyer, weligama lawyer, dikwella lawyer, tangalle lawyer, galle lawyer, hambantota lawyer, southern province lawyer, expat lawyer sri lanka, foreign investor lawyer sri lanka, lawyer phone number matara, lawyer whatsapp matara, top rated lawyer, law firm sri lanka, Ramyachandra Gunasekera Chambers, RG Chambers, Sri Lanka lawyer for overseas clients, Sri Lanka property lawyer for foreign investors, Power of Attorney Sri Lanka from USA UK Australia Canada, non-resident property deeds Sri Lanka, Sri Lanka deed verification for expatriates, Sri Lanka land partition lawyer for overseas diaspora, Company incorporation Sri Lanka for foreign direct investors, BOI company registration Sri Lanka, Sri Lanka notary public consular legalization, all deeds and agreements Sri Lanka, survey on due diligence Sri Lanka, foreign investment consultancy Sri Lanka, Sri Lanka cross border property conveyancing, Sri Lanka power of attorney registration Registrar General Department, Sri Lanka non-resident testamentary administration, Sri Lanka foreign exchange act compliance real estate, Sri Lanka land registry 30 year title search for overseas buyers, divorce cases, divorce lawyer matara, divorce court case sri lanka, child custody disputes, maintenance lawsuit matara, matrimonial property settlement, land cases, land dispute lawyer matara, partition case lawyer, declaration of title lawsuit, prescription land dispute, ejectment action, boundary dispute matara, co-ownership partition suit, magistrate court, magistrate court matara, kotavila magistrate court, kotavila court lawyer, urgent bail applications matara, criminal defense magistrate court, motor traffic cases, district court, district court matara, civil court lawyer matara, money recovery action, injunction applications matara, testamentary probate administration, high court, high court matara, civil appellate high court matara, provincial high court southern province, criminal high court trials, gift deeds, deed of gift sri lanka, deed of gift lawyer, transfer deeds, deed of transfer matara, property conveyancing deeds, power of attorney, general power of attorney POA, special power of attorney, overseas power of attorney attestation, Registrar General power of attorney registration, lease agreement lawyer, mortgage bond drafting, rectification deeds, Bim Saviya title registration, දික්කසාද නඩු, දික්කසාද නීතිඥ මාතර, විවාහ විසුරුවා හැරීමේ නඩු, නඩත්තු නඩු, ළමා භාරකාරත්වය, ඉඩම් නඩු, බෙදුම් නඩු මාතර, අයිතිය ප්‍රකාශ කිරීමේ නඩු, කාලාවරෝධය මත ඉඩම් ආරවුල්, ඉඩම් ආරවුල් නිරාකරණය, මායිම් ආරවුල්, මහේස්ත්‍රාත් අධිකරණය, කොටවිල මහේස්ත්‍රාත් අධිකරණය, හදිසි ඇප අයදුම්පත් මාතර, පොලිස් නඩු, දිසා අධිකරණය, මාතර දිසා අධිකරණය, අතුරු තහනම් නියෝග, ණය අයකර ගැනීමේ නඩු, බූදල් නඩු, අන්තිම කැමති පත්‍ර ඔප්පු කිරීම්, මහාධිකරණය, මාතර මහාධිකරණය, සිවිල් අභියාචනා මහාධිකරණය, පළාත්බද මහාධිකරණය, දීමනා ඔප්පු, දීමනා ඔප්පු ලිවීම මාතර, පැවරුම් ඔප්පු, විකුණුම් ඔප්පු, දේපල පැවරීම්, ඇටෝර්නි බලපත්‍ර, පොදු ඇටෝර්නි බලපත්‍ර, විශේෂ ඇටෝර්නි බලපත්‍ර, විදේශගත ශ්‍රී ලාංකික ඇටෝර්නි බලපත්‍ර ලියාපදිංචිය, බදු ගිවිසුම්, උකස් ඔප්පු, ප්‍රකාශන ඔප්පු, සංශෝධන ඔප්පු, dikkasada nadu, idam nadu, bedum nadu, mahesthrath usaviya, kotavila court, disa usaviya matara, mahadhikaranaya, deemana oppu, pawarun oppu, attorney balapathra">
+    <meta name="legal:cases" content="Divorce cases, Marriage dissolution, Child custody, Alimony and maintenance, Matrimonial disputes, Land cases, Partition cases, Declaration of title, Prescription land disputes, Ejectment, Boundary disputes, Co-ownership disputes, Commercial disputes, Money recovery, Testamentary probate, Urgent bail applications, Criminal defense">
+    <meta name="legal:cases_si" content="දික්කසාද නඩු, විවාහ විසුරුවා හැරීම්, ළමා භාරකාරත්වය, නඩත්තු නඩු, වන්දි නඩු, ඉඩම් නඩු, බෙදුම් නඩු, අයිතිය ප්‍රකාශ කිරීමේ නඩු, කාලාවරෝධය මත ඉඩම් ආරවුල්, ඉඩම් ආරවුල් නිරාකරණය, බූදල් නඩු, අන්තිම කැමති පත්‍ර ඔප්පු කිරීම්, හදිසි ඇප අයදුම්පත්, අපරාධ නඩු, සිවිල් නඩු">
+    <meta name="legal:courts" content="Magistrate Court, Magistrate Court Matara, Kotavila Magistrate Court, District Court, District Court Matara, Civil Appellate High Court, Provincial High Court Southern Province, High Court Matara, Court of Appeal Sri Lanka, Supreme Court of Sri Lanka">
+    <meta name="legal:courts_si" content="මහේස්ත්‍රාත් අධිකරණය, කොටවිල මහේස්ත්‍රාත් අධිකරණය මාතර, දිසා අධිකරණය, මාතර දිසා අධිකරණය, මහාධිකරණය, මාතර මහාධිකරණය, සිවිල් අභියාචනා මහාධිකරණය, පළාත්බද මහාධිකරණය, අභියාචනාධිකරණය, ශ්‍රේෂ්ඨාධිකරණය">
+    <meta name="legal:deeds" content="Gift deeds, Deed of Gift, Transfer deeds, Deed of Transfer, Property conveyancing, Power of Attorney, General Power of Attorney, Special Power of Attorney, Overseas Power of Attorney, Lease agreements, Mortgage bonds, Declaration deeds, Partition deeds, Rectification deeds, Last Will and Testament, Trust deeds, 30-year Land Registry title searches, Survey on due diligence">
+    <meta name="legal:deeds_si" content="දීමනා ඔප්පු, දීමනාකර, පැවරුම් ඔප්පු, විකුණුම් ඔප්පු, දේපල පැවරීම්, ඇටෝර්නි බලපත්‍ර, පොදු ඇටෝර්නි බලපත්‍ර, විශේෂ ඇටෝර්නි බලපත්‍ර, විදේශගත ශ්‍රී ලාංකික ඇටෝර්නි බලපත්‍ර ලියාපදිංචිය, බදු ගිවිසුම්, උකස් ඔප්පු, ප්‍රකාශන ඔප්පු, බෙදුම් ඔප්පු, සංශෝධන ඔප්පු, අන්තිම කැමති පත්‍ර, භාර ඔප්පු, අවුරුදු 30 පත්තිරු පරීක්ෂාව, ඔප්පු නොතාරිස් සේවා">
+    <link rel="canonical" href="https://ramyachandrachambers.com/faq.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ramyachandrachambers.com/faq.html">
+    <meta property="og:title" content="Legal FAQs & Consultation | Ramyachandra Chambers">
+    <meta property="og:description" content="Frequently asked questions regarding deed drafting, court cases, notarial attestations, company registrations, and legal fees at Ramyachandra Gunasekera Chambers in Matara.">
+    <meta property="og:image" content="https://ramyachandrachambers.com/photo.gif">
+    <meta property="og:site_name" content="Ramyachandra Gunasekera Chambers">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://ramyachandrachambers.com/faq.html">
+    <meta name="twitter:title" content="Legal FAQs & Consultation | Ramyachandra Chambers">
+    <meta name="twitter:description" content="Frequently asked questions regarding deed drafting, court cases, notarial attestations, company registrations, and legal fees at Ramyachandra Gunasekera Chambers in Matara.">
+    <meta name="twitter:image" content="https://ramyachandrachambers.com/photo.gif">
+
+    <!-- Structured Data JSON-LD -->
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "LegalService",
+      "@id": "https://ramyachandrachambers.com/#organization",
+      "name": "Ramyachandra Gunasekera Chambers",
+      "url": "https://ramyachandrachambers.com/",
+      "logo": "https://ramyachandrachambers.com/searchlogo.svg",
+      "image": "https://ramyachandrachambers.com/photo.gif",
+      "description": "Premier legal counsel, court litigation, notarial conveyancing, and company secretarial practice in Sri Lanka.",
+      "telephone": "+94412239429",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "No. 33, Sri Dharmarama Mawatha, Fort (Court Road)",
+        "addressLocality": "Matara",
+        "postalCode": "81000",
+        "addressRegion": "Southern Province",
+        "addressCountry": "LK"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://ramyachandrachambers.com/faq.html#faqpage",
+      "url": "https://ramyachandrachambers.com/faq.html",
+      "name": "Frequently Asked Questions | Ramyachandra Gunasekera Chambers",
+      "description": "Authoritative answers to common legal questions on property deeds, land partition, corporate incorporation, court litigation, and non-resident powers of attorney in Sri Lanka.",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How can I register a property deed in Matara and the Southern Province?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "To register a property deed in Matara, a meticulous title search spanning at least 30 years must first be conducted at the Matara Land Registry to verify unencumbered ownership and detect prior mortgages, caveats, or lis pendens. Following execution before a licensed Notary Public and two attesting witnesses, the original deed, stamp duty assessment, duplicate copies, and Land Registry applications are submitted to the Matara Land Registry Office for formal entry into the land folios."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the legal process for a land partition action in the Southern Province?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A partition action is instituted under the Partition Law in the relevant District Court (such as Matara) when co-owners of an undivided land cannot achieve an amicable division. The plaintiff files a plaint establishing the unbroken devolution of title from the original common owner. The court issues summons, orders a preliminary survey by a court-appointed licensed surveyor, adjudicates contesting title claims, enters an interlocutory decree declaring shares, and subsequently decrees a physical partition or a partition sale by public auction."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I incorporate a private limited company in Sri Lanka?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Company incorporation is governed by the Companies Act No. 7 of 2007 through the Registrar of Companies (eROC). The process begins with online name reservation approval, followed by drafting the Articles of Association and executing statutory Form 1 (Company Registration), Form 18 (Consent and Certificate of Director), and Form 19 (Consent and Certificate of Secretary). As Registered Company Secretaries, our chambers manages the submission, DRC filings, and issuance of the Certificate of Incorporation."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What documents are required for an overseas Power of Attorney for Sri Lankan assets?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A non-resident client or expatriate executing a Power of Attorney (POA) outside Sri Lanka must execute the document before a Sri Lankan Consular or Diplomatic Officer, or before a licensed Notary Public followed by consular legalization or apostille certification. Once received in Sri Lanka, the POA must be submitted to the Registrar General's Department in Colombo for adjudication of stamp duty and registration within statutory time limits before it can be legally utilized for deed attestation or court proceedings."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the steps to institute a civil or land litigation case in Matara District Court?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Civil litigation is initiated by filing a formal plaint accompanied by a proxy appointing an Attorney-at-Law in the District Court of Matara. The plaint outlines the cause of action\u2014such as declaration of title, ejectment of trespassers, recovery of possession, or contractual breach. The court issues summons to the defendants, who then file their answer. The proceeding progresses through trial, documentary evidence tender, witness examination, and final judgment."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is a 30-year title investigation conducted for Southern Province real estate?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A 30-year title search involves examining the registers and bound volumes at the relevant Land Registry (such as Matara, Galle, or Hambantota). The investigation traces the unbroken pedigree of ownership across all prior transfers, gifts, partitions, and encumbrances (such as mortgages, caveats, or pending partition lis pendens). A comprehensive Title Report & Opinion is prepared by the attorney to certify marketable title prior to any land purchase or commercial development."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is foreign investment structured for businesses and properties in Sri Lanka?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Foreign direct investment is structured through the Board of Investment (BOI) of Sri Lanka under Section 16 or 17 of the BOI Act, or via standard corporate incorporation under the Companies Act. Where real estate acquisition is involved, foreign investors frequently utilize long-term corporate leases or BOI-approved special purpose vehicles (SPVs) to ensure complete statutory compliance with land tenure laws and exchange control regulations."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the typical timeline for executing and registering a property deed?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Title searches and deed preparation typically take 3 to 7 working days. Once the deed is signed and attested before the Notary Public and two witnesses, statutory stamp duty must be paid and duplicates submitted to the Land Registry. The Land Registry registration and folio entry verification generally take between 7 to 21 working days depending on registry volume."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can a preliminary or interlocutory land partition decree be appealed or challenged?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. An interlocutory partition decree can be appealed to the Civil Appellate High Court of the Province within statutory leave-to-appeal or notice-of-appeal timeframes. Grounds of appeal usually focus on misdirection on title pedigree, omitted pedigree links, erroneous share calculations, or jurisdictional errors. Special applications may also be filed in exceptional cases where fraud or lack of summons service is demonstrated."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the ongoing legal obligations of a Registered Company Secretary in Sri Lanka?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A Registered Company Secretary is legally mandated under the Companies Act No. 7 of 2007 to maintain the company\u2019s statutory registers (shareholders, directors, charges), record board and annual general meeting (AGM) minutes, file mandatory Annual Returns (Form 15) with the Registrar of Companies, submit change of director/secretary filings (Forms 20/21), and manage Beneficial Ownership declarations."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://ramyachandrachambers.com/faq.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://ramyachandrachambers.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "FAQ",
+          "item": "https://ramyachandrachambers.com/faq.html"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+        <!-- Security & XSS Protection Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.googletagmanager.com; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://www.clarity.ms https://scripts.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; frame-src 'self' https://www.google.com https://maps.google.com https://*.google.com https://*.googleapis.com https://widget.tagembed.com https://*.tagembed.com https://embedsocial.com https://*.embedsocial.com; connect-src 'self' https://api.indexnow.org https://www.bing.com https://www.google-analytics.com https://*.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com https://cloudflareinsights.com https://*.clarity.ms https://c.bing.com; object-src 'none'; base-uri 'self'; form-action 'self' mailto: tel: https:;">
+<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
+
+        <!-- Dual-Language & Global 35-Country Multi-Regional Hreflang Mapping -->
+    <link rel="alternate" hreflang="en" href="https://ramyachandrachambers.com/faq.html">
+    <link rel="alternate" hreflang="en-LK" href="https://ramyachandrachambers.com/faq.html">
+    <link rel="alternate" hreflang="en-US" href="https://ramyachandrachambers.com/faq.html">
+    <link rel="alternate" hreflang="en-GB" href="https://ramyachandrachambers.com/faq.html">
+    <link rel="alternate" hreflang="en-AU" href="https://ramyachandrachambers.com/faq.html">
+    <link rel="alternate" hreflang="en-CA" href="https://ramyachandrachambers.com/faq.html">
+    <link rel="alternate" hreflang="en-NZ" href="https://ramyachandrachambers.com/faq.html">
+    <link rel="alternate" hreflang="en-SG" href="https://ramyachandrachambers.com/faq.html">
+    <link rel="alternate" hreflang="en-AE" href="https://ramyachandrachambers.com/faq.html">
+    <link rel="alternate" hreflang="en-IE" href="https://ramyachandrachambers.com/faq.html">
+    <link rel="alternate" hreflang="en-IN" href="https://ramyachandrachambers.com/faq.html">
+    <link rel="alternate" hreflang="x-default" href="https://ramyachandrachambers.com/faq.html">
+<style id="rg-preloader-style">
+    /* RG Pure-CSS Legal Crest Micro-Loader (350ms Instant Reveal) */
+    .rg-preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      background: radial-gradient(circle at center, #0d2137 0%, #06111c 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      animation: rgCurtainReveal 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
+    }
+    .rg-preloader-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .rg-preloader-emblem {
+      width: 44px;
+      height: 44px;
+      filter: drop-shadow(0 4px 14px rgba(212, 175, 55, 0.4));
+      animation: rgEmblemPulse 1.2s ease-in-out infinite alternate;
+    }
+    .rg-preloader-track {
+      width: 120px;
+      height: 2px;
+      background: rgba(214, 183, 124, 0.15);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+    .rg-preloader-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, transparent, #d4af37, #f4d08a, transparent);
+      animation: rgShimmer 0.6s ease-in-out infinite;
+    }
+    @keyframes rgShimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    @keyframes rgEmblemPulse {
+      0% { transform: scale(0.98); opacity: 0.9; }
+      100% { transform: scale(1.02); opacity: 1; }
+    }
+    @keyframes rgCurtainReveal {
+      0% { opacity: 1; visibility: visible; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+    #home .hero-container {
+      animation: rgHeroFadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+    }
+    @keyframes rgHeroFadeIn {
+      0% { opacity: 0.85; transform: translateY(6px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .rg-preloader { display: none !important; }
+      #home .hero-container { animation: none !important; }
+    }
+</style>
+    <link rel="alternate" type="text/markdown" title="LLM Context Standard" href="https://ramyachandrachambers.com/llms.txt">
+    <link rel="alternate" type="text/plain" title="AI Directives" href="https://ramyachandrachambers.com/.well-known/ai.txt">
+    <!-- Optimized Non-Blocking Microsoft Clarity (Zero TBT Penalty) -->
+    <script type="text/javascript">
+        window.clarity = window.clarity || function(){(window.clarity.q = window.clarity.q || []).push(arguments)};
+        function loadClarity() {
+            if (window.__clarityLoaded) return;
+            window.__clarityLoaded = true;
+            var t = document.createElement("script");
+            t.async = true;
+            t.src = "https://www.clarity.ms/tag/z89nh2abb8";
+            document.head.appendChild(t);
+        }
+        if ('requestIdleCallback' in window) {
+            window.addEventListener('load', function() { requestIdleCallback(loadClarity, { timeout: 4000 }); });
+        } else {
+            window.addEventListener('load', function() { setTimeout(loadClarity, 2000); });
+        }
+        ['pointerdown', 'pointermove', 'scroll', 'touchstart', 'keydown'].forEach(function(ev) {
+            window.addEventListener(ev, loadClarity, { once: true, passive: true });
+        });
+    </script>
+</head>
+<body>
+    <!-- RG Pure-CSS Legal Crest Micro-Loader (350ms instant prestigious reveal) -->
+    <div class="rg-preloader" aria-hidden="true">
+        <div class="rg-preloader-content">
+            <svg class="rg-preloader-emblem" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="#d4af37" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 44px; height: 44px; stroke: #d4af37; color: #d4af37; flex-shrink: 0;">
+                <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+                <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+                <path d="M7 21h10"/>
+                <path d="M12 3v18"/>
+                <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>
+            </svg>
+            <div class="rg-preloader-track">
+                <div class="rg-preloader-bar"></div>
+            </div>
+        </div>
+    </div>
+
+<!-- Ambient Living Atmosphere -->
+    <div class="global-ambient-system" aria-hidden="true">
+        <div class="ambient-layer ambient-blob-1"></div>
+        <div class="ambient-layer ambient-blob-2"></div>
+        <canvas id="ambient-cosmos-canvas" class="ambient-cosmos-canvas"></canvas>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="main-nav" class="site-nav" role="navigation" aria-label="Main Navigation">
+        <div class="nav-container">
+            <a href="/" data-target="#home" data-page="index.html" class="logo" aria-label="RG Chambers - Home">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 28px; height: 28px; max-width: 28px; fill: none; stroke: #d4af37; color: #d4af37; flex-shrink: 0;" aria-hidden="true">
+                    <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+                    <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+                    <path d="M7 21h10"/>
+                    <path d="M12 3v18"/>
+                    <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>
+                </svg>
+                RG CHAMBERS
+            </a>
+            <ul class="nav-links">
+                <li><a href="/#home" class="nav-link">Home</a></li>
+                <li><a href="/#about" class="nav-link">About</a></li>
+                <li><a href="/#services" class="nav-link">Services</a></li>
+                <li><a href="/#practice-areas" class="nav-link">Practice Areas</a></li>
+                <li><a href="/#testimonials" class="nav-link">Clients Worldwide</a></li>
+                <li><a href="faq.html" class="nav-link active" aria-current="page">FAQ</a></li>
+                <li><a href="/#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+        <main id="main-content">
+        <section class="faq-section">
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumb-trail" aria-label="Breadcrumb Trail">
+                <a href="/">Home</a>
+                <span class="breadcrumb-separator" aria-hidden="true">&rsaquo;</span>
+                <span class="breadcrumb-current" aria-current="page">Legal FAQ</span>
+            </nav>
+
+            <!-- Hero Header matching Homepage Style -->
+            <div class="faq-header-hero">
+                <span class="hero-tag">Official Legal Knowledge Base</span>
+                <h1 class="faq-title serif"><span class="unique-cap">F</span>requently Asked <span class="unique-cap">Q</span>uestions</h1>
+                <p class="faq-subtitle">Authoritative guidance on Sri Lankan property law, notarial deed registration, partition court litigation, corporate incorporation, and overseas powers of attorney.</p>
+            </div>
+
+            <!-- Search & Interactive Filter Controls -->
+            <div class="faq-filter-container">
+                <div class="faq-search-wrapper">
+                    <svg class="faq-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="faq-search-input" class="faq-search-input" placeholder="Search questions by keyword (e.g. title search, partition, power of attorney, BOI)..." aria-label="Search legal questions">
+                    <button type="button" id="faq-clear-btn" class="faq-clear-btn" aria-label="Clear search query">&times;</button>
+                </div>
+
+                <div class="faq-categories" role="tablist" aria-label="FAQ Categories">
+                    <button type="button" class="faq-category-btn is-active" data-cat="all" role="tab" aria-selected="true">All Questions (10)</button>
+                    <button type="button" class="faq-category-btn" data-cat="property" role="tab" aria-selected="false">Property &amp; Deeds (3)</button>
+                    <button type="button" class="faq-category-btn" data-cat="partition" role="tab" aria-selected="false">Land Partition (2)</button>
+                    <button type="button" class="faq-category-btn" data-cat="corporate" role="tab" aria-selected="false">Company &amp; DRC (2)</button>
+                    <button type="button" class="faq-category-btn" data-cat="overseas" role="tab" aria-selected="false">Overseas &amp; POA (2)</button>
+                    <button type="button" class="faq-category-btn" data-cat="litigation" role="tab" aria-selected="false">Court Litigation (1)</button>
+                </div>
+
+                <div class="faq-status-bar">
+                    <span id="faq-counter-text">Showing all 10 legal topics</span>
+                </div>
+            </div>
+
+            <!-- Accordion List matching Services Grid Elegance -->
+            <div class="faq-list" id="faq-list">
+                <h2 class="sr-only">Frequently Asked Legal Questions</h2>
+
+                <!-- FAQ Item 1 -->
+                <div class="faq-card glass-panel" data-category="property" id="property-deed-matara">
+                    <button class="faq-header" aria-expanded="false" aria-controls="faq-ans-1">
+                        <div class="faq-header-content">
+                            <span class="faq-category-tag">Property & Deeds &bull; Conveyancing</span>
+                            <h3 class="faq-question serif">How can I register a property deed in Matara and the Southern Province?</h3>
+                        </div>
+                        <div class="faq-toggle-icon" aria-hidden="true">
+                            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="faq-ans-1" class="faq-body" role="region" aria-labelledby="property-deed-matara">
+                        <div class="faq-inner">
+                            <div class="faq-answer-text">
+                                <p>To register a property deed in Matara, a meticulous title search spanning at least <strong>30 years</strong> must first be conducted at the Matara Land Registry to verify unencumbered ownership and detect prior mortgages, caveats, or lis pendens.</p>
+                                <p>Following execution before a licensed <strong>Notary Public</strong> and two attesting witnesses, the original deed, stamp duty assessment, duplicate copies, and Land Registry applications are submitted to the Matara Land Registry Office for formal entry into the land folios.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="faq-card glass-panel" data-category="partition" id="land-partition-process">
+                    <button class="faq-header" aria-expanded="false" aria-controls="faq-ans-2">
+                        <div class="faq-header-content">
+                            <span class="faq-category-tag">Land Partition &bull; District Court</span>
+                            <h3 class="faq-question serif">What is the legal process for a land partition action in the Southern Province?</h3>
+                        </div>
+                        <div class="faq-toggle-icon" aria-hidden="true">
+                            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="faq-ans-2" class="faq-body" role="region" aria-labelledby="land-partition-process">
+                        <div class="faq-inner">
+                            <div class="faq-answer-text">
+                                <p>A partition action is instituted under the Partition Law in the relevant District Court (such as Matara) when co-owners of an undivided land cannot achieve an amicable division.</p>
+                                <p>The plaintiff files a plaint establishing the unbroken devolution of title from the original common owner. The court issues summons, orders a preliminary survey by a court-appointed licensed surveyor, adjudicates contesting title claims, enters an interlocutory decree declaring shares, and subsequently decrees a physical partition or a partition sale by public auction.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="faq-card glass-panel" data-category="corporate" id="incorporating-company-srilanka">
+                    <button class="faq-header" aria-expanded="false" aria-controls="faq-ans-3">
+                        <div class="faq-header-content">
+                            <span class="faq-category-tag">Corporate Law &bull; Company Secretarial</span>
+                            <h3 class="faq-question serif">How do I incorporate a private limited company in Sri Lanka?</h3>
+                        </div>
+                        <div class="faq-toggle-icon" aria-hidden="true">
+                            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="faq-ans-3" class="faq-body" role="region" aria-labelledby="incorporating-company-srilanka">
+                        <div class="faq-inner">
+                            <div class="faq-answer-text">
+                                <p>Company incorporation is governed by the Companies Act No. 7 of 2007 through the Registrar of Companies (eROC). The process begins with online name reservation approval, followed by drafting the Articles of Association and executing statutory Form 1 (Company Registration), Form 18 (Consent and Certificate of Director), and Form 19 (Consent and Certificate of Secretary).</p>
+                                <p>As Registered Company Secretaries, our chambers manages the submission, DRC filings, and issuance of the Certificate of Incorporation.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="faq-card glass-panel" data-category="overseas" id="power-of-attorney-overseas">
+                    <button class="faq-header" aria-expanded="false" aria-controls="faq-ans-4">
+                        <div class="faq-header-content">
+                            <span class="faq-category-tag">Overseas Clients &bull; Non-Resident POA</span>
+                            <h3 class="faq-question serif">What documents are required for an overseas Power of Attorney for Sri Lankan assets?</h3>
+                        </div>
+                        <div class="faq-toggle-icon" aria-hidden="true">
+                            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="faq-ans-4" class="faq-body" role="region" aria-labelledby="power-of-attorney-overseas">
+                        <div class="faq-inner">
+                            <div class="faq-answer-text">
+                                <p>A non-resident client or expatriate executing a Power of Attorney (POA) outside Sri Lanka must execute the document before a Sri Lankan Consular or Diplomatic Officer, or before a licensed Notary Public followed by consular legalization or apostille certification.</p>
+                                <p>Once received in Sri Lanka, the POA must be submitted to the Registrar General's Department in Colombo for adjudication of stamp duty and registration within statutory time limits before it can be legally utilized for deed attestation or court proceedings.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="faq-card glass-panel" data-category="litigation" id="civil-litigation-matara-court">
+                    <button class="faq-header" aria-expanded="false" aria-controls="faq-ans-5">
+                        <div class="faq-header-content">
+                            <span class="faq-category-tag">Litigation &bull; Matara District Court</span>
+                            <h3 class="faq-question serif">What are the steps to institute a civil or land litigation case in Matara District Court?</h3>
+                        </div>
+                        <div class="faq-toggle-icon" aria-hidden="true">
+                            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="faq-ans-5" class="faq-body" role="region" aria-labelledby="civil-litigation-matara-court">
+                        <div class="faq-inner">
+                            <div class="faq-answer-text">
+                                <p>Civil litigation is initiated by filing a formal plaint accompanied by a proxy appointing an Attorney-at-Law in the District Court of Matara. The plaint outlines the cause of action—such as declaration of title, ejectment of trespassers, recovery of possession, or contractual breach.</p>
+                                <p>The court issues summons to the defendants, who then file their answer. The proceeding progresses through trial, documentary evidence tender, witness examination, and final judgment.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 6 -->
+                <div class="faq-card glass-panel" data-category="property" id="title-search-procedure">
+                    <button class="faq-header" aria-expanded="false" aria-controls="faq-ans-6">
+                        <div class="faq-header-content">
+                            <span class="faq-category-tag">Property & Deeds &bull; Due Diligence</span>
+                            <h3 class="faq-question serif">How is a 30-year title investigation conducted for Southern Province real estate?</h3>
+                        </div>
+                        <div class="faq-toggle-icon" aria-hidden="true">
+                            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="faq-ans-6" class="faq-body" role="region" aria-labelledby="title-search-procedure">
+                        <div class="faq-inner">
+                            <div class="faq-answer-text">
+                                <p>A 30-year title search involves examining the registers and bound volumes at the relevant Land Registry (such as Matara, Galle, or Hambantota). The investigation traces the unbroken pedigree of ownership across all prior transfers, gifts, partitions, and encumbrances (such as mortgages, caveats, or pending partition lis pendens).</p>
+                                <p>A comprehensive <strong>Title Report &amp; Legal Opinion</strong> is prepared by the attorney to certify marketable title prior to any land purchase or commercial development.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 7 -->
+                <div class="faq-card glass-panel" data-category="overseas" id="foreign-investment-structuring">
+                    <button class="faq-header" aria-expanded="false" aria-controls="faq-ans-7">
+                        <div class="faq-header-content">
+                            <span class="faq-category-tag">Foreign Direct Investment &bull; BOI &amp; SPV</span>
+                            <h3 class="faq-question serif">How is foreign investment structured for businesses and properties in Sri Lanka?</h3>
+                        </div>
+                        <div class="faq-toggle-icon" aria-hidden="true">
+                            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="faq-ans-7" class="faq-body" role="region" aria-labelledby="foreign-investment-structuring">
+                        <div class="faq-inner">
+                            <div class="faq-answer-text">
+                                <p>Foreign direct investment is structured through the <strong>Board of Investment (BOI)</strong> of Sri Lanka under Section 16 or 17 of the BOI Act, or via standard corporate incorporation under the Companies Act.</p>
+                                <p>Where real estate acquisition is involved, foreign investors frequently utilize long-term corporate leases or BOI-approved special purpose vehicles (SPVs) to ensure complete statutory compliance with land tenure laws and exchange control regulations.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 8 -->
+                <div class="faq-card glass-panel" data-category="property" id="deed-registration-timeline">
+                    <button class="faq-header" aria-expanded="false" aria-controls="faq-ans-8">
+                        <div class="faq-header-content">
+                            <span class="faq-category-tag">Property & Deeds &bull; Timelines</span>
+                            <h3 class="faq-question serif">What is the typical timeline for executing and registering a property deed?</h3>
+                        </div>
+                        <div class="faq-toggle-icon" aria-hidden="true">
+                            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="faq-ans-8" class="faq-body" role="region" aria-labelledby="deed-registration-timeline">
+                        <div class="faq-inner">
+                            <div class="faq-answer-text">
+                                <p>Title searches and deed preparation typically take <strong>3 to 7 working days</strong>. Once the deed is signed and attested before the Notary Public and two witnesses, statutory stamp duty must be paid and duplicates submitted to the Land Registry.</p>
+                                <p>The Land Registry registration and folio entry verification generally take between <strong>7 to 21 working days</strong> depending on registry volume.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 9 -->
+                <div class="faq-card glass-panel" data-category="partition" id="challenging-partition-decree">
+                    <button class="faq-header" aria-expanded="false" aria-controls="faq-ans-9">
+                        <div class="faq-header-content">
+                            <span class="faq-category-tag">Land Partition &bull; Appellate High Court</span>
+                            <h3 class="faq-question serif">Can a preliminary or interlocutory land partition decree be appealed or challenged?</h3>
+                        </div>
+                        <div class="faq-toggle-icon" aria-hidden="true">
+                            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="faq-ans-9" class="faq-body" role="region" aria-labelledby="challenging-partition-decree">
+                        <div class="faq-inner">
+                            <div class="faq-answer-text">
+                                <p>Yes. An interlocutory partition decree can be appealed to the <strong>Civil Appellate High Court of the Province</strong> within statutory leave-to-appeal or notice-of-appeal timeframes.</p>
+                                <p>Grounds of appeal usually focus on misdirection on title pedigree, omitted pedigree links, erroneous share calculations, or jurisdictional errors. Special applications may also be filed in exceptional cases where fraud or lack of summons service is demonstrated.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 10 -->
+                <div class="faq-card glass-panel" data-category="corporate" id="corporate-secretary-statutory-duties">
+                    <button class="faq-header" aria-expanded="false" aria-controls="faq-ans-10">
+                        <div class="faq-header-content">
+                            <span class="faq-category-tag">Company Secretarial &bull; Annual Compliance</span>
+                            <h3 class="faq-question serif">What are the ongoing legal obligations of a Registered Company Secretary in Sri Lanka?</h3>
+                        </div>
+                        <div class="faq-toggle-icon" aria-hidden="true">
+                            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="faq-ans-10" class="faq-body" role="region" aria-labelledby="corporate-secretary-statutory-duties">
+                        <div class="faq-inner">
+                            <div class="faq-answer-text">
+                                <p>A Registered Company Secretary is legally mandated under the <strong>Companies Act No. 7 of 2007</strong> to maintain the company’s statutory registers (shareholders, directors, charges), record board and annual general meeting (AGM) minutes, file mandatory Annual Returns (Form 15) with the Registrar of Companies, submit change of director/secretary filings (Forms 20/21), and manage Beneficial Ownership declarations.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Authoritative In-Depth Legal Practice Manuals & Editorial Guides -->
+            <div class="faq-guides-section reveal" aria-labelledby="guides-section-title" style="margin-top: 4.5rem; padding: 0;">
+                <div class="section-header" style="text-align: center; margin-bottom: 2.5rem;">
+                    <span class="hero-tag">In-Depth Practice Manuals</span>
+                    <h2 id="guides-section-title" class="serif" style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); margin-top: 0.5rem; color: #fff;">Featured Statutory Guidance &amp; Practice Checklists</h2>
+                    <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; max-width: 760px; margin: 0.5rem auto 0;">Comprehensive step-by-step treatises on Sri Lankan property title due diligence, overseas powers of attorney, partition litigation, foreign investments, testamentary probate, and corporate beneficial ownership.</p>
+                </div>
+
+                <div class="guides-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.8rem; max-width: 1180px; margin: 0 auto; width: 100%;">
+                    <!-- Guide 1: Overseas POA -->
+                    <article class="guide-card glass-panel" style="padding: 2rem; display: flex; flex-direction: column; justify-content: space-between; border-radius: 12px; background: rgba(9, 18, 29, 0.85); border: 1px solid rgba(212, 175, 55, 0.22);">
+                        <div>
+                            <span class="faq-category-tag" style="display: inline-block; margin-bottom: 0.8rem; font-size: 0.8rem; color: #d4af37; text-transform: uppercase; letter-spacing: 0.05em;">Overseas &bull; Powers of Attorney</span>
+                            <h3 class="serif" style="font-size: 1.3rem; color: #f3e8c8; margin-bottom: 1rem; line-height: 1.4;">
+                                <a href="overseas-power-of-attorney-sri-lanka.html" style="color: inherit; text-decoration: none;">How to Execute a Sri Lanka Power of Attorney from UK, USA, Australia &amp; Canada</a>
+                            </h3>
+                            <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                                Complete legal protocol for non-resident Sri Lankans and diaspora appointing attorneys for land sales, deed attestation, and court representation. Covers consular attestation, foreign notary authentication, statutory 30-day stamp duty adjudication, and Registrar General registration.
+                            </p>
+                        </div>
+                        <div>
+                            <a href="overseas-power-of-attorney-sri-lanka.html" class="btn btn-secondary guide-card-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; width: 100%; justify-content: center; font-size: 0.9rem;">
+                                <span>Read Overseas POA Guide &rarr;</span>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- Guide 2: 30-Year Title Search -->
+                    <article class="guide-card glass-panel" style="padding: 2rem; display: flex; flex-direction: column; justify-content: space-between; border-radius: 12px; background: rgba(9, 18, 29, 0.85); border: 1px solid rgba(212, 175, 55, 0.22);">
+                        <div>
+                            <span class="faq-category-tag" style="display: inline-block; margin-bottom: 0.8rem; font-size: 0.8rem; color: #d4af37; text-transform: uppercase; letter-spacing: 0.05em;">Conveyancing &bull; Due Diligence</span>
+                            <h3 class="serif" style="font-size: 1.3rem; color: #f3e8c8; margin-bottom: 1rem; line-height: 1.4;">
+                                <a href="land-registry-title-search-sri-lanka.html" style="color: inherit; text-decoration: none;">30-Year Title Search &amp; Property Due Diligence Checklist in Sri Lanka</a>
+                            </h3>
+                            <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                                Step-by-step title examination manual for property buyers, expatriates, and coastal hospitality developers in Matara, Mirissa, and Weligama. Covers Land Register foliation, Day Book checks, encumbrance discovery, and Bim Saviya Title Registration verification.
+                            </p>
+                        </div>
+                        <div>
+                            <a href="land-registry-title-search-sri-lanka.html" class="btn btn-secondary guide-card-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; width: 100%; justify-content: center; font-size: 0.9rem;">
+                                <span>Read Title Search Checklist &rarr;</span>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- Guide 3: DRC Company Registration & BO -->
+                    <article class="guide-card glass-panel" style="padding: 2rem; display: flex; flex-direction: column; justify-content: space-between; border-radius: 12px; background: rgba(9, 18, 29, 0.85); border: 1px solid rgba(212, 175, 55, 0.22);">
+                        <div>
+                            <span class="faq-category-tag" style="display: inline-block; margin-bottom: 0.8rem; font-size: 0.8rem; color: #d4af37; text-transform: uppercase; letter-spacing: 0.05em;">Corporate Law &bull; Companies Act</span>
+                            <h3 class="serif" style="font-size: 1.3rem; color: #f3e8c8; margin-bottom: 1rem; line-height: 1.4;">
+                                <a href="company-registration-sri-lanka-beneficial-ownership.html" style="color: inherit; text-decoration: none;">DRC Private Limited Company Formation &amp; Mandatory Beneficial Ownership Guide</a>
+                            </h3>
+                            <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                                Procedural manual for incorporating a Private Limited (PVT LTD) company in Sri Lanka via e-ROC. Explains statutory Forms 1, 18, and 19, the newly enforced mandatory Beneficial Ownership (BO) disclosure regulations, and post-incorporation IRD TIN compliance.
+                            </p>
+                        </div>
+                        <div>
+                            <a href="company-registration-sri-lanka-beneficial-ownership.html" class="btn btn-secondary guide-card-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; width: 100%; justify-content: center; font-size: 0.9rem;">
+                                <span>Read Company Formation Guide &rarr;</span>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- Guide 4: Land Partition Law -->
+                    <article class="guide-card glass-panel" style="padding: 2rem; display: flex; flex-direction: column; justify-content: space-between; border-radius: 12px; background: rgba(9, 18, 29, 0.85); border: 1px solid rgba(212, 175, 55, 0.22);">
+                        <div>
+                            <span class="faq-category-tag" style="display: inline-block; margin-bottom: 0.8rem; font-size: 0.8rem; color: #d4af37; text-transform: uppercase; letter-spacing: 0.05em;">Land Litigation &bull; Partition Law</span>
+                            <h3 class="serif" style="font-size: 1.3rem; color: #f3e8c8; margin-bottom: 1rem; line-height: 1.4;">
+                                <a href="land-partition-law-procedure-sri-lanka.html" style="color: inherit; text-decoration: none;">Land Partition Law &amp; Co-Ownership Disputes in Sri Lanka</a>
+                            </h3>
+                            <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                                Procedural guide on resolving undivided co-ownership disputes under Partition Law No. 21 of 1977. Explains title pedigrees, preliminary surveys, interlocutory decrees, physical division schemes, and court-decreed auction sales.
+                            </p>
+                        </div>
+                        <div>
+                            <a href="land-partition-law-procedure-sri-lanka.html" class="btn btn-secondary guide-card-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; width: 100%; justify-content: center; font-size: 0.9rem;">
+                                <span>Read Land Partition Guide &rarr;</span>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- Guide 5: Foreign Real Estate Investment -->
+                    <article class="guide-card glass-panel" style="padding: 2rem; display: flex; flex-direction: column; justify-content: space-between; border-radius: 12px; background: rgba(9, 18, 29, 0.85); border: 1px solid rgba(212, 175, 55, 0.22);">
+                        <div>
+                            <span class="faq-category-tag" style="display: inline-block; margin-bottom: 0.8rem; font-size: 0.8rem; color: #d4af37; text-transform: uppercase; letter-spacing: 0.05em;">Foreign Investment &bull; Real Estate</span>
+                            <h3 class="serif" style="font-size: 1.3rem; color: #f3e8c8; margin-bottom: 1rem; line-height: 1.4;">
+                                <a href="foreign-investment-property-acquisition-sri-lanka.html" style="color: inherit; text-decoration: none;">Foreign Real Estate Investment &amp; Property Acquisition in Sri Lanka</a>
+                            </h3>
+                            <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                                Legal treatise on the Land (Restrictions on Alienation) Act, long-term 99-year registered leases, BOI Section 17 tourism ventures, condominium apartment purchases, and Central Bank Inward Investment Accounts (IIA).
+                            </p>
+                        </div>
+                        <div>
+                            <a href="foreign-investment-property-acquisition-sri-lanka.html" class="btn btn-secondary guide-card-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; width: 100%; justify-content: center; font-size: 0.9rem;">
+                                <span>Read Foreign Investment Guide &rarr;</span>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- Guide 6: Last Will & Probate -->
+                    <article class="guide-card glass-panel" style="padding: 2rem; display: flex; flex-direction: column; justify-content: space-between; border-radius: 12px; background: rgba(9, 18, 29, 0.85); border: 1px solid rgba(212, 175, 55, 0.22);">
+                        <div>
+                            <span class="faq-category-tag" style="display: inline-block; margin-bottom: 0.8rem; font-size: 0.8rem; color: #d4af37; text-transform: uppercase; letter-spacing: 0.05em;">Testamentary &bull; Estate Probate</span>
+                            <h3 class="serif" style="font-size: 1.3rem; color: #f3e8c8; margin-bottom: 1rem; line-height: 1.4;">
+                                <a href="last-will-testamentary-probate-sri-lanka.html" style="color: inherit; text-decoration: none;">Last Will Drafting &amp; Testamentary Probate Procedure in Sri Lanka</a>
+                            </h3>
+                            <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                                Statutory manual on drafting valid testaments under the Prevention of Frauds Ordinance, District Court probate actions under the Civil Procedure Code, Letters of Administration, Orders Nisi, and non-resident diaspora inheritance.
+                            </p>
+                        </div>
+                        <div>
+                            <a href="last-will-testamentary-probate-sri-lanka.html" class="btn btn-secondary guide-card-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; width: 100%; justify-content: center; font-size: 0.9rem;">
+                                <span>Read Testamentary Probate Guide &rarr;</span>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <!-- Central Consultation Banner matching Homepage central-contact-banner -->
+            <div class="central-contact-banner glass-panel reveal" style="margin-top: 5rem; margin-bottom: 2rem; max-width: 1180px; margin-left: auto; margin-right: auto;">
+                <div class="banner-text">
+                    <span class="hero-tag">Direct Senior Legal Counsel</span>
+                    <h2 class="serif" style="font-size: clamp(2rem, 4vw, 2.8rem); margin-top: 0.5rem; color: #fff;">Require Direct Legal Advice for Your Matter?</h2>
+                    <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; max-width: 680px; margin-top: 0.5rem;">Instructions are taken directly by Senior Attorney &amp; Notary Public Ramyachandra Gunasekera at our Matara Fort Head Office or Kamburugamuwa Branch.</p>
+                </div>
+                <div class="contact-pill-container" style="display: flex; gap: 1.25rem; flex-wrap: wrap; justify-content: center; align-items: center; margin-top: 2rem; width: 100%;">
+                    <a href="tel:+94714236429" class="btn btn-primary" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; padding: 0.95rem 2.4rem; min-width: 300px; border-radius: 30px; white-space: nowrap; font-size: 0.92rem; font-weight: 700; background: linear-gradient(135deg, #dfb35d, #b88d3b); color: #05101c; border: 1px solid #dfb35d; box-shadow: 0 6px 20px rgba(223, 179, 93, 0.4); text-decoration: none;">
+                        <span>&#128222; Call +94 71 423 6429</span>
+                    </a>
+                    <a href="https://wa.me/94714236429" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.95rem 2rem; min-width: 240px; border-radius: 30px; white-space: nowrap; text-decoration: none;">
+                        <span>WhatsApp Counsel ↗</span>
+                    </a>
+                    <a href="/#contact" class="btn btn-secondary" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.95rem 2rem; min-width: 240px; border-radius: 30px; white-space: nowrap; text-decoration: none;">
+                        <span>Chamber Locations</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <span class="footer-brand-title">RAMYACHANDRA</span>
+                <span class="footer-brand-title">GUNASEKERA</span>
+                <span class="footer-brand-title">CHAMBERS</span>
+            </div>
+
+                        <!-- Middle: Legal Modals Navigation -->
+            <nav class="footer-nav" aria-label="Footer Legal Navigation">
+                <div class="footer-nav-row">
+                    <a href="deed-lawyer-matara.html" class="footer-link">Deed Lawyer</a>
+                    <a href="notary-public-matara.html" class="footer-link">Notary Public</a>
+                    <a href="company-registration-matara.html" class="footer-link">Company Registration</a>
+                </div>
+                <div class="footer-nav-row">
+                    <a href="faq.html" class="footer-link">FAQ</a>
+                    <a href="privacy-policy.html" id="open-privacy-link" class="footer-link" role="button" aria-haspopup="dialog">Privacy Policy</a>
+                    <a href="terms-of-engagement.html" id="open-terms-link" class="footer-link" role="button" aria-haspopup="dialog">Terms of Engagement</a>
+                </div>
+            </nav>
+
+            <div class="footer-legal">
+                <p class="footer-copyright">&copy; 2026 RAMYACHANDRA GUNASEKERA<br>CHAMBERS.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Accessible Legal Modals for Privacy Policy & Terms of Engagement -->
+    <div id="privacy-modal" class="legal-modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="privacy-modal-title">
+        <div class="legal-modal-content glass-panel">
+            <button class="legal-modal-close" aria-label="Close Privacy Policy Modal">&times;</button>
+            <h2 id="privacy-modal-title" class="legal-modal-heading">Privacy Policy &amp; Client Confidentiality</h2>
+            <div class="legal-modal-body">
+                <p><strong>Ramyachandra Gunasekera Chambers</strong> is dedicated to upholding the strictest standards of legal confidentiality, ethical advocacy, and professional privilege under the statutes of Sri Lanka, the Evidence Ordinance (Sections 126–129), and the Bar Association guidelines.</p>
+                <p><strong>Information Handling &amp; Privilege:</strong> All correspondence, consultation requests, title deeds, and case particulars submitted via digital channels, telephone, or during in-person chamber sessions at Fort and Kamburugamuwa are protected under professional Attorney-Client privilege. Instructions are handled directly by Senior Attorney Ramyachandra Gunasekera.</p>
+                <p><strong>Strict Privacy Guarantee:</strong> This website maintains zero commercial advertising networks, zero tracking cookies, zero data broking, and zero third-party behavioral profiling trackers. We enforce referrer suppression and client origin privacy.</p>
+                <p><strong>Transport Security:</strong> Digital connectivity to this site is fortified with modern 256-bit TLS encryption, strict HTTP Strict Transport Security (HSTS Preload), and hardened Content Security Policies.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="terms-modal" class="legal-modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="terms-modal-title">
+        <div class="legal-modal-content glass-panel">
+            <button class="legal-modal-close" aria-label="Close Terms of Engagement Modal">&times;</button>
+            <h2 id="terms-modal-title" class="legal-modal-heading">Terms of Engagement</h2>
+            <div class="legal-modal-body">
+                <p><strong>General Informational Notice:</strong> The materials and information made available on this website are presented exclusively for general informational context regarding the chamber practice of Attorney-at-Law and Notary Public Ramyachandra Gunasekera.</p>
+                <p><strong>Retainer &amp; Representation:</strong> Formal legal representation in judicial proceedings, deed attestation, title examinations, or corporate registrations is established solely through official appointment, proxy signing, and mutually agreed engagement terms.</p>
+                <p><strong>Jurisdiction:</strong> All chamber services and client representations are conducted subject to the statutory jurisdiction of the courts of Sri Lanka.</p>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Interactive FAQ Script -->
+
+    <!-- Main Deferred JavaScript -->
+    <script defer src="js/main.min.js?v=9.9.5"></script>
+</body>
+</html>

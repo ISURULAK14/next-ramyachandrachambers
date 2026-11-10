@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "test": "node tests/e2e_ui_test.js",
+    "test:e2e": "node tests/e2e_ui_test.js"
+  },
+  "devDependencies": {
+    "lighthouse": "^13.6.0",
+    "puppeteer": "^25.9.0",
+    "terser": "^5.51.2"
+  }
+}

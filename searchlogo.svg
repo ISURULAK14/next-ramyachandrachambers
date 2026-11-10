@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <style>
+    .letter-r {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 140px;
+      fill: #0A1128; /* Premium Black Sapphire */
+      stroke: #B76E79; /* Rose Gold / Copper */
+      stroke-width: 3px;
+    }
+    .letter-g {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 140px;
+      fill: #0A1128;
+      stroke: #B76E79;
+      stroke-width: 3px;
+    }
+    /* Auto-adjusts for browsers in dark mode */
+    @media (prefers-color-scheme: dark) {
+      .letter-r, .letter-g {
+        fill: #FDFBF7; 
+      }
+    }
+  </style>
+  <!-- R positioned at normal baseline -->
+  <text x="30" y="160" class="letter-r">R</text>
+  <!-- G positioned lower -->
+  <text x="110" y="190" class="letter-g">G</text>
+</svg>

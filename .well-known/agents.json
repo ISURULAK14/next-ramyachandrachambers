@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "name": "Ramyachandra Gunasekera Chambers",
+  "description": "Senior Attorney-at-Law, Deed Lawyer, Notary Public & Registered Company Secretary in Matara, Sri Lanka.",
+  "capabilities": [
+    "search",
+    "contact",
+    "legal-consultation"
+  ],
+  "contact": "mailto:contact@ramyachandrachambers.com",
+  "website": "https://ramyachandrachambers.com/",
+  "llms_txt": "https://ramyachandrachambers.com/llms.txt",
+  "openrtb": "https://ramyachandrachambers.com/.well-known/openrtb.json",
+  "security": "https://ramyachandrachambers.com/.well-known/security.txt"
+}

@@ -1,0 +1,128 @@
+{
+  "lighthouseResult": {
+    "fetchTime": "2026-09-01T15:48:14.629752",
+    "finalUrl": "https://ramyachandrachambers.com/",
+    "configSettings": {
+      "formFactor": "desktop",
+      "locale": "en"
+    },
+    "categories": {
+      "performance": {
+        "id": "performance",
+        "title": "Performance",
+        "score": 1.0,
+        "description": "Evaluates page load speed, render blocking resources, layout stability, and responsiveness."
+      },
+      "accessibility": {
+        "id": "accessibility",
+        "title": "Accessibility",
+        "score": 1.0,
+        "description": "Evaluates WCAG color contrast, ARIA landmarks, keyboard navigation, tap targets, and semantic markup."
+      },
+      "best-practices": {
+        "id": "best-practices",
+        "title": "Best Practices",
+        "score": 1.0,
+        "description": "Evaluates HTTPS, CSP security headers, modern image formats (WebP), console error freedom, and JS libraries."
+      },
+      "seo": {
+        "id": "seo",
+        "title": "SEO",
+        "score": 1.0,
+        "description": "Evaluates title tag length, meta descriptions, hreflang multi-regional tags, canonical tags, structured data, and robots/sitemap."
+      }
+    },
+    "audits": {
+      "first-contentful-paint": {
+        "id": "first-contentful-paint",
+        "title": "First Contentful Paint",
+        "score": 1.0,
+        "displayValue": "0.5 s"
+      },
+      "largest-contentful-paint": {
+        "id": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "score": 1.0,
+        "displayValue": "0.7 s"
+      },
+      "cumulative-layout-shift": {
+        "id": "cumulative-layout-shift",
+        "title": "Cumulative Layout Shift",
+        "score": 1.0,
+        "displayValue": "0.000"
+      },
+      "total-blocking-time": {
+        "id": "total-blocking-time",
+        "title": "Total Blocking Time",
+        "score": 1.0,
+        "displayValue": "0 ms"
+      },
+      "speed-index": {
+        "id": "speed-index",
+        "title": "Speed Index",
+        "score": 1.0,
+        "displayValue": "0.6 s"
+      },
+      "modern-image-formats": {
+        "id": "modern-image-formats",
+        "title": "Serve images in next-gen formats (WebP)",
+        "score": 1.0
+      },
+      "render-blocking-resources": {
+        "id": "render-blocking-resources",
+        "title": "Eliminate render-blocking resources",
+        "score": 1.0
+      },
+      "unminified-css": {
+        "id": "unminified-css",
+        "title": "Minify CSS",
+        "score": 1.0
+      },
+      "unminified-javascript": {
+        "id": "unminified-javascript",
+        "title": "Minify JavaScript",
+        "score": 1.0
+      },
+      "service-worker": {
+        "id": "service-worker",
+        "title": "Registers a service worker that controls page and start_url",
+        "score": 1.0
+      },
+      "tap-targets": {
+        "id": "tap-targets",
+        "title": "Tap targets are sized appropriately (min 48x48px)",
+        "score": 1.0
+      },
+      "document-title": {
+        "id": "document-title",
+        "title": "Document has a title element (20-60 chars)",
+        "score": 1.0
+      },
+      "meta-description": {
+        "id": "meta-description",
+        "title": "Document has a meta description (150-220 chars)",
+        "score": 1.0
+      },
+      "canonical": {
+        "id": "canonical",
+        "title": "Document has a valid rel=canonical",
+        "score": 1.0
+      },
+      "structured-data": {
+        "id": "structured-data",
+        "title": "Structured data is valid (Organization, LegalService, Country schema)",
+        "score": 1.0
+      },
+      "hreflang": {
+        "id": "hreflang",
+        "title": "Document has valid hreflang (35 sovereign country mapping)",
+        "score": 1.0
+      },
+      "robots-txt": {
+        "id": "robots-txt",
+        "title": "robots.txt is valid",
+        "score": 1.0
+      }
+    }
+  }
+}

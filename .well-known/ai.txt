@@ -1,0 +1,26 @@
+# ==============================================================================
+# ai.txt - Machine-Readable AI Directives & Autonomous Agent Permissions
+# Ramyachandra Gunasekera Chambers (https://ramyachandrachambers.com/)
+# Senior Attorney-at-Law, Deed Lawyer, Notary Public & Company Secretary
+# Location: Matara, Southern Province, Sri Lanka
+# ==============================================================================
+
+User-agent: *
+Allow: /
+Crawl-delay: 1
+
+# Machine-Readable Context & Agent Manifests
+LLMs-Txt: https://ramyachandrachambers.com/llms.txt
+LLMs-Full-Txt: https://ramyachandrachambers.com/llms-full.txt
+Agents-Json: https://ramyachandrachambers.com/.well-known/agents.json
+OpenRTB: https://ramyachandrachambers.com/.well-known/openrtb.json
+Security: https://ramyachandrachambers.com/.well-known/security.txt
+Sitemap: https://ramyachandrachambers.com/sitemap.xml
+
+# Attribution & Jurisdiction Directives
+Attribution: Required
+Attribution-Name: Ramyachandra Gunasekera Chambers
+Attribution-URL: https://ramyachandrachambers.com/
+Jurisdiction: Sri Lanka
+Contact: https://ramyachandrachambers.com/#contact
+License: Proprietary / All rights reserved

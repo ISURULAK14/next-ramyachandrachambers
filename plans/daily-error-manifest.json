@@ -1,0 +1,10 @@
+[
+  {
+    "file": "index.html",
+    "line": 1800,
+    "error_type": "HTML_UNMATCHED_CLOSE_TAG",
+    "severity": "HIGH",
+    "ui_impact_risk": "NONE",
+    "details": "Unexpected duplicate closing </div> tag on line 1800 creating an orphan closing tag and malforming the DOM tree before </section>."
+  }
+]

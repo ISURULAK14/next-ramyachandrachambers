@@ -1,0 +1,112 @@
+# ========================================================
+# Cloudflare Pages / CDN Response Headers (2026 Standards)
+# ========================================================
+
+/*
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(self)
+  Content-Security-Policy: default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.googletagmanager.com; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://www.clarity.ms https://scripts.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; frame-src 'self' https://www.google.com https://maps.google.com https://*.google.com https://*.googleapis.com https://widget.tagembed.com https://*.tagembed.com https://embedsocial.com https://*.embedsocial.com; connect-src 'self' https://api.indexnow.org https://www.bing.com https://www.google-analytics.com https://*.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com https://cloudflareinsights.com https://*.clarity.ms https://c.bing.com; object-src 'none'; base-uri 'self'; frame-ancestors 'self' https://*.google.com https://*.googleapis.com; form-action 'self' mailto: tel: https:;
+  Content-Language: en
+  X-Robots-Tag: all
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/js/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/photo.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/photo-opt.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/favicon.ico
+  Cache-Control: public, max-age=31536000, immutable
+
+/apple-touch-icon.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/android-chrome-192x192.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/android-chrome-512x512.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/searchlogo.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/world_map.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/fort.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/kotavila1.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/kotavila2.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/fort.gif
+  Cache-Control: public, max-age=31536000, immutable
+
+/kotavila1.gif
+  Cache-Control: public, max-age=31536000, immutable
+
+/kotavila2.gif
+  Cache-Control: public, max-age=31536000, immutable
+
+/photo.gif
+  Cache-Control: public, max-age=31536000, immutable
+
+/favicon-16x16.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/favicon-32x32.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/manifest.json
+  Cache-Control: public, max-age=86400
+  Content-Type: application/manifest+json; charset=utf-8
+
+/robots.txt
+  Cache-Control: public, max-age=3600
+
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+
+/BingSiteAuth.xml
+  Cache-Control: public, max-age=3600
+  Content-Type: application/xml; charset=utf-8
+
+
+/llms.txt
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
+/llms-full.txt
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
+/.well-known/ai.txt
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
+/ai.txt
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
+
+/8796e635b2be4fbb80453e5cd791ed92.txt
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
+
+/4a8f9c2d1e7b304586f0a12e34d56789.txt
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8

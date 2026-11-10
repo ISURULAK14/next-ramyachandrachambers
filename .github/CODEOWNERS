@@ -1,0 +1,4 @@
+# CODEOWNERS for Ramyachandra Gunasekera Chambers
+# Enforces mandatory code owner review for branch protection rules
+
+* @ISURULAK14
