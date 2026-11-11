@@ -29,7 +29,7 @@
     <link rel="preload" href="https://fonts.gstatic.com/s/montserrat/v31/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2" as="font" type="font/woff2" crossorigin>
 
     <!-- Optimized Non-Blocking Google Fonts with display=swap -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=optional" media="print" onload="this.media='all'" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=optional">
     <noscript>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=optional">
     </noscript>
@@ -286,7 +286,7 @@
       document.head.appendChild(s);
     }
     // GTag deferred to user interaction
-    ['pointerdown', 'pointermove', 'scroll', 'touchstart', 'keydown'].forEach(function(ev) {
+    ['click', 'touchstart', 'keydown'].forEach(function(ev) {
       window.addEventListener(ev, loadGtag, { once: true, passive: true });
     });
   </script>
@@ -294,6 +294,7 @@
     <!-- Optimized Non-Blocking Microsoft Clarity (Zero TBT Penalty) -->
     <script type="text/javascript">
         window.clarity = window.clarity || function(){(window.clarity.q = window.clarity.q || []).push(arguments)};
+        window.clarity('consent', false);
         function loadClarity() {
             if (window.__clarityLoaded) return;
             window.__clarityLoaded = true;
@@ -302,7 +303,7 @@
             t.src = "https://www.clarity.ms/tag/z89nh2abb8";
             document.head.appendChild(t);
         }
-        ['pointerdown', 'pointermove', 'scroll', 'touchstart', 'keydown'].forEach(function(ev) {
+        ['click', 'touchstart', 'keydown'].forEach(function(ev) {
             window.addEventListener(ev, loadClarity, { once: true, passive: true });
         });
     </script>
