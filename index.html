@@ -29,9 +29,9 @@
     <link rel="preload" href="https://fonts.gstatic.com/s/montserrat/v31/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2" as="font" type="font/woff2" crossorigin>
 
     <!-- Optimized Non-Blocking Google Fonts with display=swap -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=optional" media="print" onload="this.media='all'" crossorigin>
     <noscript>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=optional">
     </noscript>
 
     <style>
@@ -55,17 +55,7 @@
     }
 
     /* RG Pure-CSS Legal Crest Micro-Loader (350ms Instant Reveal) */
-    .rg-preloader {
-      position: fixed;
-      inset: 0;
-      z-index: 999999;
-      background: radial-gradient(circle at center, #0a3328 0%, #03120e 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      animation: rgCurtainReveal 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
+    .rg-preloader { display: none !important;
     }
     .rg-preloader-content {
       display: flex;
@@ -109,7 +99,6 @@
       100% { opacity: 0; visibility: hidden; }
     }
     #home .hero-container {
-      animation: rgHeroFadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
     }
     @keyframes rgHeroFadeIn {
       0% { opacity: 0.85; transform: translateY(6px); }
@@ -117,7 +106,6 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .rg-preloader { display: none !important; }
-      #home .hero-container { animation: none !important; }
     }
 
     @font-face {
@@ -297,7 +285,7 @@
       s.src = 'https://www.googletagmanager.com/gtag/js?id=G-C0KRJZFKLM';
       document.head.appendChild(s);
     }
-    setTimeout(loadGtag, 15000);
+    // GTag deferred to user interaction
     ['pointerdown', 'pointermove', 'scroll', 'touchstart', 'keydown'].forEach(function(ev) {
       window.addEventListener(ev, loadGtag, { once: true, passive: true });
     });
@@ -313,11 +301,6 @@
             t.async = true;
             t.src = "https://www.clarity.ms/tag/z89nh2abb8";
             document.head.appendChild(t);
-        }
-        if ('requestIdleCallback' in window) {
-            window.addEventListener('load', function() { requestIdleCallback(loadClarity, { timeout: 4000 }); });
-        } else {
-            window.addEventListener('load', function() { setTimeout(loadClarity, 2000); });
         }
         ['pointerdown', 'pointermove', 'scroll', 'touchstart', 'keydown'].forEach(function(ev) {
             window.addEventListener(ev, loadClarity, { once: true, passive: true });

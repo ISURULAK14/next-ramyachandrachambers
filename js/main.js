@@ -423,7 +423,17 @@ document.addEventListener('DOMContentLoaded', () => {
             card.addEventListener('touchstart', stopTimer, { passive: true });
             card.addEventListener('touchend', startTimer, { passive: true });
 
-            startTimer();
+            if ('IntersectionObserver' in window && card) {
+                const reviewObserver = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) startTimer();
+                        else stopTimer();
+                    });
+                }, { threshold: 0.1 });
+                reviewObserver.observe(card);
+            } else {
+                startTimer();
+            }
         });
     }
 
@@ -640,10 +650,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 animId = requestAnimationFrame(renderCosmos);
             };
-            if ('requestIdleCallback' in window) {
-                requestIdleCallback(() => { animId = requestAnimationFrame(renderCosmos); }, { timeout: 2000 });
+            const heroSec = document.getElementById('home') || canvas;
+            if ('IntersectionObserver' in window && heroSec) {
+                const cosmosObserver = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            if (!animId) animId = requestAnimationFrame(renderCosmos);
+                        } else {
+                            if (animId) {
+                                cancelAnimationFrame(animId);
+                                animId = 0;
+                            }
+                        }
+                    });
+                }, { threshold: 0.05 });
+                cosmosObserver.observe(heroSec);
             } else {
-                setTimeout(() => { animId = requestAnimationFrame(renderCosmos); }, 500);
+                animId = requestAnimationFrame(renderCosmos);
             }
         }
     }
@@ -769,7 +792,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let x = -200, y = -200, raf = 0;
         const render = () => {
             field.style.transform = `translate3d(${x - 56}px, ${y - 56}px, 0)`;
-            raf = requestAnimationFrame(render);
+            raf = 0;
         };
         
         window.addEventListener('pointermove', (event) => {
