@@ -2078,4 +2078,59 @@ header.site-header {
   .hero-ambient-lights, .hero-aurora-band {
     animation: none !important;
   }
+
+  /* Mobile Review Cards & Controls Fix */
+  .reviews-grid > .review-card,
+  .review-card-google,
+  .review-card-direct {
+    height: auto !important;
+    min-height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    padding: 1.5rem 1.25rem !important;
+  }
+  .review-card-google .google-review-header {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 1rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+  .google-reviews-carousel {
+    justify-content: flex-start !important;
+    flex: none !important;
+    min-height: 280px !important;
+    position: relative !important;
+  }
+  .carousel-nav {
+    margin-top: auto !important;
+    padding-top: 1rem !important;
+  }
+  .carousel-btn {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  /* Mobile Navigation Scroll Fade Indicator */
+  .site-nav {
+    -webkit-mask-image: linear-gradient(90deg, #000 86%, transparent 100%);
+    mask-image: linear-gradient(90deg, #000 86%, transparent 100%);
+  }
+
+  /* Mobile Hero Subtitle & Body Contrast Enhancement */
+  .hero-subtitle {
+    color: #e2e8f0 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75) !important;
+  }
+  .about-lead {
+    color: #f1f5f9 !important;
+  }
+  .section-desc a {
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+  }
 }
