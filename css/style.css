@@ -1749,6 +1749,10 @@ body {
   z-index: -1;
   pointer-events: none;
 }
+.hero-subtitle {
+  color: rgba(248, 250, 252, 0.92) !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.72) !important;
+}
 h1, h2, h3, h4, .serif, .hero-title, .accordion-title {
   font-family: 'Cinzel', 'Cormorant Garamond', Georgia, serif !important;
   letter-spacing: 0.035em !important;

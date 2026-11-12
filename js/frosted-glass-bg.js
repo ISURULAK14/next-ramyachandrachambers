@@ -98,29 +98,30 @@ import * as THREE from './vendor/three.module.js';
 
     // Preserved underlying geometric shapes behind the transmissive glass layer
     const shapeGroup = new THREE.Group();
-    shapeGroup.position.z = -1.6;
+    shapeGroup.position.z = -0.95;
     scene.add(shapeGroup);
 
     const shapes = [];
     const shapeSpecs = [
-        { geo: new THREE.IcosahedronGeometry(1.75, 0), color: 0x10b981, emissive: 0x0b3d2e, pos: [-3.4, 1.6, -0.4], speed: 0.18, opacity: 0.65 },
-        { geo: new THREE.OctahedronGeometry(1.45, 0), color: 0xe2c275, emissive: 0x8a6d2f, pos: [3.2, -1.4, -0.2], speed: -0.22, opacity: 0.55 },
-        { geo: new THREE.TorusGeometry(2.1, 0.14, 16, 48), color: 0x34d399, emissive: 0x05281f, pos: [0.4, 0.3, -0.7], speed: 0.12, opacity: 0.48 },
-        { geo: new THREE.DodecahedronGeometry(1.15, 0), color: 0xfae8b4, emissive: 0x6b5320, pos: [-1.8, -2.1, -0.1], speed: 0.24, opacity: 0.45 }
+        { geo: new THREE.IcosahedronGeometry(1.95, 0), color: 0x10b981, emissive: 0x0f7655, pos: [-3.2, 1.4, -0.25], speed: 0.18, opacity: 0.88 },
+        { geo: new THREE.OctahedronGeometry(1.65, 0), color: 0xe2c275, emissive: 0xb88d3b, pos: [3.1, -1.2, -0.15], speed: -0.22, opacity: 0.82 },
+        { geo: new THREE.TorusGeometry(2.25, 0.22, 18, 56), color: 0x34d399, emissive: 0x0b533d, pos: [0.2, 0.15, -0.45], speed: 0.12, opacity: 0.78 },
+        { geo: new THREE.DodecahedronGeometry(1.35, 0), color: 0xf4d08a, emissive: 0x9c7628, pos: [-1.7, -1.9, -0.1], speed: 0.24, opacity: 0.78 }
     ];
 
     shapeSpecs.forEach((spec, i) => {
         const mat = new THREE.MeshStandardMaterial({
             color: spec.color,
             emissive: spec.emissive,
-            emissiveIntensity: 0.85,
-            roughness: 0.35,
-            metalness: 0.4,
+            emissiveIntensity: 1.15,
+            roughness: 0.28,
+            metalness: 0.35,
             transparent: true,
             opacity: spec.opacity
         });
         const mesh = new THREE.Mesh(spec.geo, mat);
         mesh.position.set(spec.pos[0], spec.pos[1], spec.pos[2]);
+
         shapeGroup.add(mesh);
         shapes.push({ mesh, basePos: [...spec.pos], speed: spec.speed, phase: i * 1.4 });
     });
@@ -139,20 +140,20 @@ import * as THREE from './vendor/three.module.js';
     // =========================================================================
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xeefcf6),
+        color: new THREE.Color(0x9bd4bf),
         transmission: 0.96,
-        roughness: 0.62,
+        roughness: 0.46,
         ior: 1.5,
-        thickness: 1.2,
-        metalness: 0.04,
-        clearcoat: 0.25,
-        clearcoatRoughness: 0.42,
-        attenuationColor: new THREE.Color(0x0b3d2e),
-        attenuationDistance: 8.5,
+        thickness: 1.0,
+        metalness: 0.02,
+        clearcoat: 0.1,
+        clearcoatRoughness: 0.6,
+        attenuationColor: new THREE.Color(0x06291e),
+        attenuationDistance: 9.0,
         normalMap,
-        normalScale: new THREE.Vector2(0.38, 0.38),
+        normalScale: new THREE.Vector2(0.35, 0.35),
         bumpMap: normalMap,
-        bumpScale: 0.015,
+        bumpScale: 0.012,
         transparent: true,
         opacity: 1.0
     });
@@ -214,8 +215,8 @@ import * as THREE from './vendor/three.module.js';
     dirLight.position.set(-4, 5, 4);
     scene.add(dirLight);
 
-    const cursorLight = new THREE.PointLight(0xfae8b4, 28, 32, 1.45);
-    cursorLight.position.set(0, 0, 2.8);
+    const cursorLight = new THREE.PointLight(0xd4b978, 3.8, 18, 1.85);
+    cursorLight.position.set(0, 0, 3.2);
     scene.add(cursorLight);
 
     // =========================================================================
@@ -276,7 +277,7 @@ import * as THREE from './vendor/three.module.js';
         const targetY = mouse.y * (frustumAtGlass.height * 0.5);
         currentLight.x += (targetX - currentLight.x) * 0.12;
         currentLight.y += (targetY - currentLight.y) * 0.12;
-        cursorLight.position.set(currentLight.x, currentLight.y, 2.8);
+        cursorLight.position.set(currentLight.x, currentLight.y, 3.2);
 
         // Gentle drift for underlying geometric shapes behind the glass
         if (!prefersReducedMotion) {
