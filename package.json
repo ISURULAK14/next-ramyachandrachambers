@@ -1,7 +1,8 @@
 {
   "scripts": {
     "test": "node tests/e2e_ui_test.js",
-    "test:e2e": "node tests/e2e_ui_test.js"
+    "test:e2e": "node tests/e2e_ui_test.js",
+    "test:full": "node tests/full_website_suite.js"
   },
   "devDependencies": {
     "lighthouse": "^13.6.0",

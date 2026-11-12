@@ -2053,10 +2053,16 @@ header.site-header {
   border: 1px solid rgba(226, 194, 117, 0.35) !important;
   color: #f8fafc !important;
 }
-.faq-category-btn.active, .faq-category-btn:hover {
+.faq-category-btn.active, .faq-category-btn.is-active, .faq-category-btn:hover {
   background: linear-gradient(135deg, #fae8b4 0%, #e2c275 100%) !important;
   color: #03120e !important;
   font-weight: 700 !important;
+}
+.legal-modal-backdrop {
+  z-index: 100005 !important;
+}
+.rg-preloader {
+  display: none !important;
 }
 .faq-question {
   color: #f8fafc !important;
@@ -2132,5 +2138,11 @@ header.site-header {
     min-height: 44px !important;
     display: inline-flex !important;
     align-items: center !important;
+  }
+  .faq-category-btn {
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 }

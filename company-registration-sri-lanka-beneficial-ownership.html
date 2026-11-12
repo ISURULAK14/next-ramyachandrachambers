@@ -32,8 +32,8 @@
     <!-- Stylesheets -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.min.css?v=9.9.5">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=optional" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.min.css?v=11.0.0">
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -185,6 +185,7 @@
     <!-- Optimized Non-Blocking Microsoft Clarity (Zero TBT Penalty) -->
     <script type="text/javascript">
         window.clarity = window.clarity || function(){(window.clarity.q = window.clarity.q || []).push(arguments)};
+        window.clarity('consent', false);
         function loadClarity() {
             if (window.__clarityLoaded) return;
             window.__clarityLoaded = true;
@@ -193,12 +194,7 @@
             t.src = "https://www.clarity.ms/tag/z89nh2abb8";
             document.head.appendChild(t);
         }
-        if ('requestIdleCallback' in window) {
-            window.addEventListener('load', function() { requestIdleCallback(loadClarity, { timeout: 4000 }); });
-        } else {
-            window.addEventListener('load', function() { setTimeout(loadClarity, 2000); });
-        }
-        ['pointerdown', 'pointermove', 'scroll', 'touchstart', 'keydown'].forEach(function(ev) {
+        ['click', 'touchstart', 'keydown'].forEach(function(ev) {
             window.addEventListener(ev, loadClarity, { once: true, passive: true });
         });
     </script>
@@ -362,8 +358,8 @@
                 </div>
                 <div class="footer-nav-row">
                     <a href="faq.html" class="footer-link">FAQ</a>
-                    <a href="privacy-policy.html" id="open-privacy-link" class="footer-link" role="button" aria-haspopup="dialog">Privacy Policy</a>
-                    <a href="terms-of-engagement.html" id="open-terms-link" class="footer-link" role="button" aria-haspopup="dialog">Terms of Engagement</a>
+                    <a href="privacy-policy.html" class="footer-link">Privacy Policy</a>
+                    <a href="terms-of-engagement.html" class="footer-link">Terms of Engagement</a>
                 </div>
             </nav>
 

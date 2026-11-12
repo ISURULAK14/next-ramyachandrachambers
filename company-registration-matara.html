@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xml:lang="en" translate="yes" data-theme="light">
+<html lang="en" xml:lang="en" translate="yes" data-theme="dark">
 <head>
     <!-- Critical Dark Frame Initialization (Zero White Flash) -->
     <style id="rg-critical-base">
       html, body {
-        background-color: #f8f6f0 !important;
-        color: #f5f5f5 !important;
+        background-color: #03120e !important;
+        color: #f8fafc !important;
         margin: 0 !important;
         padding: 0 !important;
         overflow-x: hidden !important;
@@ -22,11 +22,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://www.googletagmanager.com">
 
-    <!-- Optimized Non-Blocking Google Fonts with display=swap -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" crossorigin>
+    <!-- Optimized Non-Blocking Google Fonts with display=optional -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=optional" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=optional" crossorigin>
     <noscript>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=optional">
     </noscript>
 
           <!-- Optimized Non-Blocking Google Analytics (Zero TBT Penalty) -->
@@ -43,12 +43,7 @@
       s.src = 'https://www.googletagmanager.com/gtag/js?id=G-C0KRJZFKLM';
       document.head.appendChild(s);
     }
-    if ('requestIdleCallback' in window) {
-      window.addEventListener('load', function() { requestIdleCallback(loadGtag, { timeout: 2500 }); });
-    } else {
-      window.addEventListener('load', function() { setTimeout(loadGtag, 1500); });
-    }
-    ['pointerdown', 'scroll', 'touchstart', 'keydown'].forEach(function(ev) {
+    ['click', 'touchstart', 'keydown'].forEach(function(ev) {
       window.addEventListener(ev, loadGtag, { once: true, passive: true });
     });
   </script>
@@ -59,7 +54,7 @@
     <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <meta name="language" content="en">
     <meta name="revisit-after" content="7 days">
-    <meta name="theme-color" content="#0b1720">
+    <meta name="theme-color" content="#03120e">
     <meta name="application-name" content="Ramyachandra Gunasekera Chambers">
     <meta name="apple-mobile-web-app-title" content="RG Chambers">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -200,7 +195,7 @@
 }
     </script>
 
-    <link rel="stylesheet" href="css/style.min.css?v=9.9.5">
+    <link rel="stylesheet" href="css/style.min.css?v=11.0.0">
     <!-- Security & XSS Protection Headers -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.googletagmanager.com; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://www.clarity.ms https://scripts.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; frame-src 'self' https://www.google.com https://maps.google.com https://*.google.com https://*.googleapis.com https://widget.tagembed.com https://*.tagembed.com https://embedsocial.com https://*.embedsocial.com; connect-src 'self' https://api.indexnow.org https://www.bing.com https://www.google-analytics.com https://*.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com https://cloudflareinsights.com https://*.clarity.ms https://c.bing.com; object-src 'none'; base-uri 'self'; form-action 'self' mailto: tel: https:;">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -225,7 +220,7 @@
       position: fixed;
       inset: 0;
       z-index: 999999;
-      background: radial-gradient(circle at center, #ffffff 0%, #f4efe4 100%);
+      background: radial-gradient(circle at center, #0d2137 0%, #06111c 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -291,6 +286,7 @@
     <!-- Optimized Non-Blocking Microsoft Clarity (Zero TBT Penalty) -->
     <script type="text/javascript">
         window.clarity = window.clarity || function(){(window.clarity.q = window.clarity.q || []).push(arguments)};
+        window.clarity('consent', false);
         function loadClarity() {
             if (window.__clarityLoaded) return;
             window.__clarityLoaded = true;
@@ -299,12 +295,7 @@
             t.src = "https://www.clarity.ms/tag/z89nh2abb8";
             document.head.appendChild(t);
         }
-        if ('requestIdleCallback' in window) {
-            window.addEventListener('load', function() { requestIdleCallback(loadClarity, { timeout: 4000 }); });
-        } else {
-            window.addEventListener('load', function() { setTimeout(loadClarity, 2000); });
-        }
-        ['pointerdown', 'pointermove', 'scroll', 'touchstart', 'keydown'].forEach(function(ev) {
+        ['click', 'touchstart', 'keydown'].forEach(function(ev) {
             window.addEventListener(ev, loadClarity, { once: true, passive: true });
         });
     </script>
@@ -477,6 +468,6 @@
     <!-- Interactive Scripts: Accordions, Scroll Reveals, Cursor -->
 
     <!-- Main Deferred JavaScript -->
-    <script defer src="js/main.min.js?v=9.9.5"></script>
+    <script defer src="js/main.min.js?v=11.0.0"></script>
 </body>
 </html>

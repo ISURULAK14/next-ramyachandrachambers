@@ -769,16 +769,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Deep link handling (e.g. faq.html#property-deed-matara)
-        if (window.location.hash) {
+        const openFaqFromHash = () => {
+            if (!window.location.hash) return;
             const targetId = window.location.hash.substring(1);
             const targetCard = document.getElementById(targetId);
-            if (targetCard) {
-                setTimeout(() => {
-                    setFaqCardState(targetCard, true);
-                    targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 300);
+            if (targetCard && targetCard.classList.contains('faq-card')) {
+                setFaqCardState(targetCard, true);
+                targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
+        };
+        if (window.location.hash) {
+            setTimeout(openFaqFromHash, 300);
         }
+        window.addEventListener('hashchange', openFaqFromHash);
     }
 
 
