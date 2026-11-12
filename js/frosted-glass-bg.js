@@ -1,7 +1,7 @@
 /**
  * Ramyachandra Gunasekera Chambers — Staging (next.ramyachandrachambers.com)
- * Three.js Transmissive Frosted Glass + Shader Gradient Stripes + Uniform Grid
- * + Bright Empty-Margin Cursor & Scroll-Jump Backlight
+ * Three.js Transmissive Satin-Frosted Glass + Architectural Gradient Stripes + Uniform Grid
+ * + Silky 60fps Frame-Independent Empty-Margin Backlight
  */
 import * as THREE from './vendor/three.module.js';
 
@@ -21,11 +21,14 @@ import * as THREE from './vendor/three.module.js';
         return; // Graceful fallback to CSS #03120e emerald base
     }
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    renderer.setPixelRatio(dpr);
+    // Cap DPR & half-res transmission target for locked 60/120fps silky frosted rendering
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
     renderer.setSize(window.innerWidth, window.innerHeight, false);
+    if ('transmissionResolutionScale' in renderer) {
+        renderer.transmissionResolutionScale = 0.5;
+    }
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.05;
+    renderer.toneMappingExposure = 1.04;
 
     const scene = new THREE.Scene();
 
@@ -46,7 +49,7 @@ import * as THREE from './vendor/three.module.js';
     }
 
     // =========================================================================
-    // 1. Background Environment Layer: Earlier Shader Gradient Stripes & Emerald Glow
+    // 1. Background Environment Layer: Preserved Shader Gradient Stripes
     // =========================================================================
     const bgZ = -1.6;
     const bgGeo = new THREE.PlaneGeometry(1, 1);
@@ -75,44 +78,40 @@ import * as THREE from './vendor/three.module.js';
                 vec2 p = vUv;
                 vec2 px = vUv * uResolution;
 
-                // Preserved --bg-texture base emerald palette
                 vec3 baseNoir = vec3(0.0118, 0.0706, 0.0549);      // #03120e
                 vec3 deepEmerald = vec3(0.0235, 0.1373, 0.1098);   // #06231c
                 vec3 midEmerald = vec3(0.0314, 0.1020, 0.0824);    // #081a15
                 vec3 brightEmerald = vec3(0.0627, 0.7255, 0.5059); // #10b981
                 vec3 champagne = vec3(0.8863, 0.7608, 0.4588);     // #e2c275
 
-                // Base diagonal gradient + subtle radial glows
                 float diag = clamp(p.x * 0.55 + (1.0 - p.y) * 0.45, 0.0, 1.0);
                 vec3 col = mix(baseNoir, deepEmerald, smoothstep(0.0, 0.45, diag));
                 col = mix(col, midEmerald, smoothstep(0.45, 0.80, diag));
                 col = mix(col, baseNoir, smoothstep(0.80, 1.0, diag));
 
-                col += brightEmerald * smoothstep(0.65, 0.0, length(p - vec2(0.5, 1.05))) * 0.18;
-                col += champagne * smoothstep(0.55, 0.0, length(p - vec2(0.86, 0.78))) * 0.14;
+                col += brightEmerald * smoothstep(0.65, 0.0, length(p - vec2(0.5, 1.05))) * 0.16;
+                col += champagne * smoothstep(0.55, 0.0, length(p - vec2(0.86, 0.78))) * 0.12;
 
-                // Earlier architectural fluted gradient stripes (diagonal aurora bands + vertical fluted bars)
+                // Architectural fluted gradient stripes
                 float angle = radians(14.0);
                 vec2 rot = vec2(
                     px.x * cos(angle) - px.y * sin(angle),
                     px.x * sin(angle) + px.y * cos(angle)
                 );
-                float drift = uTime * 14.0 + uScroll * 0.18;
+                float drift = uTime * 10.0 + uScroll * 0.12;
 
-                // Broad soft gradient stripes (replaces random geometric shapes)
-                float bandWave = sin((rot.x + drift) * 0.022) * 0.5 + 0.5;
-                float bandStripe = smoothstep(0.25, 0.85, bandWave);
-                float secondaryWave = sin((px.x * 0.018 - px.y * 0.008) - uTime * 0.35) * 0.5 + 0.5;
+                float bandWave = sin((rot.x + drift) * 0.020) * 0.5 + 0.5;
+                float bandStripe = smoothstep(0.22, 0.88, bandWave);
+                float secondaryWave = sin((px.x * 0.016 - px.y * 0.007) - uTime * 0.25) * 0.5 + 0.5;
 
-                // Keep central text corridor darker while stripes shimmer cleanly
-                float edgeMask = smoothstep(0.10, 0.48, abs(p.x - 0.5));
-                col += deepEmerald * bandStripe * 0.75;
-                col += brightEmerald * pow(bandStripe, 2.2) * (0.12 + 0.18 * edgeMask);
-                col += champagne * smoothstep(0.62, 0.98, secondaryWave) * (0.05 + 0.11 * edgeMask);
+                // Keep central text corridor dark & legible while side margins glow softly
+                float edgeMask = smoothstep(0.12, 0.48, abs(p.x - 0.5));
+                col += deepEmerald * bandStripe * 0.70;
+                col += brightEmerald * pow(bandStripe, 2.2) * (0.10 + 0.18 * edgeMask);
+                col += champagne * smoothstep(0.62, 0.98, secondaryWave) * (0.04 + 0.10 * edgeMask);
 
-                // Subtle fine 12deg diagonal architectural pinstripe sheen
-                float fineStripe = smoothstep(0.88, 1.0, sin((rot.x * 0.35)) * 0.5 + 0.5);
-                col += vec3(0.08, 0.18, 0.14) * fineStripe * 0.22;
+                float fineStripe = smoothstep(0.90, 1.0, sin((rot.x * 0.32)) * 0.5 + 0.5);
+                col += vec3(0.06, 0.15, 0.11) * fineStripe * 0.16;
 
                 gl_FragColor = vec4(col, 1.0);
             }
@@ -123,33 +122,31 @@ import * as THREE from './vendor/three.module.js';
     scene.add(bgMesh);
 
     // =========================================================================
-    // 2. Surface Displacement (Normal Map via THREE.TextureLoader)
+    // 2. Refined Satin-Frosted Surface Micro-Texture (Normal Map via TextureLoader)
     // =========================================================================
     const textureLoader = new THREE.TextureLoader();
     const normalMap = textureLoader.load('assets/frosted-normal.png');
     normalMap.wrapS = THREE.RepeatWrapping;
     normalMap.wrapT = THREE.RepeatWrapping;
-    normalMap.repeat.set(5, 3);
+    normalMap.repeat.set(4, 2.5);
 
     // =========================================================================
     // 3. Frosted Glass Shader (MeshPhysicalMaterial on Full-Screen PlaneGeometry)
     // =========================================================================
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0x9bd4bf),
+        color: new THREE.Color(0x8ecab3),
         transmission: 0.96,
-        roughness: 0.48,
+        roughness: 0.52,
         ior: 1.5,
-        thickness: 1.0,
+        thickness: 0.95,
         metalness: 0.02,
-        clearcoat: 0.16,
-        clearcoatRoughness: 0.52,
+        clearcoat: 0.12,
+        clearcoatRoughness: 0.58,
         attenuationColor: new THREE.Color(0x05241a),
         attenuationDistance: 9.0,
         normalMap,
-        normalScale: new THREE.Vector2(0.36, 0.36),
-        bumpMap: normalMap,
-        bumpScale: 0.014,
+        normalScale: new THREE.Vector2(0.16, 0.16),
         transparent: true,
         opacity: 1.0
     });
@@ -158,7 +155,7 @@ import * as THREE from './vendor/three.module.js';
     scene.add(glassMesh);
 
     // =========================================================================
-    // 4. Distinct, Fine, Uniform Screen-Space Grid Overlay
+    // 4. Fine Uniform Screen-Space Grid Overlay
     // =========================================================================
     const gridGeo = new THREE.PlaneGeometry(1, 1);
     const gridUniforms = {
@@ -183,15 +180,15 @@ import * as THREE from './vendor/three.module.js';
                 vec2 coord = gl_FragCoord.xy / uGridSize;
                 vec2 grid = abs(fract(coord - 0.5) - 0.5) / fwidth(coord);
                 float line = min(grid.x, grid.y);
-                float minorAlpha = (1.0 - min(line, 1.0)) * 0.085;
+                float minorAlpha = (1.0 - min(line, 1.0)) * 0.075;
 
                 vec2 majorCoord = gl_FragCoord.xy / (uGridSize * 4.0);
                 vec2 majorGrid = abs(fract(majorCoord - 0.5) - 0.5) / fwidth(majorCoord);
                 float majorLine = min(majorGrid.x, majorGrid.y);
-                float majorAlpha = (1.0 - min(majorLine, 1.0)) * 0.06;
+                float majorAlpha = (1.0 - min(majorLine, 1.0)) * 0.055;
 
                 vec3 color = mix(uAccentColor, uLineColor, 0.65);
-                float alpha = clamp(minorAlpha + majorAlpha, 0.0, 0.14);
+                float alpha = clamp(minorAlpha + majorAlpha, 0.0, 0.13);
                 gl_FragColor = vec4(color, alpha);
             }
         `
@@ -201,19 +198,24 @@ import * as THREE from './vendor/three.module.js';
     scene.add(gridMesh);
 
     // =========================================================================
-    // 5. Bright Dynamic Backlight Constrained to Empty Side Margins
+    // 5. Velvety Dynamic Lighting In Front of Glass Plane (Empty Margins Only)
     // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x0a2e23, 0.45);
+    const ambientLight = new THREE.AmbientLight(0x0a2e23, 0.42);
     scene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0x10b981, 0.35);
+    const dirLight = new THREE.DirectionalLight(0x10b981, 0.30);
     dirLight.position.set(-5, 4, 3.5);
     scene.add(dirLight);
 
-    // High-brightness backlight positioned in front of the frosted glass plane
-    const cursorLight = new THREE.PointLight(0xfae8b4, 30.0, 26, 1.35);
-    cursorLight.position.set(4.5, 0.8, 2.9);
+    // Primary luminous champagne backlight (soft wide bloom at z = 3.8)
+    const cursorLight = new THREE.PointLight(0xf6dfa6, 22.0, 28, 1.5);
+    cursorLight.position.set(4.5, 0.6, 3.8);
     scene.add(cursorLight);
+
+    // Subtle emerald-teal counter-rim on opposite margin for balanced luxury depth
+    const counterLight = new THREE.PointLight(0x10b981, 7.5, 24, 1.6);
+    counterLight.position.set(-4.8, -0.8, 3.4);
+    scene.add(counterLight);
 
     // =========================================================================
     // 6. Responsive Frustum Scaling & Resize Handler
@@ -227,7 +229,7 @@ import * as THREE from './vendor/three.module.js';
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
 
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
         renderer.setSize(w, h, false);
 
         bgUniforms.uResolution.value.set(w, h);
@@ -241,67 +243,75 @@ import * as THREE from './vendor/three.module.js';
         const gridFrustum = getFrustumSizeAtZ(0.02);
         gridMesh.scale.set(gridFrustum.width * 1.02, gridFrustum.height * 1.02, 1);
 
-        normalMap.repeat.set(Math.max(2, w / 320), Math.max(2, h / 320));
+        normalMap.repeat.set(Math.max(2, w / 360), Math.max(2, h / 360));
     }
     handleResize();
     window.addEventListener('resize', handleResize, { passive: true });
 
     // =========================================================================
-    // 7. Interactivity: Empty-Side Cursor Tracking + Involuntary Scroll Jump
+    // 7. Fluid Empty-Margin Tracking & Silky Scroll Glide
     // =========================================================================
-    const mouse = { x: 0.85, y: 0.15 };
-    const currentLight = { x: 0, y: 0 };
-    let scrollJumpSide = 1; // +1 = right empty gutter, -1 = left empty gutter
-    let lastScrollY = window.scrollY || 0;
+    const targetNDC = { x: 0.84, y: 0.15 };
+    const currentNDC = { x: 0.84, y: 0.15 };
+    let smoothScrollY = window.scrollY || 0;
+    let targetScrollY = smoothScrollY;
 
-    // Map horizontal cursor into empty outer side margins (|x| in [0.76, 0.96])
-    // so central text columns always remain dark and high-contrast.
+    // Project horizontal cursor smoothly into outer empty margins (|x| >= 0.76)
+    // so central text columns always remain dark and readable.
     function projectToEmptySide(ndcX) {
         const sign = ndcX >= 0 ? 1 : -1;
         const mag = Math.min(1, Math.abs(ndcX));
-        return sign * (0.76 + mag * 0.20);
+        return sign * (0.76 + mag * 0.18);
     }
 
     window.addEventListener('mousemove', (event) => {
         const rawX = (event.clientX / Math.max(1, window.innerWidth)) * 2 - 1;
         const rawY = -(event.clientY / Math.max(1, window.innerHeight)) * 2 + 1;
-        mouse.x = projectToEmptySide(rawX);
-        mouse.y = rawY * 0.85;
-        scrollJumpSide = rawX >= 0 ? 1 : -1;
+        targetNDC.x = projectToEmptySide(rawX);
+        targetNDC.y = rawY * 0.78;
     }, { passive: true });
 
-    // Involuntary jump on scroll while keeping light strictly in empty side margin
     window.addEventListener('scroll', () => {
-        const nowY = window.scrollY || 0;
-        const delta = nowY - lastScrollY;
-        lastScrollY = nowY;
-        bgUniforms.uScroll.value = nowY;
-
-        if (Math.abs(delta) > 4) {
-            if (Math.abs(delta) > 35) {
-                scrollJumpSide = (Math.floor(nowY / 180) % 2 === 0) ? 1 : -1;
-            }
-            const sideBias = 0.78 + (Math.abs(Math.sin(nowY * 0.017)) * 0.18);
-            mouse.x = scrollJumpSide * sideBias;
-            mouse.y = Math.max(-0.85, Math.min(0.85, Math.sin(nowY * 0.013) * 0.78));
-        }
+        targetScrollY = window.scrollY || 0;
+        // Smooth organic wave along empty margin on scroll (no jarring snap)
+        const scrollPhase = targetScrollY * 0.0035;
+        targetNDC.y = Math.sin(scrollPhase) * 0.68;
+        const sideWave = Math.cos(targetScrollY * 0.0018);
+        const sign = sideWave >= 0 ? 1 : -1;
+        targetNDC.x = sign * (0.78 + 0.14 * Math.abs(sideWave));
     }, { passive: true });
 
     // =========================================================================
-    // 8. Animation Loop (requestAnimationFrame)
+    // 8. Frame-Rate Independent Smooth Animation Loop
     // =========================================================================
     const clock = new THREE.Clock();
     let rafId = 0;
 
     function renderFrame() {
-        const elapsed = clock.getElapsedTime();
-        bgUniforms.uTime.value = elapsed;
+        const dt = Math.min(clock.getDelta(), 0.05);
+        const elapsed = clock.elapsedTime;
 
-        const targetX = mouse.x * (frustumAtGlass.width * 0.5);
-        const targetY = mouse.y * (frustumAtGlass.height * 0.5);
-        currentLight.x += (targetX - currentLight.x) * 0.18;
-        currentLight.y += (targetY - currentLight.y) * 0.18;
-        cursorLight.position.set(currentLight.x, currentLight.y, 2.9);
+        // Exponential damping (butter-smooth at any refresh rate)
+        const posEase = 1 - Math.exp(-3.8 * dt);
+        const scrollEase = 1 - Math.exp(-5.0 * dt);
+
+        smoothScrollY += (targetScrollY - smoothScrollY) * scrollEase;
+        bgUniforms.uTime.value = elapsed;
+        bgUniforms.uScroll.value = smoothScrollY;
+
+        currentNDC.x += (targetNDC.x - currentNDC.x) * posEase;
+        currentNDC.y += (targetNDC.y - currentNDC.y) * posEase;
+
+        // Keep light clamped outside the central text corridor during cross-glides
+        const safeNDCX = Math.abs(currentNDC.x) < 0.76
+            ? (currentNDC.x >= 0 ? 0.76 : -0.76)
+            : currentNDC.x;
+
+        const worldX = safeNDCX * (frustumAtGlass.width * 0.5);
+        const worldY = currentNDC.y * (frustumAtGlass.height * 0.5);
+
+        cursorLight.position.set(worldX, worldY, 3.8);
+        counterLight.position.set(-worldX * 0.92, -worldY * 0.65, 3.4);
 
         renderer.render(scene, camera);
 
@@ -312,7 +322,7 @@ import * as THREE from './vendor/three.module.js';
             ior: glassMat.ior,
             hasNormalMap: Boolean(glassMat.normalMap),
             hasGridOverlay: Boolean(gridMesh.visible),
-            mouseNDC: { x: mouse.x, y: mouse.y },
+            mouseNDC: { x: safeNDCX, y: currentNDC.y },
             lightPos: { x: cursorLight.position.x, y: cursorLight.position.y, z: cursorLight.position.z }
         };
     }
