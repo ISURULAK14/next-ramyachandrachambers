@@ -1,6 +1,7 @@
 /**
  * Ramyachandra Gunasekera Chambers — Staging (next.ramyachandrachambers.com)
- * Three.js Transmissive Frosted Glass Background + Uniform Grid + Dynamic Cursor Light
+ * Three.js Transmissive Frosted Glass + Shader Gradient Stripes + Uniform Grid
+ * + Bright Empty-Margin Cursor & Scroll-Jump Backlight
  */
 import * as THREE from './vendor/three.module.js';
 
@@ -24,7 +25,7 @@ import * as THREE from './vendor/three.module.js';
     renderer.setPixelRatio(dpr);
     renderer.setSize(window.innerWidth, window.innerHeight, false);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.08;
+    renderer.toneMappingExposure = 1.05;
 
     const scene = new THREE.Scene();
 
@@ -36,7 +37,6 @@ import * as THREE from './vendor/three.module.js';
     );
     camera.position.set(0, 0, 10);
 
-    // Helper: compute exact world-space frustum width & height at a given Z plane
     function getFrustumSizeAtZ(zPlane) {
         const dist = camera.position.z - zPlane;
         const vFov = THREE.MathUtils.degToRad(camera.fov);
@@ -46,12 +46,13 @@ import * as THREE from './vendor/three.module.js';
     }
 
     // =========================================================================
-    // 1. Background Environment Layer (Preserved Emerald Colors & Geometric Shapes)
+    // 1. Background Environment Layer: Earlier Shader Gradient Stripes & Emerald Glow
     // =========================================================================
-    const bgZ = -3.0;
+    const bgZ = -1.6;
     const bgGeo = new THREE.PlaneGeometry(1, 1);
     const bgUniforms = {
         uTime: { value: 0 },
+        uScroll: { value: 0 },
         uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
     };
     const bgMat = new THREE.ShaderMaterial({
@@ -67,26 +68,51 @@ import * as THREE from './vendor/three.module.js';
         fragmentShader: `
             varying vec2 vUv;
             uniform float uTime;
+            uniform float uScroll;
+            uniform vec2 uResolution;
+
             void main() {
                 vec2 p = vUv;
+                vec2 px = vUv * uResolution;
+
+                // Preserved --bg-texture base emerald palette
                 vec3 baseNoir = vec3(0.0118, 0.0706, 0.0549);      // #03120e
-                vec3 deepEmerald = vec3(0.0196, 0.1569, 0.1216);   // #05281f
-                vec3 royalEmerald = vec3(0.0431, 0.2392, 0.1804);  // #0b3d2e
-                vec3 champagneGlow = vec3(0.886, 0.761, 0.459);    // #e2c275
+                vec3 deepEmerald = vec3(0.0235, 0.1373, 0.1098);   // #06231c
+                vec3 midEmerald = vec3(0.0314, 0.1020, 0.0824);    // #081a15
+                vec3 brightEmerald = vec3(0.0627, 0.7255, 0.5059); // #10b981
+                vec3 champagne = vec3(0.8863, 0.7608, 0.4588);     // #e2c275
 
-                float drift1 = sin(uTime * 0.25) * 0.05;
-                float drift2 = cos(uTime * 0.20) * 0.05;
+                // Base diagonal gradient + subtle radial glows
+                float diag = clamp(p.x * 0.55 + (1.0 - p.y) * 0.45, 0.0, 1.0);
+                vec3 col = mix(baseNoir, deepEmerald, smoothstep(0.0, 0.45, diag));
+                col = mix(col, midEmerald, smoothstep(0.45, 0.80, diag));
+                col = mix(col, baseNoir, smoothstep(0.80, 1.0, diag));
 
-                float d1 = length(p - vec2(0.18 + drift1, 0.85));
-                float d2 = length(p - vec2(0.86 - drift2, 0.22));
-                float d3 = length(p - vec2(0.50, 0.50 + drift1 * 0.6));
+                col += brightEmerald * smoothstep(0.65, 0.0, length(p - vec2(0.5, 1.05))) * 0.18;
+                col += champagne * smoothstep(0.55, 0.0, length(p - vec2(0.86, 0.78))) * 0.14;
 
-                vec3 col = baseNoir;
-                col = mix(col, royalEmerald, smoothstep(0.95, 0.05, d1) * 0.90);
-                col = mix(col, deepEmerald, smoothstep(0.90, 0.05, d2) * 0.85);
-                col += royalEmerald * smoothstep(0.75, 0.0, d3) * 0.35;
-                col += champagneGlow * smoothstep(0.55, 0.0, length(p - vec2(0.24, 0.78))) * 0.10;
-                col += champagneGlow * smoothstep(0.50, 0.0, length(p - vec2(0.78, 0.28))) * 0.08;
+                // Earlier architectural fluted gradient stripes (diagonal aurora bands + vertical fluted bars)
+                float angle = radians(14.0);
+                vec2 rot = vec2(
+                    px.x * cos(angle) - px.y * sin(angle),
+                    px.x * sin(angle) + px.y * cos(angle)
+                );
+                float drift = uTime * 14.0 + uScroll * 0.18;
+
+                // Broad soft gradient stripes (replaces random geometric shapes)
+                float bandWave = sin((rot.x + drift) * 0.022) * 0.5 + 0.5;
+                float bandStripe = smoothstep(0.25, 0.85, bandWave);
+                float secondaryWave = sin((px.x * 0.018 - px.y * 0.008) - uTime * 0.35) * 0.5 + 0.5;
+
+                // Keep central text corridor darker while stripes shimmer cleanly
+                float edgeMask = smoothstep(0.10, 0.48, abs(p.x - 0.5));
+                col += deepEmerald * bandStripe * 0.75;
+                col += brightEmerald * pow(bandStripe, 2.2) * (0.12 + 0.18 * edgeMask);
+                col += champagne * smoothstep(0.62, 0.98, secondaryWave) * (0.05 + 0.11 * edgeMask);
+
+                // Subtle fine 12deg diagonal architectural pinstripe sheen
+                float fineStripe = smoothstep(0.88, 1.0, sin((rot.x * 0.35)) * 0.5 + 0.5);
+                col += vec3(0.08, 0.18, 0.14) * fineStripe * 0.22;
 
                 gl_FragColor = vec4(col, 1.0);
             }
@@ -95,36 +121,6 @@ import * as THREE from './vendor/three.module.js';
     const bgMesh = new THREE.Mesh(bgGeo, bgMat);
     bgMesh.position.z = bgZ;
     scene.add(bgMesh);
-
-    // Preserved underlying geometric shapes behind the transmissive glass layer
-    const shapeGroup = new THREE.Group();
-    shapeGroup.position.z = -0.95;
-    scene.add(shapeGroup);
-
-    const shapes = [];
-    const shapeSpecs = [
-        { geo: new THREE.IcosahedronGeometry(1.95, 0), color: 0x10b981, emissive: 0x0f7655, pos: [-3.2, 1.4, -0.25], speed: 0.18, opacity: 0.88 },
-        { geo: new THREE.OctahedronGeometry(1.65, 0), color: 0xe2c275, emissive: 0xb88d3b, pos: [3.1, -1.2, -0.15], speed: -0.22, opacity: 0.82 },
-        { geo: new THREE.TorusGeometry(2.25, 0.22, 18, 56), color: 0x34d399, emissive: 0x0b533d, pos: [0.2, 0.15, -0.45], speed: 0.12, opacity: 0.78 },
-        { geo: new THREE.DodecahedronGeometry(1.35, 0), color: 0xf4d08a, emissive: 0x9c7628, pos: [-1.7, -1.9, -0.1], speed: 0.24, opacity: 0.78 }
-    ];
-
-    shapeSpecs.forEach((spec, i) => {
-        const mat = new THREE.MeshStandardMaterial({
-            color: spec.color,
-            emissive: spec.emissive,
-            emissiveIntensity: 1.15,
-            roughness: 0.28,
-            metalness: 0.35,
-            transparent: true,
-            opacity: spec.opacity
-        });
-        const mesh = new THREE.Mesh(spec.geo, mat);
-        mesh.position.set(spec.pos[0], spec.pos[1], spec.pos[2]);
-
-        shapeGroup.add(mesh);
-        shapes.push({ mesh, basePos: [...spec.pos], speed: spec.speed, phase: i * 1.4 });
-    });
 
     // =========================================================================
     // 2. Surface Displacement (Normal Map via THREE.TextureLoader)
@@ -142,18 +138,18 @@ import * as THREE from './vendor/three.module.js';
     const glassMat = new THREE.MeshPhysicalMaterial({
         color: new THREE.Color(0x9bd4bf),
         transmission: 0.96,
-        roughness: 0.46,
+        roughness: 0.48,
         ior: 1.5,
         thickness: 1.0,
         metalness: 0.02,
-        clearcoat: 0.1,
-        clearcoatRoughness: 0.6,
-        attenuationColor: new THREE.Color(0x06291e),
+        clearcoat: 0.16,
+        clearcoatRoughness: 0.52,
+        attenuationColor: new THREE.Color(0x05241a),
         attenuationDistance: 9.0,
         normalMap,
-        normalScale: new THREE.Vector2(0.35, 0.35),
+        normalScale: new THREE.Vector2(0.36, 0.36),
         bumpMap: normalMap,
-        bumpScale: 0.012,
+        bumpScale: 0.014,
         transparent: true,
         opacity: 1.0
     });
@@ -189,11 +185,10 @@ import * as THREE from './vendor/three.module.js';
                 float line = min(grid.x, grid.y);
                 float minorAlpha = (1.0 - min(line, 1.0)) * 0.085;
 
-                // Subtle major intersection crosshairs every 4 cells
                 vec2 majorCoord = gl_FragCoord.xy / (uGridSize * 4.0);
                 vec2 majorGrid = abs(fract(majorCoord - 0.5) - 0.5) / fwidth(majorCoord);
                 float majorLine = min(majorGrid.x, majorGrid.y);
-                float majorAlpha = (1.0 - min(majorLine, 1.0)) * 0.065;
+                float majorAlpha = (1.0 - min(majorLine, 1.0)) * 0.06;
 
                 vec3 color = mix(uAccentColor, uLineColor, 0.65);
                 float alpha = clamp(minorAlpha + majorAlpha, 0.0, 0.14);
@@ -206,17 +201,18 @@ import * as THREE from './vendor/three.module.js';
     scene.add(gridMesh);
 
     // =========================================================================
-    // 5. Dynamic Lighting In Front of the Glass Plane
+    // 5. Bright Dynamic Backlight Constrained to Empty Side Margins
     // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x104536, 0.75);
+    const ambientLight = new THREE.AmbientLight(0x0a2e23, 0.45);
     scene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0x10b981, 0.55);
-    dirLight.position.set(-4, 5, 4);
+    const dirLight = new THREE.DirectionalLight(0x10b981, 0.35);
+    dirLight.position.set(-5, 4, 3.5);
     scene.add(dirLight);
 
-    const cursorLight = new THREE.PointLight(0xd4b978, 3.8, 18, 1.85);
-    cursorLight.position.set(0, 0, 3.2);
+    // High-brightness backlight positioned in front of the frosted glass plane
+    const cursorLight = new THREE.PointLight(0xfae8b4, 30.0, 26, 1.35);
+    cursorLight.position.set(4.5, 0.8, 2.9);
     scene.add(cursorLight);
 
     // =========================================================================
@@ -245,26 +241,55 @@ import * as THREE from './vendor/three.module.js';
         const gridFrustum = getFrustumSizeAtZ(0.02);
         gridMesh.scale.set(gridFrustum.width * 1.02, gridFrustum.height * 1.02, 1);
 
-        normalMap.repeat.set(Math.max(2, (w / 320)), Math.max(2, (h / 320)));
+        normalMap.repeat.set(Math.max(2, w / 320), Math.max(2, h / 320));
     }
     handleResize();
     window.addEventListener('resize', handleResize, { passive: true });
 
     // =========================================================================
-    // 7. Interactivity: Normalized Cursor Tracking (-1 to +1)
+    // 7. Interactivity: Empty-Side Cursor Tracking + Involuntary Scroll Jump
     // =========================================================================
-    const mouse = { x: 0, y: 0 };
+    const mouse = { x: 0.85, y: 0.15 };
     const currentLight = { x: 0, y: 0 };
+    let scrollJumpSide = 1; // +1 = right empty gutter, -1 = left empty gutter
+    let lastScrollY = window.scrollY || 0;
+
+    // Map horizontal cursor into empty outer side margins (|x| in [0.76, 0.96])
+    // so central text columns always remain dark and high-contrast.
+    function projectToEmptySide(ndcX) {
+        const sign = ndcX >= 0 ? 1 : -1;
+        const mag = Math.min(1, Math.abs(ndcX));
+        return sign * (0.76 + mag * 0.20);
+    }
 
     window.addEventListener('mousemove', (event) => {
-        mouse.x = (event.clientX / Math.max(1, window.innerWidth)) * 2 - 1;
-        mouse.y = -(event.clientY / Math.max(1, window.innerHeight)) * 2 + 1;
+        const rawX = (event.clientX / Math.max(1, window.innerWidth)) * 2 - 1;
+        const rawY = -(event.clientY / Math.max(1, window.innerHeight)) * 2 + 1;
+        mouse.x = projectToEmptySide(rawX);
+        mouse.y = rawY * 0.85;
+        scrollJumpSide = rawX >= 0 ? 1 : -1;
+    }, { passive: true });
+
+    // Involuntary jump on scroll while keeping light strictly in empty side margin
+    window.addEventListener('scroll', () => {
+        const nowY = window.scrollY || 0;
+        const delta = nowY - lastScrollY;
+        lastScrollY = nowY;
+        bgUniforms.uScroll.value = nowY;
+
+        if (Math.abs(delta) > 4) {
+            if (Math.abs(delta) > 35) {
+                scrollJumpSide = (Math.floor(nowY / 180) % 2 === 0) ? 1 : -1;
+            }
+            const sideBias = 0.78 + (Math.abs(Math.sin(nowY * 0.017)) * 0.18);
+            mouse.x = scrollJumpSide * sideBias;
+            mouse.y = Math.max(-0.85, Math.min(0.85, Math.sin(nowY * 0.013) * 0.78));
+        }
     }, { passive: true });
 
     // =========================================================================
     // 8. Animation Loop (requestAnimationFrame)
     // =========================================================================
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const clock = new THREE.Clock();
     let rafId = 0;
 
@@ -272,21 +297,11 @@ import * as THREE from './vendor/three.module.js';
         const elapsed = clock.getElapsedTime();
         bgUniforms.uTime.value = elapsed;
 
-        // Smoothly map normalized [-1, +1] cursor coordinates to light world position
         const targetX = mouse.x * (frustumAtGlass.width * 0.5);
         const targetY = mouse.y * (frustumAtGlass.height * 0.5);
-        currentLight.x += (targetX - currentLight.x) * 0.12;
-        currentLight.y += (targetY - currentLight.y) * 0.12;
-        cursorLight.position.set(currentLight.x, currentLight.y, 3.2);
-
-        // Gentle drift for underlying geometric shapes behind the glass
-        if (!prefersReducedMotion) {
-            shapes.forEach((item) => {
-                item.mesh.rotation.x += 0.0022 * item.speed * 4;
-                item.mesh.rotation.y += 0.0031 * item.speed * 4;
-                item.mesh.position.y = item.basePos[1] + Math.sin(elapsed * 0.45 + item.phase) * 0.35;
-            });
-        }
+        currentLight.x += (targetX - currentLight.x) * 0.18;
+        currentLight.y += (targetY - currentLight.y) * 0.18;
+        cursorLight.position.set(currentLight.x, currentLight.y, 2.9);
 
         renderer.render(scene, camera);
 

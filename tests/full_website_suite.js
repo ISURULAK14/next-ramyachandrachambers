@@ -813,11 +813,19 @@ async function runFullSuite() {
       );
       await page.mouse.move(100, 100);
       await new Promise(r => setTimeout(r, 250));
-      const pos1 = await page.evaluate(() => window.__rgFrostedGlass.lightPos);
+      const pos1 = await page.evaluate(() => ({ light: window.__rgFrostedGlass.lightPos, ndc: window.__rgFrostedGlass.mouseNDC }));
+      await page.mouse.move(720, 450);
+      await new Promise(r => setTimeout(r, 250));
+      const centerNdc = await page.evaluate(() => window.__rgFrostedGlass.mouseNDC);
+      check(Math.abs(centerNdc.x) >= 0.75, `Backlight remains in empty side margin when mouse near center (|ndcX|=${Math.abs(centerNdc.x).toFixed(2)})`);
       await page.mouse.move(1300, 800);
       await new Promise(r => setTimeout(r, 250));
-      const pos2 = await page.evaluate(() => window.__rgFrostedGlass.lightPos);
-      check(pos2.x > pos1.x && pos2.y < pos1.y, `Dynamic PointLight tracks normalized cursor coordinates (${pos1.x.toFixed(2)},${pos1.y.toFixed(2)} -> ${pos2.x.toFixed(2)},${pos2.y.toFixed(2)})`);
+      const pos2 = await page.evaluate(() => ({ light: window.__rgFrostedGlass.lightPos, ndc: window.__rgFrostedGlass.mouseNDC }));
+      check(pos2.light.x > pos1.light.x && pos2.light.y < pos1.light.y, `Dynamic PointLight tracks normalized cursor coordinates (${pos1.light.x.toFixed(2)},${pos1.light.y.toFixed(2)} -> ${pos2.light.x.toFixed(2)},${pos2.light.y.toFixed(2)})`);
+      await page.evaluate(() => window.scrollTo(0, 600));
+      await new Promise(r => setTimeout(r, 250));
+      const afterScroll = await page.evaluate(() => window.__rgFrostedGlass.mouseNDC);
+      check(afterScroll.y !== pos2.ndc.y && Math.abs(afterScroll.x) >= 0.75, `Scroll triggers involuntary side-margin jump (ndc: ${afterScroll.x.toFixed(2)}, ${afterScroll.y.toFixed(2)})`);
     }
     await page.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
     await new Promise(r => setTimeout(r, 250));
