@@ -1,7 +1,7 @@
 /**
  * Ramyachandra Gunasekera Chambers — Staging (next.ramyachandrachambers.com)
- * Option B: Heavy Frosted Glass + Thick Gradient Stripes + Behind-Glass Refracted Prism Beam
- * (No grid overlay; center text stays dark & crisp)
+ * Option C: Heavy Frosted Glass + Thick Gradient Stripes + Peripheral Halo Stripe-Reactive Backlight
+ * (Editorial Noir: outer 25% margins glow, central text corridor locked in deep obsidian)
  */
 import * as THREE from './vendor/three.module.js';
 
@@ -27,7 +27,7 @@ import * as THREE from './vendor/three.module.js';
         renderer.transmissionResolutionScale = 0.5;
     }
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.06;
+    renderer.toneMappingExposure = 1.05;
 
     const scene = new THREE.Scene();
 
@@ -48,7 +48,7 @@ import * as THREE from './vendor/three.module.js';
     }
 
     // =========================================================================
-    // 1. Background Environment: Thick Gradient Stripes + Behind-Glass Prism Beam (Option B)
+    // 1. Background Environment: Thick Gradient Stripes + Option C Peripheral Halo
     // =========================================================================
     const bgZ = -1.5;
     const bgGeo = new THREE.PlaneGeometry(1, 1);
@@ -90,42 +90,45 @@ import * as THREE from './vendor/three.module.js';
                 // Thick monumental diagonal gradient stripes
                 float stripeCoord = (p.x * 0.94 + p.y * 0.34) * 3.0 + uTime * 0.04 + uScroll * 0.00022;
                 float thickBand = sin(stripeCoord * 3.14159265) * 0.5 + 0.5;
-                float bandCurve = smoothstep(0.15, 0.85, thickBand);
+                float bandCurve = smoothstep(0.16, 0.86, thickBand);
 
-                float edgeMask = smoothstep(0.16, 0.48, abs(p.x - 0.5));
+                // Outer 25% peripheral margin mask; center 50% stays deep obsidian noir
+                float peripheralMask = smoothstep(0.24, 0.49, abs(p.x - 0.5));
 
-                vec3 col = mix(baseNoir, deepEmerald, bandCurve * 0.92);
-                col = mix(col, royalEmerald, pow(bandCurve, 1.7) * (0.45 + 0.48 * edgeMask));
+                vec3 col = mix(baseNoir, deepEmerald, bandCurve * (0.35 + 0.60 * peripheralMask));
+                col = mix(col, royalEmerald, pow(bandCurve, 1.8) * peripheralMask * 0.85);
 
                 // -------------------------------------------------------------
-                // Option B: Behind-Glass Refracted Diagonal Prism Beam
-                // Cursor & scroll smoothly tilt/glide the volumetric caustic beam
-                // through the thick stripes along the outer empty margins.
+                // Option C: Dual-Lobe Peripheral Halo + Stripe-Reactive Backlight
+                // Brightens the thick gradient stripes passing through outer 25%
+                // empty margins near cursor/scroll height; center stays pure noir.
                 // -------------------------------------------------------------
-                float targetX = mix(0.14, 0.86, clamp(uActiveSide * 0.5 + 0.5, 0.0, 1.0));
-                float targetY = clamp(uLightY, 0.16, 0.84);
+                float rightWeight = clamp(uActiveSide * 0.5 + 0.5, 0.0, 1.0);
+                float leftWeight = 1.0 - rightWeight;
+                float yPrimary = clamp(uLightY, 0.14, 0.86);
+                float yCounter = 1.0 - yPrimary;
 
-                // Beam tilts subtly with vertical cursor/scroll state
-                float tilt = mix(-0.42, 0.42, targetY);
-                vec2 rel = p - vec2(targetX, targetY);
-                float beamAxis = rel.x * cos(tilt) - rel.y * sin(tilt);
-                float beamAlong = rel.x * sin(tilt) + rel.y * cos(tilt);
+                // Dual smooth peripheral lobes (right & left outer edges)
+                float rightDistY = exp(-pow((p.y - yPrimary) / 0.36, 2.0));
+                float leftDistY = exp(-pow((p.y - yCounter) / 0.38, 2.0));
 
-                // Wide volumetric caustic core + secondary refraction halo
-                float beamCore = exp(-pow(beamAxis / 0.16, 2.0)) * exp(-pow(beamAlong / 0.65, 2.0));
-                float beamWide = exp(-pow(beamAxis / 0.30, 2.0)) * exp(-pow(beamAlong / 0.85, 2.0));
+                float rightMargin = smoothstep(0.68, 0.98, p.x);
+                float leftMargin = smoothstep(0.32, 0.02, p.x);
 
-                // Amplify caustics where thick stripes intersect the prism beam, attenuated in center text zone
-                float causticIntensity = (0.45 + 0.85 * bandCurve) * (0.18 + 0.82 * edgeMask);
+                float activeRight = rightMargin * mix(leftDistY, rightDistY, rightWeight);
+                float activeLeft = leftMargin * mix(rightDistY, leftDistY, rightWeight);
 
-                col += mix(brightEmerald, warmGold, 0.72) * beamCore * causticIntensity * 0.95;
-                col += mix(royalEmerald, champagne, 0.45) * beamWide * causticIntensity * 0.38;
+                // Stripe-reactive illumination: thick bands catch warm champagne/emerald light
+                float stripeBoost = 0.40 + 0.95 * bandCurve;
 
-                // Subtle balancing emerald caustic on opposite margin
-                float oppX = 1.0 - targetX;
-                float oppY = 1.0 - targetY;
-                float oppGlow = exp(-pow((p.x - oppX) / 0.18, 2.0)) * exp(-pow((p.y - oppY) / 0.45, 2.0));
-                col += brightEmerald * oppGlow * (0.35 + 0.65 * bandCurve) * 0.32;
+                vec3 primaryGlow = mix(brightEmerald, warmGold, 0.68);
+                vec3 secondaryGlow = mix(royalEmerald, brightEmerald, 0.72);
+
+                col += mix(secondaryGlow, primaryGlow, rightWeight) * activeRight * stripeBoost * 0.78;
+                col += mix(secondaryGlow, primaryGlow, leftWeight) * activeLeft * stripeBoost * 0.78;
+
+                // Ultra-soft champagne edge rim on the thick stripes in outer vignette
+                col += champagne * pow(bandCurve, 2.6) * peripheralMask * (activeRight * rightWeight + activeLeft * leftWeight) * 0.36;
 
                 gl_FragColor = vec4(col, 1.0);
             }
@@ -155,12 +158,12 @@ import * as THREE from './vendor/three.module.js';
         ior: 1.52,
         thickness: 1.35,
         metalness: 0.02,
-        clearcoat: 0.08,
-        clearcoatRoughness: 0.75,
+        clearcoat: 0.06,
+        clearcoatRoughness: 0.8,
         attenuationColor: new THREE.Color(0x05241a),
         attenuationDistance: 9.0,
         normalMap,
-        normalScale: new THREE.Vector2(0.24, 0.24),
+        normalScale: new THREE.Vector2(0.22, 0.22),
         transparent: true,
         opacity: 1.0
     });
@@ -169,17 +172,13 @@ import * as THREE from './vendor/three.module.js';
     scene.add(glassMesh);
 
     // =========================================================================
-    // 4. Gentle Edge Micro-Sheen Lighting (Main caustic is behind the glass)
+    // 4. Minimal Ambient + Subtle Telemetry Light (Zero Front Hotspot Glare)
     // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x0c382a, 0.45);
+    const ambientLight = new THREE.AmbientLight(0x0c382a, 0.42);
     scene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0x10b981, 0.20);
-    dirLight.position.set(-5, 4, 4);
-    scene.add(dirLight);
-
-    const cursorLight = new THREE.PointLight(0xf6dfa6, 2.8, 22, 1.8);
-    cursorLight.position.set(5.0, 0.5, 4.4);
+    const cursorLight = new THREE.PointLight(0xf6dfa6, 1.2, 18, 2.0);
+    cursorLight.position.set(5.0, 0.5, 4.6);
     scene.add(cursorLight);
 
     // =========================================================================
@@ -211,7 +210,7 @@ import * as THREE from './vendor/three.module.js';
     window.addEventListener('resize', handleResize, { passive: true });
 
     // =========================================================================
-    // 6. Fluid Empty-Margin Prism Beam Tracking & Scroll Glide
+    // 6. Fluid Peripheral Halo Cursor Tracking & Scroll Glide
     // =========================================================================
     const targetNDC = { x: 0.88, y: 0.15 };
     const currentNDC = { x: 0.88, y: 0.15 };
@@ -273,7 +272,7 @@ import * as THREE from './vendor/three.module.js';
 
         const worldX = safeNDCX * (frustumAtGlass.width * 0.5);
         const worldY = currentNDC.y * (frustumAtGlass.height * 0.5);
-        cursorLight.position.set(worldX, worldY, 4.4);
+        cursorLight.position.set(worldX, worldY, 4.6);
 
         renderer.render(scene, camera);
 
