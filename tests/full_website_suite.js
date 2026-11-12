@@ -808,8 +808,8 @@ async function runFullSuite() {
     if (glassCanvas && glassCanvas.state) {
       const st = glassCanvas.state;
       check(
-        st.active && st.transmission >= 0.9 && st.roughness >= 0.3 && st.ior > 1.3 && st.hasNormalMap && st.hasGridOverlay,
-        `Three.js Frosted Glass Shader active (transmission=${st.transmission}, roughness=${st.roughness}, ior=${st.ior}, normalMap=${st.hasNormalMap}, grid=${st.hasGridOverlay})`
+        st.active && st.transmission >= 0.9 && st.roughness >= 0.65 && st.ior > 1.3 && st.hasNormalMap && st.hasGridOverlay === false,
+        `Three.js Heavy Frosted Glass + Prism Beam active (transmission=${st.transmission}, roughness=${st.roughness}, ior=${st.ior}, normalMap=${st.hasNormalMap}, grid=${st.hasGridOverlay})`
       );
       await page.mouse.move(100, 100);
       await new Promise(r => setTimeout(r, 250));

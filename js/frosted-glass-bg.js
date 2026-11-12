@@ -1,7 +1,7 @@
 /**
  * Ramyachandra Gunasekera Chambers — Staging (next.ramyachandrachambers.com)
- * Option A: Thick Architectural Gradient Stripes + Transmissive Satin-Frosted Glass
- * + Dual Edge-Lit Light Blades & Uniform Grid
+ * Option B: Heavy Frosted Glass + Thick Gradient Stripes + Behind-Glass Refracted Prism Beam
+ * (No grid overlay; center text stays dark & crisp)
  */
 import * as THREE from './vendor/three.module.js';
 
@@ -48,16 +48,15 @@ import * as THREE from './vendor/three.module.js';
     }
 
     // =========================================================================
-    // 1. Background Environment: Thick Architectural Shader Gradient Stripes
-    //    + Dual Edge-Lit Sconce Light Blades (Option A)
+    // 1. Background Environment: Thick Gradient Stripes + Behind-Glass Prism Beam (Option B)
     // =========================================================================
     const bgZ = -1.5;
     const bgGeo = new THREE.PlaneGeometry(1, 1);
     const bgUniforms = {
         uTime: { value: 0 },
         uScroll: { value: 0 },
-        uActiveSide: { value: 1.0 }, // +1 right margin, -1 left margin (smoothly interpolated)
-        uLightY: { value: 0.55 },     // [0..1] vertical position of primary sconce blade
+        uActiveSide: { value: 1.0 },
+        uLightY: { value: 0.55 },
         uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
     };
     const bgMat = new THREE.ShaderMaterial({
@@ -81,7 +80,6 @@ import * as THREE from './vendor/three.module.js';
             void main() {
                 vec2 p = vUv;
 
-                // Preserved emerald noir palette
                 vec3 baseNoir = vec3(0.0118, 0.0706, 0.0549);      // #03120e
                 vec3 deepEmerald = vec3(0.0235, 0.1451, 0.1137);   // #06251d
                 vec3 royalEmerald = vec3(0.0510, 0.3059, 0.2314);  // #0d4e3b
@@ -89,55 +87,45 @@ import * as THREE from './vendor/three.module.js';
                 vec3 champagne = vec3(0.8863, 0.7608, 0.4588);     // #e2c275
                 vec3 warmGold = vec3(0.9804, 0.9098, 0.7059);      // #fae8b4
 
-                // Thick monumental diagonal gradient stripes (~3-4 wide bands across screen)
-                float stripeCoord = (p.x * 0.94 + p.y * 0.34) * 3.1 + uTime * 0.045 + uScroll * 0.00025;
+                // Thick monumental diagonal gradient stripes
+                float stripeCoord = (p.x * 0.94 + p.y * 0.34) * 3.0 + uTime * 0.04 + uScroll * 0.00022;
                 float thickBand = sin(stripeCoord * 3.14159265) * 0.5 + 0.5;
                 float bandCurve = smoothstep(0.15, 0.85, thickBand);
 
-                float counterCoord = (p.x * 0.85 - p.y * 0.25) * 2.2 - uTime * 0.03;
-                float counterBand = smoothstep(0.25, 0.88, sin(counterCoord * 3.14159265) * 0.5 + 0.5);
-
-                // Darken center text column softly while letting thick bands breathe
-                float edgeMask = smoothstep(0.14, 0.48, abs(p.x - 0.5));
+                float edgeMask = smoothstep(0.16, 0.48, abs(p.x - 0.5));
 
                 vec3 col = mix(baseNoir, deepEmerald, bandCurve * 0.92);
-                col = mix(col, royalEmerald, pow(bandCurve, 1.8) * (0.42 + 0.45 * edgeMask));
-                col += brightEmerald * counterBand * (0.04 + 0.12 * edgeMask);
-                col += champagne * pow(bandCurve, 3.0) * (0.02 + 0.07 * edgeMask);
+                col = mix(col, royalEmerald, pow(bandCurve, 1.7) * (0.45 + 0.48 * edgeMask));
 
                 // -------------------------------------------------------------
-                // Option A: Dual Edge-Lit Architectural Light Blades (Sconce Bars)
-                // Tightly constrained to left/right empty gutters; center stays dark
+                // Option B: Behind-Glass Refracted Diagonal Prism Beam
+                // Cursor & scroll smoothly tilt/glide the volumetric caustic beam
+                // through the thick stripes along the outer empty margins.
                 // -------------------------------------------------------------
-                float rightWeight = clamp(uActiveSide * 0.5 + 0.5, 0.0, 1.0);
-                float leftWeight = 1.0 - rightWeight;
+                float targetX = mix(0.14, 0.86, clamp(uActiveSide * 0.5 + 0.5, 0.0, 1.0));
+                float targetY = clamp(uLightY, 0.16, 0.84);
 
-                // Tall vertical Gaussian blades at outer edges (x = 0.055 and x = 0.945)
-                float leftBladeX = exp(-pow((p.x - 0.055) / 0.075, 2.0));
-                float rightBladeX = exp(-pow((p.x - 0.945) / 0.075, 2.0));
+                // Beam tilts subtly with vertical cursor/scroll state
+                float tilt = mix(-0.42, 0.42, targetY);
+                vec2 rel = p - vec2(targetX, targetY);
+                float beamAxis = rel.x * cos(tilt) - rel.y * sin(tilt);
+                float beamAlong = rel.x * sin(tilt) + rel.y * cos(tilt);
 
-                // Smooth tall vertical sconce envelope tracking cursor/scroll Y
-                float yPrimary = clamp(uLightY, 0.14, 0.86);
-                float yCounter = 1.0 - yPrimary;
+                // Wide volumetric caustic core + secondary refraction halo
+                float beamCore = exp(-pow(beamAxis / 0.16, 2.0)) * exp(-pow(beamAlong / 0.65, 2.0));
+                float beamWide = exp(-pow(beamAxis / 0.30, 2.0)) * exp(-pow(beamAlong / 0.85, 2.0));
 
-                float primaryEnvY = exp(-pow((p.y - yPrimary) / 0.34, 2.0));
-                float counterEnvY = exp(-pow((p.y - yCounter) / 0.38, 2.0));
+                // Amplify caustics where thick stripes intersect the prism beam, attenuated in center text zone
+                float causticIntensity = (0.45 + 0.85 * bandCurve) * (0.18 + 0.82 * edgeMask);
 
-                float rightCore = rightBladeX * mix(counterEnvY, primaryEnvY, rightWeight);
-                float leftCore = leftBladeX * mix(primaryEnvY, counterEnvY, rightWeight);
+                col += mix(brightEmerald, warmGold, 0.72) * beamCore * causticIntensity * 0.95;
+                col += mix(royalEmerald, champagne, 0.45) * beamWide * causticIntensity * 0.38;
 
-                // Soft wide secondary atmospheric halo near outer edges only
-                float rightHalo = exp(-pow((p.x - 0.91) / 0.14, 2.0)) * mix(counterEnvY, primaryEnvY, rightWeight);
-                float leftHalo = exp(-pow((p.x - 0.09) / 0.14, 2.0)) * mix(primaryEnvY, counterEnvY, rightWeight);
-
-                vec3 activeColor = mix(brightEmerald, warmGold, 0.78);
-                vec3 counterColor = mix(royalEmerald, brightEmerald, 0.65);
-
-                col += mix(counterColor, activeColor, rightWeight) * rightCore * 0.72;
-                col += mix(counterColor, activeColor, rightWeight) * rightHalo * 0.22;
-
-                col += mix(counterColor, activeColor, leftWeight) * leftCore * 0.72;
-                col += mix(counterColor, activeColor, leftWeight) * leftHalo * 0.22;
+                // Subtle balancing emerald caustic on opposite margin
+                float oppX = 1.0 - targetX;
+                float oppY = 1.0 - targetY;
+                float oppGlow = exp(-pow((p.x - oppX) / 0.18, 2.0)) * exp(-pow((p.y - oppY) / 0.45, 2.0));
+                col += brightEmerald * oppGlow * (0.35 + 0.65 * bandCurve) * 0.32;
 
                 gl_FragColor = vec4(col, 1.0);
             }
@@ -148,31 +136,31 @@ import * as THREE from './vendor/three.module.js';
     scene.add(bgMesh);
 
     // =========================================================================
-    // 2. Refined Satin-Frosted Surface Micro-Texture (Normal Map via TextureLoader)
+    // 2. Heavy Frosted Surface Micro-Texture (Normal Map via TextureLoader)
     // =========================================================================
     const textureLoader = new THREE.TextureLoader();
     const normalMap = textureLoader.load('assets/frosted-normal.png');
     normalMap.wrapS = THREE.RepeatWrapping;
     normalMap.wrapT = THREE.RepeatWrapping;
-    normalMap.repeat.set(4, 2.5);
+    normalMap.repeat.set(4.5, 3);
 
     // =========================================================================
-    // 3. Frosted Glass Shader (MeshPhysicalMaterial on Full-Screen PlaneGeometry)
+    // 3. Heavy Frosted Glass Shader (MeshPhysicalMaterial on Full-Screen PlaneGeometry)
     // =========================================================================
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0x8ecab3),
+        color: new THREE.Color(0x9bd2be),
         transmission: 0.96,
-        roughness: 0.48,
-        ior: 1.5,
-        thickness: 0.95,
+        roughness: 0.72,
+        ior: 1.52,
+        thickness: 1.35,
         metalness: 0.02,
-        clearcoat: 0.10,
-        clearcoatRoughness: 0.62,
+        clearcoat: 0.08,
+        clearcoatRoughness: 0.75,
         attenuationColor: new THREE.Color(0x05241a),
         attenuationDistance: 9.0,
         normalMap,
-        normalScale: new THREE.Vector2(0.14, 0.14),
+        normalScale: new THREE.Vector2(0.24, 0.24),
         transparent: true,
         opacity: 1.0
     });
@@ -181,65 +169,21 @@ import * as THREE from './vendor/three.module.js';
     scene.add(glassMesh);
 
     // =========================================================================
-    // 4. Fine Uniform Screen-Space Grid Overlay
+    // 4. Gentle Edge Micro-Sheen Lighting (Main caustic is behind the glass)
     // =========================================================================
-    const gridGeo = new THREE.PlaneGeometry(1, 1);
-    const gridUniforms = {
-        uGridSize: { value: 44.0 },
-        uLineColor: { value: new THREE.Color(0xe2c275) },
-        uAccentColor: { value: new THREE.Color(0x34d399) }
-    };
-    const gridMat = new THREE.ShaderMaterial({
-        uniforms: gridUniforms,
-        transparent: true,
-        depthWrite: false,
-        vertexShader: `
-            void main() {
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-        `,
-        fragmentShader: `
-            uniform float uGridSize;
-            uniform vec3 uLineColor;
-            uniform vec3 uAccentColor;
-            void main() {
-                vec2 coord = gl_FragCoord.xy / uGridSize;
-                vec2 grid = abs(fract(coord - 0.5) - 0.5) / fwidth(coord);
-                float line = min(grid.x, grid.y);
-                float minorAlpha = (1.0 - min(line, 1.0)) * 0.07;
-
-                vec2 majorCoord = gl_FragCoord.xy / (uGridSize * 4.0);
-                vec2 majorGrid = abs(fract(majorCoord - 0.5) - 0.5) / fwidth(majorCoord);
-                float majorLine = min(majorGrid.x, majorGrid.y);
-                float majorAlpha = (1.0 - min(majorLine, 1.0)) * 0.05;
-
-                vec3 color = mix(uAccentColor, uLineColor, 0.65);
-                float alpha = clamp(minorAlpha + majorAlpha, 0.0, 0.12);
-                gl_FragColor = vec4(color, alpha);
-            }
-        `
-    });
-    const gridMesh = new THREE.Mesh(gridGeo, gridMat);
-    gridMesh.position.z = 0.02;
-    scene.add(gridMesh);
-
-    // =========================================================================
-    // 5. Subtle Front Physical Sheen Light (No Circular Hotspot)
-    // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x0a2e23, 0.5);
+    const ambientLight = new THREE.AmbientLight(0x0c382a, 0.45);
     scene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0x10b981, 0.25);
+    const dirLight = new THREE.DirectionalLight(0x10b981, 0.20);
     dirLight.position.set(-5, 4, 4);
     scene.add(dirLight);
 
-    // Gentle edge sheen PointLight synchronized with active light blade
-    const cursorLight = new THREE.PointLight(0xf6dfa6, 6.5, 22, 1.6);
-    cursorLight.position.set(5.0, 0.5, 4.2);
+    const cursorLight = new THREE.PointLight(0xf6dfa6, 2.8, 22, 1.8);
+    cursorLight.position.set(5.0, 0.5, 4.4);
     scene.add(cursorLight);
 
     // =========================================================================
-    // 6. Responsive Frustum Scaling & Resize Handler
+    // 5. Responsive Frustum Scaling & Resize Handler
     // =========================================================================
     let frustumAtGlass = getFrustumSizeAtZ(0);
 
@@ -261,16 +205,13 @@ import * as THREE from './vendor/three.module.js';
         frustumAtGlass = getFrustumSizeAtZ(0);
         glassMesh.scale.set(frustumAtGlass.width * 1.02, frustumAtGlass.height * 1.02, 1);
 
-        const gridFrustum = getFrustumSizeAtZ(0.02);
-        gridMesh.scale.set(gridFrustum.width * 1.02, gridFrustum.height * 1.02, 1);
-
-        normalMap.repeat.set(Math.max(2, w / 360), Math.max(2, h / 360));
+        normalMap.repeat.set(Math.max(2, w / 340), Math.max(2, h / 340));
     }
     handleResize();
     window.addEventListener('resize', handleResize, { passive: true });
 
     // =========================================================================
-    // 7. Fluid Empty-Margin Sconce Tracking & Scroll Glide
+    // 6. Fluid Empty-Margin Prism Beam Tracking & Scroll Glide
     // =========================================================================
     const targetNDC = { x: 0.88, y: 0.15 };
     const currentNDC = { x: 0.88, y: 0.15 };
@@ -303,7 +244,7 @@ import * as THREE from './vendor/three.module.js';
     }, { passive: true });
 
     // =========================================================================
-    // 8. Smooth Frame-Rate Independent Animation Loop
+    // 7. Smooth Frame-Rate Independent Animation Loop
     // =========================================================================
     const clock = new THREE.Clock();
     let rafId = 0;
@@ -332,7 +273,7 @@ import * as THREE from './vendor/three.module.js';
 
         const worldX = safeNDCX * (frustumAtGlass.width * 0.5);
         const worldY = currentNDC.y * (frustumAtGlass.height * 0.5);
-        cursorLight.position.set(worldX, worldY, 4.2);
+        cursorLight.position.set(worldX, worldY, 4.4);
 
         renderer.render(scene, camera);
 
@@ -342,7 +283,7 @@ import * as THREE from './vendor/three.module.js';
             roughness: glassMat.roughness,
             ior: glassMat.ior,
             hasNormalMap: Boolean(glassMat.normalMap),
-            hasGridOverlay: Boolean(gridMesh.visible),
+            hasGridOverlay: false,
             mouseNDC: { x: safeNDCX, y: currentNDC.y },
             lightPos: { x: cursorLight.position.x, y: cursorLight.position.y, z: cursorLight.position.z }
         };
