@@ -1,7 +1,7 @@
 /**
  * Ramyachandra Gunasekera Chambers — Staging (next.ramyachandrachambers.com)
- * Three.js Transmissive Satin-Frosted Glass + Architectural Gradient Stripes + Uniform Grid
- * + Silky 60fps Frame-Independent Empty-Margin Backlight
+ * Option A: Thick Architectural Gradient Stripes + Transmissive Satin-Frosted Glass
+ * + Dual Edge-Lit Light Blades & Uniform Grid
  */
 import * as THREE from './vendor/three.module.js';
 
@@ -21,14 +21,13 @@ import * as THREE from './vendor/three.module.js';
         return; // Graceful fallback to CSS #03120e emerald base
     }
 
-    // Cap DPR & half-res transmission target for locked 60/120fps silky frosted rendering
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
     renderer.setSize(window.innerWidth, window.innerHeight, false);
     if ('transmissionResolutionScale' in renderer) {
         renderer.transmissionResolutionScale = 0.5;
     }
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.04;
+    renderer.toneMappingExposure = 1.06;
 
     const scene = new THREE.Scene();
 
@@ -49,13 +48,16 @@ import * as THREE from './vendor/three.module.js';
     }
 
     // =========================================================================
-    // 1. Background Environment Layer: Preserved Shader Gradient Stripes
+    // 1. Background Environment: Thick Architectural Shader Gradient Stripes
+    //    + Dual Edge-Lit Sconce Light Blades (Option A)
     // =========================================================================
-    const bgZ = -1.6;
+    const bgZ = -1.5;
     const bgGeo = new THREE.PlaneGeometry(1, 1);
     const bgUniforms = {
         uTime: { value: 0 },
         uScroll: { value: 0 },
+        uActiveSide: { value: 1.0 }, // +1 right margin, -1 left margin (smoothly interpolated)
+        uLightY: { value: 0.55 },     // [0..1] vertical position of primary sconce blade
         uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
     };
     const bgMat = new THREE.ShaderMaterial({
@@ -72,46 +74,70 @@ import * as THREE from './vendor/three.module.js';
             varying vec2 vUv;
             uniform float uTime;
             uniform float uScroll;
+            uniform float uActiveSide;
+            uniform float uLightY;
             uniform vec2 uResolution;
 
             void main() {
                 vec2 p = vUv;
-                vec2 px = vUv * uResolution;
 
+                // Preserved emerald noir palette
                 vec3 baseNoir = vec3(0.0118, 0.0706, 0.0549);      // #03120e
-                vec3 deepEmerald = vec3(0.0235, 0.1373, 0.1098);   // #06231c
-                vec3 midEmerald = vec3(0.0314, 0.1020, 0.0824);    // #081a15
+                vec3 deepEmerald = vec3(0.0235, 0.1451, 0.1137);   // #06251d
+                vec3 royalEmerald = vec3(0.0510, 0.3059, 0.2314);  // #0d4e3b
                 vec3 brightEmerald = vec3(0.0627, 0.7255, 0.5059); // #10b981
                 vec3 champagne = vec3(0.8863, 0.7608, 0.4588);     // #e2c275
+                vec3 warmGold = vec3(0.9804, 0.9098, 0.7059);      // #fae8b4
 
-                float diag = clamp(p.x * 0.55 + (1.0 - p.y) * 0.45, 0.0, 1.0);
-                vec3 col = mix(baseNoir, deepEmerald, smoothstep(0.0, 0.45, diag));
-                col = mix(col, midEmerald, smoothstep(0.45, 0.80, diag));
-                col = mix(col, baseNoir, smoothstep(0.80, 1.0, diag));
+                // Thick monumental diagonal gradient stripes (~3-4 wide bands across screen)
+                float stripeCoord = (p.x * 0.94 + p.y * 0.34) * 3.1 + uTime * 0.045 + uScroll * 0.00025;
+                float thickBand = sin(stripeCoord * 3.14159265) * 0.5 + 0.5;
+                float bandCurve = smoothstep(0.15, 0.85, thickBand);
 
-                col += brightEmerald * smoothstep(0.65, 0.0, length(p - vec2(0.5, 1.05))) * 0.16;
-                col += champagne * smoothstep(0.55, 0.0, length(p - vec2(0.86, 0.78))) * 0.12;
+                float counterCoord = (p.x * 0.85 - p.y * 0.25) * 2.2 - uTime * 0.03;
+                float counterBand = smoothstep(0.25, 0.88, sin(counterCoord * 3.14159265) * 0.5 + 0.5);
 
-                // Architectural fluted gradient stripes
-                float angle = radians(14.0);
-                vec2 rot = vec2(
-                    px.x * cos(angle) - px.y * sin(angle),
-                    px.x * sin(angle) + px.y * cos(angle)
-                );
-                float drift = uTime * 10.0 + uScroll * 0.12;
+                // Darken center text column softly while letting thick bands breathe
+                float edgeMask = smoothstep(0.14, 0.48, abs(p.x - 0.5));
 
-                float bandWave = sin((rot.x + drift) * 0.020) * 0.5 + 0.5;
-                float bandStripe = smoothstep(0.22, 0.88, bandWave);
-                float secondaryWave = sin((px.x * 0.016 - px.y * 0.007) - uTime * 0.25) * 0.5 + 0.5;
+                vec3 col = mix(baseNoir, deepEmerald, bandCurve * 0.92);
+                col = mix(col, royalEmerald, pow(bandCurve, 1.8) * (0.42 + 0.45 * edgeMask));
+                col += brightEmerald * counterBand * (0.04 + 0.12 * edgeMask);
+                col += champagne * pow(bandCurve, 3.0) * (0.02 + 0.07 * edgeMask);
 
-                // Keep central text corridor dark & legible while side margins glow softly
-                float edgeMask = smoothstep(0.12, 0.48, abs(p.x - 0.5));
-                col += deepEmerald * bandStripe * 0.70;
-                col += brightEmerald * pow(bandStripe, 2.2) * (0.10 + 0.18 * edgeMask);
-                col += champagne * smoothstep(0.62, 0.98, secondaryWave) * (0.04 + 0.10 * edgeMask);
+                // -------------------------------------------------------------
+                // Option A: Dual Edge-Lit Architectural Light Blades (Sconce Bars)
+                // Tightly constrained to left/right empty gutters; center stays dark
+                // -------------------------------------------------------------
+                float rightWeight = clamp(uActiveSide * 0.5 + 0.5, 0.0, 1.0);
+                float leftWeight = 1.0 - rightWeight;
 
-                float fineStripe = smoothstep(0.90, 1.0, sin((rot.x * 0.32)) * 0.5 + 0.5);
-                col += vec3(0.06, 0.15, 0.11) * fineStripe * 0.16;
+                // Tall vertical Gaussian blades at outer edges (x = 0.055 and x = 0.945)
+                float leftBladeX = exp(-pow((p.x - 0.055) / 0.075, 2.0));
+                float rightBladeX = exp(-pow((p.x - 0.945) / 0.075, 2.0));
+
+                // Smooth tall vertical sconce envelope tracking cursor/scroll Y
+                float yPrimary = clamp(uLightY, 0.14, 0.86);
+                float yCounter = 1.0 - yPrimary;
+
+                float primaryEnvY = exp(-pow((p.y - yPrimary) / 0.34, 2.0));
+                float counterEnvY = exp(-pow((p.y - yCounter) / 0.38, 2.0));
+
+                float rightCore = rightBladeX * mix(counterEnvY, primaryEnvY, rightWeight);
+                float leftCore = leftBladeX * mix(primaryEnvY, counterEnvY, rightWeight);
+
+                // Soft wide secondary atmospheric halo near outer edges only
+                float rightHalo = exp(-pow((p.x - 0.91) / 0.14, 2.0)) * mix(counterEnvY, primaryEnvY, rightWeight);
+                float leftHalo = exp(-pow((p.x - 0.09) / 0.14, 2.0)) * mix(primaryEnvY, counterEnvY, rightWeight);
+
+                vec3 activeColor = mix(brightEmerald, warmGold, 0.78);
+                vec3 counterColor = mix(royalEmerald, brightEmerald, 0.65);
+
+                col += mix(counterColor, activeColor, rightWeight) * rightCore * 0.72;
+                col += mix(counterColor, activeColor, rightWeight) * rightHalo * 0.22;
+
+                col += mix(counterColor, activeColor, leftWeight) * leftCore * 0.72;
+                col += mix(counterColor, activeColor, leftWeight) * leftHalo * 0.22;
 
                 gl_FragColor = vec4(col, 1.0);
             }
@@ -137,16 +163,16 @@ import * as THREE from './vendor/three.module.js';
     const glassMat = new THREE.MeshPhysicalMaterial({
         color: new THREE.Color(0x8ecab3),
         transmission: 0.96,
-        roughness: 0.52,
+        roughness: 0.48,
         ior: 1.5,
         thickness: 0.95,
         metalness: 0.02,
-        clearcoat: 0.12,
-        clearcoatRoughness: 0.58,
+        clearcoat: 0.10,
+        clearcoatRoughness: 0.62,
         attenuationColor: new THREE.Color(0x05241a),
         attenuationDistance: 9.0,
         normalMap,
-        normalScale: new THREE.Vector2(0.16, 0.16),
+        normalScale: new THREE.Vector2(0.14, 0.14),
         transparent: true,
         opacity: 1.0
     });
@@ -180,15 +206,15 @@ import * as THREE from './vendor/three.module.js';
                 vec2 coord = gl_FragCoord.xy / uGridSize;
                 vec2 grid = abs(fract(coord - 0.5) - 0.5) / fwidth(coord);
                 float line = min(grid.x, grid.y);
-                float minorAlpha = (1.0 - min(line, 1.0)) * 0.075;
+                float minorAlpha = (1.0 - min(line, 1.0)) * 0.07;
 
                 vec2 majorCoord = gl_FragCoord.xy / (uGridSize * 4.0);
                 vec2 majorGrid = abs(fract(majorCoord - 0.5) - 0.5) / fwidth(majorCoord);
                 float majorLine = min(majorGrid.x, majorGrid.y);
-                float majorAlpha = (1.0 - min(majorLine, 1.0)) * 0.055;
+                float majorAlpha = (1.0 - min(majorLine, 1.0)) * 0.05;
 
                 vec3 color = mix(uAccentColor, uLineColor, 0.65);
-                float alpha = clamp(minorAlpha + majorAlpha, 0.0, 0.13);
+                float alpha = clamp(minorAlpha + majorAlpha, 0.0, 0.12);
                 gl_FragColor = vec4(color, alpha);
             }
         `
@@ -198,24 +224,19 @@ import * as THREE from './vendor/three.module.js';
     scene.add(gridMesh);
 
     // =========================================================================
-    // 5. Velvety Dynamic Lighting In Front of Glass Plane (Empty Margins Only)
+    // 5. Subtle Front Physical Sheen Light (No Circular Hotspot)
     // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x0a2e23, 0.42);
+    const ambientLight = new THREE.AmbientLight(0x0a2e23, 0.5);
     scene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0x10b981, 0.30);
-    dirLight.position.set(-5, 4, 3.5);
+    const dirLight = new THREE.DirectionalLight(0x10b981, 0.25);
+    dirLight.position.set(-5, 4, 4);
     scene.add(dirLight);
 
-    // Primary luminous champagne backlight (soft wide bloom at z = 3.8)
-    const cursorLight = new THREE.PointLight(0xf6dfa6, 22.0, 28, 1.5);
-    cursorLight.position.set(4.5, 0.6, 3.8);
+    // Gentle edge sheen PointLight synchronized with active light blade
+    const cursorLight = new THREE.PointLight(0xf6dfa6, 6.5, 22, 1.6);
+    cursorLight.position.set(5.0, 0.5, 4.2);
     scene.add(cursorLight);
-
-    // Subtle emerald-teal counter-rim on opposite margin for balanced luxury depth
-    const counterLight = new THREE.PointLight(0x10b981, 7.5, 24, 1.6);
-    counterLight.position.set(-4.8, -0.8, 3.4);
-    scene.add(counterLight);
 
     // =========================================================================
     // 6. Responsive Frustum Scaling & Resize Handler
@@ -249,19 +270,19 @@ import * as THREE from './vendor/three.module.js';
     window.addEventListener('resize', handleResize, { passive: true });
 
     // =========================================================================
-    // 7. Fluid Empty-Margin Tracking & Silky Scroll Glide
+    // 7. Fluid Empty-Margin Sconce Tracking & Scroll Glide
     // =========================================================================
-    const targetNDC = { x: 0.84, y: 0.15 };
-    const currentNDC = { x: 0.84, y: 0.15 };
+    const targetNDC = { x: 0.88, y: 0.15 };
+    const currentNDC = { x: 0.88, y: 0.15 };
+    let targetSide = 1.0;
+    let currentSide = 1.0;
     let smoothScrollY = window.scrollY || 0;
     let targetScrollY = smoothScrollY;
 
-    // Project horizontal cursor smoothly into outer empty margins (|x| >= 0.76)
-    // so central text columns always remain dark and readable.
     function projectToEmptySide(ndcX) {
         const sign = ndcX >= 0 ? 1 : -1;
         const mag = Math.min(1, Math.abs(ndcX));
-        return sign * (0.76 + mag * 0.18);
+        return sign * (0.80 + mag * 0.14);
     }
 
     window.addEventListener('mousemove', (event) => {
@@ -269,20 +290,20 @@ import * as THREE from './vendor/three.module.js';
         const rawY = -(event.clientY / Math.max(1, window.innerHeight)) * 2 + 1;
         targetNDC.x = projectToEmptySide(rawX);
         targetNDC.y = rawY * 0.78;
+        targetSide = rawX >= 0 ? 1.0 : -1.0;
     }, { passive: true });
 
     window.addEventListener('scroll', () => {
         targetScrollY = window.scrollY || 0;
-        // Smooth organic wave along empty margin on scroll (no jarring snap)
-        const scrollPhase = targetScrollY * 0.0035;
+        const scrollPhase = targetScrollY * 0.0032;
         targetNDC.y = Math.sin(scrollPhase) * 0.68;
-        const sideWave = Math.cos(targetScrollY * 0.0018);
-        const sign = sideWave >= 0 ? 1 : -1;
-        targetNDC.x = sign * (0.78 + 0.14 * Math.abs(sideWave));
+        const sideWave = Math.cos(targetScrollY * 0.0016);
+        targetSide = sideWave >= 0 ? 1.0 : -1.0;
+        targetNDC.x = targetSide * (0.82 + 0.12 * Math.abs(sideWave));
     }, { passive: true });
 
     // =========================================================================
-    // 8. Frame-Rate Independent Smooth Animation Loop
+    // 8. Smooth Frame-Rate Independent Animation Loop
     // =========================================================================
     const clock = new THREE.Clock();
     let rafId = 0;
@@ -291,27 +312,27 @@ import * as THREE from './vendor/three.module.js';
         const dt = Math.min(clock.getDelta(), 0.05);
         const elapsed = clock.elapsedTime;
 
-        // Exponential damping (butter-smooth at any refresh rate)
-        const posEase = 1 - Math.exp(-3.8 * dt);
-        const scrollEase = 1 - Math.exp(-5.0 * dt);
+        const posEase = 1 - Math.exp(-3.6 * dt);
+        const sideEase = 1 - Math.exp(-2.8 * dt);
+        const scrollEase = 1 - Math.exp(-4.5 * dt);
 
         smoothScrollY += (targetScrollY - smoothScrollY) * scrollEase;
-        bgUniforms.uTime.value = elapsed;
-        bgUniforms.uScroll.value = smoothScrollY;
-
+        currentSide += (targetSide - currentSide) * sideEase;
         currentNDC.x += (targetNDC.x - currentNDC.x) * posEase;
         currentNDC.y += (targetNDC.y - currentNDC.y) * posEase;
 
-        // Keep light clamped outside the central text corridor during cross-glides
         const safeNDCX = Math.abs(currentNDC.x) < 0.76
             ? (currentNDC.x >= 0 ? 0.76 : -0.76)
             : currentNDC.x;
 
+        bgUniforms.uTime.value = elapsed;
+        bgUniforms.uScroll.value = smoothScrollY;
+        bgUniforms.uActiveSide.value = currentSide;
+        bgUniforms.uLightY.value = currentNDC.y * 0.5 + 0.5;
+
         const worldX = safeNDCX * (frustumAtGlass.width * 0.5);
         const worldY = currentNDC.y * (frustumAtGlass.height * 0.5);
-
-        cursorLight.position.set(worldX, worldY, 3.8);
-        counterLight.position.set(-worldX * 0.92, -worldY * 0.65, 3.4);
+        cursorLight.position.set(worldX, worldY, 4.2);
 
         renderer.render(scene, camera);
 
