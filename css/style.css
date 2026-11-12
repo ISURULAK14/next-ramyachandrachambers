@@ -1728,13 +1728,26 @@ html, body {
    ========================================================================== */
 
 /* 1. Global Typography: Cinzel Lapidary + Plus Jakarta Sans */
-body {
-  font-family: 'Plus Jakarta Sans', 'Montserrat', sans-serif !important;
+html {
   background-color: var(--bg-base) !important;
-  color: var(--text-primary) !important;
   background-image: var(--bg-texture) !important;
   background-attachment: fixed !important;
+}
+body {
+  font-family: 'Plus Jakarta Sans', 'Montserrat', sans-serif !important;
+  background-color: transparent !important;
+  color: var(--text-primary) !important;
+  background-image: none !important;
   letter-spacing: -0.01em !important;
+}
+#frosted-glass-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
 }
 h1, h2, h3, h4, .serif, .hero-title, .accordion-title {
   font-family: 'Cinzel', 'Cormorant Garamond', Georgia, serif !important;

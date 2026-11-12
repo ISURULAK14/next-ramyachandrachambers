@@ -3,8 +3,14 @@
 <head>
     <!-- Critical Dark Frame Initialization (Zero White Flash) -->
     <style id="rg-critical-base">
-      html, body {
+      html {
         background-color: #03120e !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: hidden !important;
+      }
+      body {
+        background-color: transparent !important;
         color: #f8fafc !important;
         margin: 0 !important;
         padding: 0 !important;
@@ -1072,6 +1078,7 @@
     <link rel="alternate" type="text/plain" title="AI Directives" href="https://ramyachandrachambers.com/.well-known/ai.txt">
 </head>
 <body>
+    <canvas id="frosted-glass-canvas" aria-hidden="true"></canvas>
     <!-- RG Pure-CSS Legal Crest Micro-Loader (350ms instant prestigious reveal) -->
     <div class="rg-preloader" aria-hidden="true">
         <div class="rg-preloader-content">
@@ -2261,5 +2268,6 @@
 
     <!-- Main Deferred JavaScript -->
     <script defer src="js/main.min.js?v=11.0.0"></script>
+    <script type="module" src="js/frosted-glass-bg.js?v=1.0.0"></script>
 </body>
 </html>
