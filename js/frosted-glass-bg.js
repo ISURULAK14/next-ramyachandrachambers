@@ -1,8 +1,7 @@
 /**
  * Ramyachandra Gunasekera Chambers — Staging (next.ramyachandrachambers.com)
- * Frosted Ice Sheet + Realistic Natural Flowing Stream (Three.js WebGL)
- * High-performance analytical stream dynamics (dual wave interference caustics,
- * meandering current, capillary ripples, physical ice sheet refraction, zero backlight).
+ * Original First Frosted Glass (smooth, uncracked) + Hyper-Realistic Natural Flowing Stream
+ * Physical Transmission blur, organic river thalweg, Voronoi/wave caustics, riverbed depth & zero backlight.
  */
 import * as THREE from './vendor/three.module.js';
 
@@ -49,7 +48,7 @@ import * as THREE from './vendor/three.module.js';
     }
 
     // =========================================================================
-    // 1. Realistic Natural Flowing Stream Shader (Beneath the Ice Sheet at z = -1.5)
+    // 1. Hyper-Realistic Natural Flowing Stream Shader (Beneath Frost at z = -1.5)
     // =========================================================================
     const bgZ = -1.5;
     const bgGeo = new THREE.PlaneGeometry(1, 1);
@@ -75,72 +74,106 @@ import * as THREE from './vendor/three.module.js';
             uniform float uScroll;
             uniform vec2 uResolution;
 
+            // Fast pseudo-hash for riverbed pebbles / texture
+            float hash12(vec2 p) {
+                vec3 p3  = fract(vec3(p.xyx) * 0.1031);
+                p3 += dot(p3, p3.yzx + 33.33);
+                return fract((p3.x + p3.y) * p3.z);
+            }
+
             void main() {
                 vec2 p = vUv;
 
-                // Natural meandering stream channel topology
-                float meander = sin(p.y * 2.2 + 0.35) * 0.18 + sin(p.y * 4.8 - 0.5) * 0.07;
-                float channelDist = abs(p.x - 0.5 - meander);
+                // Natural meandering river thalweg (curving river centerline)
+                float meander1 = sin(p.y * 2.1 + 0.3) * 0.19;
+                float meander2 = sin(p.y * 4.4 - 0.4) * 0.08;
+                float riverCenter = 0.5 + meander1 + meander2;
+                float distToCenter = abs(p.x - riverCenter);
 
-                // Hydrodynamic flow velocity (natural downstream current + scroll glide)
-                float flowSpeed = 0.12;
-                float scrollOffset = uScroll * 0.00024;
-                float streamTime = uTime * flowSpeed + scrollOffset;
+                // River channel cross-section profile: deep center channel, shallow banks
+                float channelWidth = 0.48;
+                float channel = smoothstep(channelWidth, 0.04, distToCenter);
+                float riverBedDepth = channel * (0.65 + 0.35 * sin(p.y * 3.0 + 1.2));
 
-                // Dual-octave flowing coordinates with lateral meandering drift
-                vec2 flowUv1 = vec2(p.x * 2.6 + sin(p.y * 2.8 + streamTime * 2.5) * 0.12, p.y * 2.1 - streamTime);
-                vec2 flowUv2 = vec2(p.x * 3.8 - cos(p.y * 3.4 - streamTime * 2.0) * 0.10, p.y * 3.2 - streamTime * 1.35);
+                // Natural velocity gradient: fast current in deep channel, slow near banks
+                float currentSpeed = mix(0.08, 0.16, channel);
+                float scrollOffset = uScroll * 0.00022;
+                float flowTime = uTime * currentSpeed + scrollOffset;
+
+                // Streamline coordinates following the curving river
+                vec2 streamUv = vec2((p.x - riverCenter) * 2.5, p.y * 2.4 - flowTime);
+
+                // Centrifugal lateral current drift along river bends
+                float bendCurvature = cos(p.y * 2.1 + 0.3) * 0.14;
+                streamUv.x += bendCurvature;
 
                 // Fluid eddies & harmonic turbulence
-                float turb1 = sin(flowUv1.x * 4.2 + flowUv1.y * 3.1 + uTime * 0.45) * 0.5
-                            + cos(flowUv1.x * 2.8 - flowUv1.y * 4.6 - uTime * 0.35) * 0.5;
-                float turb2 = cos(flowUv2.x * 5.4 - flowUv2.y * 2.8 + uTime * 0.55) * 0.5
-                            + sin(flowUv2.x * 3.2 + flowUv2.y * 5.1 - uTime * 0.40) * 0.5;
+                float eddy1 = sin(streamUv.x * 3.8 + streamUv.y * 2.4 + uTime * 0.40) * 0.5
+                            + cos(streamUv.x * 2.4 - streamUv.y * 4.2 - uTime * 0.30) * 0.5;
+                float eddy2 = cos(streamUv.x * 5.2 - streamUv.y * 3.1 + uTime * 0.50) * 0.5
+                            + sin(streamUv.x * 3.6 + streamUv.y * 5.6 - uTime * 0.35) * 0.5;
 
-                // Analytical water caustics (dancing liquid filament nets without loop overhead)
-                vec2 cUv1 = flowUv1 * 5.5 + turb1 * 0.65;
-                vec2 cUv2 = flowUv2 * 7.2 - turb2 * 0.55;
+                // Flowing water coordinate layers with micro-vortices
+                vec2 flowLayer1 = streamUv * 2.4 + vec2(eddy1 * 0.18, -flowTime * 0.6);
+                vec2 flowLayer2 = streamUv * 3.8 + vec2(-eddy2 * 0.14, -flowTime * 1.1);
 
-                float w1 = sin(cUv1.x + sin(cUv1.y + uTime * 0.8)) + cos(cUv1.y * 1.25 + cos(cUv1.x * 0.95 - uTime * 0.7));
-                float w2 = sin(cUv2.x * 1.2 - sin(cUv2.y * 0.85 - uTime * 0.9)) + cos(cUv2.y + cos(cUv2.x * 1.1 + uTime * 0.65));
+                // 1. Organic water caustics: dancing liquid light nets refracted by moving waves
+                float cWave1 = sin(flowLayer1.x * 4.2 + sin(flowLayer1.y * 3.6 + uTime * 0.75))
+                             + cos(flowLayer1.y * 4.0 + cos(flowLayer1.x * 3.2 - uTime * 0.65));
+                float cWave2 = sin(flowLayer2.x * 5.4 - sin(flowLayer2.y * 4.2 - uTime * 0.85))
+                             + cos(flowLayer2.y * 5.0 + cos(flowLayer2.x * 4.8 + uTime * 0.60));
 
-                float causticNet = pow(1.0 - clamp(abs(w1 * 0.48), 0.0, 1.0), 3.2) * 0.6
-                                 + pow(1.0 - clamp(abs(w2 * 0.48), 0.0, 1.0), 3.5) * 0.5;
+                float caustic1 = pow(1.0 - clamp(abs(cWave1 * 0.46), 0.0, 1.0), 3.4);
+                float caustic2 = pow(1.0 - clamp(abs(cWave2 * 0.46), 0.0, 1.0), 3.6);
+                float caustics = (caustic1 * 0.58 + caustic2 * 0.42) * (0.35 + 0.65 * channel);
 
-                // Capillary wave ripples along flow vectors
-                float rippleWave = sin(flowUv1.y * 24.0 + turb1 * 4.0) * cos(flowUv1.x * 16.0 - turb2 * 3.5);
-                float ripples = smoothstep(0.42, 0.94, rippleWave * 0.5 + 0.5);
+                // 2. Capillary ripples & surface wave reflections
+                float ripplePattern = sin(flowLayer1.y * 22.0 + eddy1 * 3.5) * cos(flowLayer1.x * 14.0 - eddy2 * 3.0);
+                float surfaceRipples = smoothstep(0.40, 0.92, ripplePattern * 0.5 + 0.5) * (0.2 + 0.8 * channel);
 
+                // 3. Subsurface riverbed stones visible through clear water
+                vec2 pebbleUv = vec2(p.x * 16.0, p.y * 14.0 + meander1 * 2.0);
+                float pebbles = hash12(floor(pebbleUv));
+                float pebbleDetail = smoothstep(0.35, 0.75, sin(pebbles * 6.28 + length(fract(pebbleUv) - 0.5) * 5.0));
+
+                // 4. Foam flecks & laminar flow shear filaments
+                float foamShear = pow(abs(eddy1 - eddy2), 2.2);
+                float foamFlecks = smoothstep(0.55, 0.90, sin(flowLayer2.y * 18.0 + flowLayer2.x * 8.0) * foamShear) * channel;
+
+                // =====================================================================
                 // Deep Imperial Emerald Noir Palette
-                vec3 bedrockColor   = vec3(0.0118, 0.0549, 0.0431); // #030e0b deep abyss bedrock
-                vec3 deepWater      = vec3(0.0235, 0.1373, 0.1059); // #06231b deep water pool
-                vec3 channelCurrent = vec3(0.0392, 0.2588, 0.1961); // #0a4232 rushing main current
-                vec3 emeraldLight   = vec3(0.0627, 0.7255, 0.5059); // #10b981 emerald current glow
-                vec3 causticsFoam   = vec3(0.7843, 0.9412, 0.8824); // #c8f0e1 crystalline pale seafoam
-                vec3 champagneGlint = vec3(0.8863, 0.7608, 0.4588); // #e2c275 subtle mineral refraction
+                // =====================================================================
+                vec3 bedrockColor   = vec3(0.0118, 0.0471, 0.0392); // #030c0a deep abyss riverbed
+                vec3 pebbleShade    = vec3(0.0196, 0.0980, 0.0784); // #051914 riverbed stones
+                vec3 deepWaterPool  = vec3(0.0235, 0.1412, 0.1098); // #06241c clear emerald pool
+                vec3 rushingThalweg = vec3(0.0431, 0.2824, 0.2118); // #0b4836 main river current
+                vec3 livingEmerald  = vec3(0.0627, 0.7255, 0.5059); // #10b981 emerald current illumination
+                vec3 causticGlint   = vec3(0.8196, 0.9490, 0.8980); // #d1f2e5 pale crystalline seafoam
+                vec3 champagneGlint = vec3(0.9216, 0.8235, 0.5490); // #ebd28c champagne mineral refraction
 
-                // Stream channel depth attenuation
-                float channelIntensity = smoothstep(0.52, 0.05, channelDist);
+                // Layered natural fluid rendering
+                vec3 riverbed = mix(bedrockColor, pebbleShade, pebbleDetail * 0.35);
+                vec3 waterColor = mix(riverbed, deepWaterPool, riverBedDepth * 0.85);
+                waterColor = mix(waterColor, rushingThalweg, channel * (0.40 + 0.60 * (eddy1 * 0.5 + 0.5)));
 
-                // Base liquid layering
-                vec3 col = mix(bedrockColor, deepWater, 0.65 + 0.35 * channelIntensity);
-                col = mix(col, channelCurrent, channelIntensity * (0.45 + 0.55 * (turb1 * 0.5 + 0.5)));
+                // Living current threads
+                float currentThreads = smoothstep(0.18, 0.82, (eddy1 * eddy2) * 0.5 + 0.5);
+                waterColor += livingEmerald * currentThreads * channel * 0.34;
 
-                // Living emerald current flow threads
-                float currentThreads = smoothstep(0.20, 0.80, (turb1 * turb2) * 0.5 + 0.5);
-                col += emeraldLight * currentThreads * channelIntensity * 0.35;
+                // Dancing water caustics
+                waterColor += causticGlint * caustics * (0.28 + 0.42 * riverBedDepth);
 
-                // Refracted liquid water caustics
-                col += causticsFoam * causticNet * (0.24 + 0.38 * channelIntensity);
+                // Surface capillary wave reflections & champagne sparkles
+                waterColor += champagneGlint * surfaceRipples * caustics * 0.22 * channel;
 
-                // Fine capillary ripple glints
-                col += champagneGlint * ripples * causticNet * 0.20 * channelIntensity;
+                // Delicate water foam flecks along current shear
+                waterColor += causticGlint * foamFlecks * 0.18;
 
-                // Soft vignette framing
-                float vignette = smoothstep(0.98, 0.38, length(p - 0.5));
-                col *= (0.78 + 0.22 * vignette);
+                // Vignette for seamless editorial framing
+                float vignette = smoothstep(0.98, 0.36, length(p - 0.5));
+                waterColor *= (0.76 + 0.24 * vignette);
 
-                gl_FragColor = vec4(col, 1.0);
+                gl_FragColor = vec4(waterColor, 1.0);
             }
         `
     });
@@ -150,31 +183,33 @@ import * as THREE from './vendor/three.module.js';
     scene.add(bgMesh);
 
     // =========================================================================
-    // 2. Frosted Ice Sheet Surface Micro-Texture (Normal Map via TextureLoader)
+    // 2. First Frosted Glass Surface Micro-Texture (Smooth, Uncracked Normal Map)
     // =========================================================================
     const textureLoader = new THREE.TextureLoader();
     const normalMap = textureLoader.load('assets/frosted-normal.png');
     normalMap.wrapS = THREE.RepeatWrapping;
     normalMap.wrapT = THREE.RepeatWrapping;
-    normalMap.repeat.set(4.0, 3.0);
+    normalMap.repeat.set(5.0, 3.0);
 
     // =========================================================================
-    // 3. Frosted Ice Sheet Material (MeshPhysicalMaterial on Full-Screen PlaneGeometry)
+    // 3. First Frosted Glass Material (MeshPhysicalMaterial with Pure Frosted Blur)
     // =========================================================================
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0x9bd8c8),
-        transmission: 0.95,
-        roughness: 0.66,
-        ior: 1.309,              // Physical index of refraction for natural water ice
-        thickness: 1.8,
-        metalness: 0.0,
-        clearcoat: 0.14,
-        clearcoatRoughness: 0.62,
-        attenuationColor: new THREE.Color(0x042218),
-        attenuationDistance: 7.5,
+        color: new THREE.Color(0xeefcf6),
+        transmission: 0.96,
+        roughness: 0.62,
+        ior: 1.50,
+        thickness: 1.2,
+        metalness: 0.04,
+        clearcoat: 0.25,
+        clearcoatRoughness: 0.42,
+        attenuationColor: new THREE.Color(0x0b3d2e),
+        attenuationDistance: 8.5,
         normalMap,
-        normalScale: new THREE.Vector2(0.25, 0.25),
+        normalScale: new THREE.Vector2(0.38, 0.38),
+        bumpMap: normalMap,
+        bumpScale: 0.015,
         transparent: true,
         opacity: 1.0
     });
@@ -189,9 +224,9 @@ import * as THREE from './vendor/three.module.js';
     const ambientLight = new THREE.AmbientLight(0x0a2f23, 0.72);
     scene.add(ambientLight);
 
-    const iceFacetLight = new THREE.DirectionalLight(0xb5e8d8, 0.38);
-    iceFacetLight.position.set(0.6, 1.2, 2.4);
-    scene.add(iceFacetLight);
+    const softDirectional = new THREE.DirectionalLight(0xb5e8d8, 0.38);
+    softDirectional.position.set(0.6, 1.2, 2.4);
+    scene.add(softDirectional);
 
     // =========================================================================
     // 5. Responsive Frustum Scaling & Resize Handler
