@@ -808,26 +808,20 @@ async function runFullSuite() {
     if (glassCanvas && glassCanvas.state) {
       const st = glassCanvas.state;
       check(
-        st.active && st.transmission >= 0.9 && st.roughness >= 0.55 && st.ior >= 1.3 && st.hasNormalMap && st.hasGridOverlay === false,
-        `Three.js Realistic Frosted Glass active with grid removed (transmission=${st.transmission}, roughness=${st.roughness}, ior=${st.ior}, normalMap=${st.hasNormalMap}, grid=${st.hasGridOverlay})`
+        st.active && st.transmission >= 0.9 && st.roughness >= 0.45 && st.ior >= 1.30 && st.hasNormalMap && st.hasGridOverlay === false,
+        `Three.js Realistic Frosted Ice Plane active (transmission=${st.transmission}, roughness=${st.roughness}, ior=${st.ior}, normalMap=${st.hasNormalMap}, grid=${st.hasGridOverlay})`
+      );
+      check(
+        st.hasRealisticIce === true,
+        'Physical ice optics active (IOR 1.309 water ice, dual-layer clearcoat, volumetric attenuation)'
       );
       check(
         st.hasShapes === true,
         'Physical underlying geometric solids rendered behind transmissive glass plane'
       );
       check(
-        st.lightIntensity <= 4.0,
-        `Cursor backlight reduced to subtle non-glaring level (intensity=${st.lightIntensity})`
-      );
-      await page.mouse.move(100, 100);
-      await new Promise(r => setTimeout(r, 250));
-      const pos1 = await page.evaluate(() => ({ light: window.__rgFrostedGlass.lightPos, ndc: window.__rgFrostedGlass.mouseNDC }));
-      await page.mouse.move(1300, 800);
-      await new Promise(r => setTimeout(r, 250));
-      const pos2 = await page.evaluate(() => ({ light: window.__rgFrostedGlass.lightPos, ndc: window.__rgFrostedGlass.mouseNDC }));
-      check(
-        pos2.light.x > pos1.light.x && pos2.light.y < pos1.light.y,
-        `Refined PointLight tracks normalized cursor coordinates (${pos1.light.x.toFixed(2)},${pos1.light.y.toFixed(2)} -> ${pos2.light.x.toFixed(2)},${pos2.light.y.toFixed(2)})`
+        st.hasCursorBacklight === false && st.lightPos === null,
+        'Backlight completely removed (zero front glare or hotspot over text)'
       );
       await new Promise(r => setTimeout(r, 250));
       const st2 = await page.evaluate(() => window.__rgFrostedGlass);
