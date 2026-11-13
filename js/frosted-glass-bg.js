@@ -210,7 +210,7 @@ import * as THREE from './vendor/three.module.js';
     shapes.push({ mesh: dodecahedron, basePos: [-1.8, -2.1, -0.1], speed: 0.20, phase: 4.71 });
 
     // =========================================================================
-    // 3. Photorealistic Frosted Ice Plane (MeshPhysicalMaterial at z = 0)
+    // 3. Photorealistic Frosted Translucent Ice Sheet (MeshPhysicalMaterial at z = 0)
     // =========================================================================
     const textureLoader = new THREE.TextureLoader();
     const normalMap = textureLoader.load('assets/frosted-normal.png');
@@ -220,22 +220,22 @@ import * as THREE from './vendor/three.module.js';
 
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xf0faf5),
-        transmission: 0.95,
-        roughness: 0.50,              // Tactile frosted ice scattering
-        ior: 1.309,                   // True physical index of refraction for natural water ice
-        thickness: 2.2,               // Physical optical volume for authentic deep refraction
+        color: new THREE.Color(0xdcf5ea),
+        transmission: 0.94,
+        roughness: 0.72,              // Heavy frosted ice diffusion and light scattering
+        ior: 1.309,                   // True physical index of refraction for water ice
+        thickness: 2.8,               // Thick translucent ice slab with deep internal refraction
         metalness: 0.0,
-        specularIntensity: 0.95,
-        specularColor: new THREE.Color(0xd6f7eb),
-        clearcoat: 0.45,              // Polished melting/refrozen top ice sheen
-        clearcoatRoughness: 0.16,
-        attenuationColor: new THREE.Color(0x042419), // Deep glacial emerald absorption
-        attenuationDistance: 5.8,
+        specularIntensity: 0.92,
+        specularColor: new THREE.Color(0xe0fcf3),
+        clearcoat: 0.28,              // Soft crystalline frost glaze
+        clearcoatRoughness: 0.52,
+        attenuationColor: new THREE.Color(0x052a1d), // Deep emerald absorption inside the ice slab
+        attenuationDistance: 5.0,
         normalMap,
-        normalScale: new THREE.Vector2(0.32, 0.32),
+        normalScale: new THREE.Vector2(0.48, 0.48),  // Pronounced tactile frost micro-surface
         bumpMap: normalMap,
-        bumpScale: 0.012,
+        bumpScale: 0.022,
         transparent: true,
         opacity: 1.0
     });
@@ -248,11 +248,11 @@ import * as THREE from './vendor/three.module.js';
     // 4. Balanced Studio Lighting (NO BACKLIGHT)
     // =========================================================================
     // Deep emerald ambient fill
-    const ambientLight = new THREE.AmbientLight(0x0a2f23, 0.78);
+    const ambientLight = new THREE.AmbientLight(0x0c3427, 0.82);
     scene.add(ambientLight);
 
     // Cool ice graze directional light from high angle
-    const iceGrazeLight = new THREE.DirectionalLight(0xafe8d8, 0.42);
+    const iceGrazeLight = new THREE.DirectionalLight(0xb2eee0, 0.45);
     iceGrazeLight.position.set(-2.5, 4.0, 3.5);
     scene.add(iceGrazeLight);
 
