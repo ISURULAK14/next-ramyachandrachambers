@@ -808,12 +808,16 @@ async function runFullSuite() {
     if (glassCanvas && glassCanvas.state) {
       const st = glassCanvas.state;
       check(
-        st.active && st.transmission >= 0.9 && st.roughness >= 0.6 && st.ior >= 1.3 && st.hasNormalMap && st.hasGridOverlay === true,
-        `Three.js Transmissive Frosted Glass + Grid Overlay active (transmission=${st.transmission}, roughness=${st.roughness}, ior=${st.ior}, normalMap=${st.hasNormalMap}, grid=${st.hasGridOverlay})`
+        st.active && st.transmission >= 0.9 && st.roughness >= 0.55 && st.ior >= 1.3 && st.hasNormalMap && st.hasGridOverlay === false,
+        `Three.js Realistic Frosted Glass active with grid removed (transmission=${st.transmission}, roughness=${st.roughness}, ior=${st.ior}, normalMap=${st.hasNormalMap}, grid=${st.hasGridOverlay})`
       );
       check(
         st.hasShapes === true,
-        'Underlying geometric shapes rendered behind transmissive glass plane'
+        'Physical underlying geometric solids rendered behind transmissive glass plane'
+      );
+      check(
+        st.lightIntensity <= 4.0,
+        `Cursor backlight reduced to subtle non-glaring level (intensity=${st.lightIntensity})`
       );
       await page.mouse.move(100, 100);
       await new Promise(r => setTimeout(r, 250));
@@ -823,7 +827,7 @@ async function runFullSuite() {
       const pos2 = await page.evaluate(() => ({ light: window.__rgFrostedGlass.lightPos, ndc: window.__rgFrostedGlass.mouseNDC }));
       check(
         pos2.light.x > pos1.light.x && pos2.light.y < pos1.light.y,
-        `Dynamic PointLight tracks normalized cursor coordinates (${pos1.light.x.toFixed(2)},${pos1.light.y.toFixed(2)} -> ${pos2.light.x.toFixed(2)},${pos2.light.y.toFixed(2)})`
+        `Refined PointLight tracks normalized cursor coordinates (${pos1.light.x.toFixed(2)},${pos1.light.y.toFixed(2)} -> ${pos2.light.x.toFixed(2)},${pos2.light.y.toFixed(2)})`
       );
       await new Promise(r => setTimeout(r, 250));
       const st2 = await page.evaluate(() => window.__rgFrostedGlass);

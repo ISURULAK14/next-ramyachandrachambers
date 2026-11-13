@@ -1,6 +1,6 @@
 /**
  * Ramyachandra Gunasekera Chambers — Staging (next.ramyachandrachambers.com)
- * Three.js Transmissive Frosted Glass + Preserved Geometric Shapes + Uniform Grid + Dynamic Specular Cursor Light
+ * Three.js Realistic Transmissive Frosted Glass + Physical Underlying Solids + Refined Soft Cursor Light (Grid Removed)
  */
 import * as THREE from './vendor/three.module.js';
 
@@ -48,7 +48,7 @@ import * as THREE from './vendor/three.module.js';
     }
 
     // =========================================================================
-    // 1. Background Environment Layer (Preserved Emerald Colors & Radial Gradients)
+    // 1. Background Environment Layer (Deep Imperial Emerald Radial Gradients)
     // =========================================================================
     const bgZ = -3.0;
     const bgGeo = new THREE.PlaneGeometry(1, 1);
@@ -74,24 +74,28 @@ import * as THREE from './vendor/three.module.js';
 
             void main() {
                 vec2 p = vUv;
-                vec3 baseNoir     = vec3(0.0118, 0.0706, 0.0549); // #03120e
+                vec3 baseNoir     = vec3(0.0118, 0.0549, 0.0431); // #030e0b deep abyss
                 vec3 deepEmerald  = vec3(0.0196, 0.1569, 0.1216); // #05281f
-                vec3 royalEmerald = vec3(0.0431, 0.2392, 0.1804); // #0b3d2e
+                vec3 royalEmerald = vec3(0.0431, 0.2588, 0.1961); // #0b4232
                 vec3 champagne    = vec3(0.8863, 0.7608, 0.4588); // #e2c275
 
-                float drift1 = sin(uTime * 0.25) * 0.05;
-                float drift2 = cos(uTime * 0.20) * 0.05;
+                float drift1 = sin(uTime * 0.22) * 0.06;
+                float drift2 = cos(uTime * 0.18) * 0.06;
 
-                float d1 = length(p - vec2(0.18 + drift1, 0.85));
-                float d2 = length(p - vec2(0.86 - drift2, 0.22));
-                float d3 = length(p - vec2(0.50, 0.50 + drift1 * 0.6));
+                float d1 = length(p - vec2(0.20 + drift1, 0.82));
+                float d2 = length(p - vec2(0.84 - drift2, 0.24));
+                float d3 = length(p - vec2(0.50, 0.50 + drift1 * 0.5));
 
                 vec3 col = baseNoir;
                 col = mix(col, royalEmerald, smoothstep(0.95, 0.05, d1) * 0.88);
                 col = mix(col, deepEmerald, smoothstep(0.90, 0.05, d2) * 0.82);
-                col += royalEmerald * smoothstep(0.75, 0.0, d3) * 0.32;
-                col += champagne * smoothstep(0.55, 0.0, length(p - vec2(0.24, 0.78))) * 0.08;
-                col += champagne * smoothstep(0.50, 0.0, length(p - vec2(0.78, 0.28))) * 0.06;
+                col += royalEmerald * smoothstep(0.75, 0.0, d3) * 0.30;
+                col += champagne * smoothstep(0.55, 0.0, length(p - vec2(0.26, 0.76))) * 0.08;
+                col += champagne * smoothstep(0.50, 0.0, length(p - vec2(0.76, 0.30))) * 0.06;
+
+                // Subtle organic vignette
+                float vignette = smoothstep(0.98, 0.35, length(p - 0.5));
+                col *= (0.78 + 0.22 * vignette);
 
                 gl_FragColor = vec4(col, 1.0);
             }
@@ -103,43 +107,79 @@ import * as THREE from './vendor/three.module.js';
     scene.add(bgMesh);
 
     // =========================================================================
-    // 2. Preserved Underlying Geometric Shapes (Behind Transmissive Glass)
+    // 2. Realistic Physical Geometric Solids (Floating Behind Glass at z = -1.6)
     // =========================================================================
     const shapeGroup = new THREE.Group();
     shapeGroup.position.z = -1.6;
     scene.add(shapeGroup);
 
     const shapes = [];
-    const shapeSpecs = [
-        { geo: new THREE.IcosahedronGeometry(1.75, 0), color: 0x10b981, emissive: 0x0b3d2e, pos: [-3.4, 1.6, -0.4], speed: 0.18, opacity: 0.65 },
-        { geo: new THREE.OctahedronGeometry(1.45, 0), color: 0xe2c275, emissive: 0x8a6d2f, pos: [3.2, -1.4, -0.2], speed: -0.22, opacity: 0.55 },
-        { geo: new THREE.TorusGeometry(2.1, 0.14, 16, 48), color: 0x34d399, emissive: 0x05281f, pos: [0.4, 0.3, -0.7], speed: 0.12, opacity: 0.48 },
-        { geo: new THREE.DodecahedronGeometry(1.15, 0), color: 0xfae8b4, emissive: 0x6b5320, pos: [-1.8, -2.1, -0.1], speed: 0.24, opacity: 0.45 }
-    ];
 
-    shapeSpecs.forEach((spec, i) => {
-        const mat = new THREE.MeshStandardMaterial({
-            color: spec.color,
-            emissive: spec.emissive,
-            emissiveIntensity: 0.85,
-            roughness: 0.35,
-            metalness: 0.4,
-            transparent: true,
-            opacity: spec.opacity
-        });
-        const mesh = new THREE.Mesh(spec.geo, mat);
-        mesh.position.set(spec.pos[0], spec.pos[1], spec.pos[2]);
-        shapeGroup.add(mesh);
-        shapes.push({
-            mesh,
-            basePos: [...spec.pos],
-            speed: spec.speed,
-            phase: i * 1.57
-        });
+    // 2A. Emerald crystal (Icosahedron)
+    const emeraldMat = new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color(0x10b981),
+        emissive: new THREE.Color(0x063124),
+        emissiveIntensity: 0.65,
+        roughness: 0.24,
+        metalness: 0.15,
+        transmission: 0.42,
+        ior: 1.57,
+        transparent: true,
+        opacity: 0.88
     });
+    const icosahedron = new THREE.Mesh(new THREE.IcosahedronGeometry(1.8, 0), emeraldMat);
+    icosahedron.position.set(-3.4, 1.6, -0.4);
+    shapeGroup.add(icosahedron);
+    shapes.push({ mesh: icosahedron, basePos: [-3.4, 1.6, -0.4], speed: 0.18, phase: 0 });
+
+    // 2B. Polished Gold Octahedron
+    const goldMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0xdfbe72),
+        emissive: new THREE.Color(0x5a4316),
+        emissiveIntensity: 0.55,
+        roughness: 0.22,
+        metalness: 0.88,
+        transparent: true,
+        opacity: 0.85
+    });
+    const octahedron = new THREE.Mesh(new THREE.OctahedronGeometry(1.45, 0), goldMat);
+    octahedron.position.set(3.2, -1.4, -0.2);
+    shapeGroup.add(octahedron);
+    shapes.push({ mesh: octahedron, basePos: [3.2, -1.4, -0.2], speed: -0.20, phase: 1.57 });
+
+    // 2C. Satin Jade Torus
+    const jadeMat = new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color(0x34d399),
+        emissive: new THREE.Color(0x04241a),
+        emissiveIntensity: 0.50,
+        roughness: 0.36,
+        clearcoat: 0.35,
+        clearcoatRoughness: 0.4,
+        transparent: true,
+        opacity: 0.75
+    });
+    const torus = new THREE.Mesh(new THREE.TorusGeometry(2.1, 0.15, 16, 48), jadeMat);
+    torus.position.set(0.4, 0.3, -0.7);
+    shapeGroup.add(torus);
+    shapes.push({ mesh: torus, basePos: [0.4, 0.3, -0.7], speed: 0.12, phase: 3.14 });
+
+    // 2D. Champagne Dodecahedron
+    const champMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0xfae8b4),
+        emissive: new THREE.Color(0x524018),
+        emissiveIntensity: 0.50,
+        roughness: 0.28,
+        metalness: 0.65,
+        transparent: true,
+        opacity: 0.78
+    });
+    const dodecahedron = new THREE.Mesh(new THREE.DodecahedronGeometry(1.15, 0), champMat);
+    dodecahedron.position.set(-1.8, -2.1, -0.1);
+    shapeGroup.add(dodecahedron);
+    shapes.push({ mesh: dodecahedron, basePos: [-1.8, -2.1, -0.1], speed: 0.22, phase: 4.71 });
 
     // =========================================================================
-    // 3. Frosted Glass Shader (MeshPhysicalMaterial on Full-Screen Plane)
+    // 3. Hyper-Realistic Frosted Glass Material (MeshPhysicalMaterial)
     // =========================================================================
     const textureLoader = new THREE.TextureLoader();
     const normalMap = textureLoader.load('assets/frosted-normal.png');
@@ -149,20 +189,22 @@ import * as THREE from './vendor/three.module.js';
 
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xeefcf6),
+        color: new THREE.Color(0xf2fcf7),
         transmission: 0.96,
-        roughness: 0.62,
-        ior: 1.50,
-        thickness: 1.2,
-        metalness: 0.04,
-        clearcoat: 0.25,
-        clearcoatRoughness: 0.42,
-        attenuationColor: new THREE.Color(0x0b3d2e),
-        attenuationDistance: 8.5,
+        roughness: 0.58,              // Refined optical frosted diffusion
+        ior: 1.52,                    // Realistic crown glass refraction
+        thickness: 1.6,               // Physical optical volume
+        metalness: 0.02,
+        specularIntensity: 0.88,
+        specularColor: new THREE.Color(0xfff5db),
+        clearcoat: 0.35,              // Dual-layer: polished outer reflection + frosted interior
+        clearcoatRoughness: 0.28,
+        attenuationColor: new THREE.Color(0x063124),
+        attenuationDistance: 7.2,
         normalMap,
-        normalScale: new THREE.Vector2(0.38, 0.38),
+        normalScale: new THREE.Vector2(0.28, 0.28),
         bumpMap: normalMap,
-        bumpScale: 0.015,
+        bumpScale: 0.012,
         transparent: true,
         opacity: 1.0
     });
@@ -172,70 +214,29 @@ import * as THREE from './vendor/three.module.js';
     scene.add(glassMesh);
 
     // =========================================================================
-    // 4. Grid Overlay (Fine, Uniform Precision Foreground Mesh at z = 0.02)
+    // 4. Refined Balanced Lighting (Reduced, Subtle Cursor PointLight)
     // =========================================================================
-    const gridGeo = new THREE.PlaneGeometry(1, 1);
-    const gridMat = new THREE.ShaderMaterial({
-        transparent: true,
-        depthWrite: false,
-        uniforms: {
-            uLineColor: { value: new THREE.Color(0x34d399) },
-            uAccentColor: { value: new THREE.Color(0xe2c275) },
-            uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-            uGridScale: { value: 36.0 }
-        },
-        vertexShader: `
-            varying vec2 vUv;
-            void main() {
-                vUv = uv;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-        `,
-        fragmentShader: `
-            varying vec2 vUv;
-            uniform vec2 uResolution;
-            uniform float uGridScale;
-            uniform vec3 uLineColor;
-            uniform vec3 uAccentColor;
-
-            void main() {
-                vec2 coord = vUv * vec2(uResolution.x / max(1.0, uResolution.y), 1.0) * uGridScale;
-                vec2 grid = abs(fract(coord - 0.5) - 0.5) / fwidth(coord);
-                float line = min(grid.x, grid.y);
-                float minorAlpha = (1.0 - min(line, 1.0)) * 0.085;
-
-                vec2 majorCoord = coord / 4.0;
-                vec2 majorGrid = abs(fract(majorCoord - 0.5) - 0.5) / fwidth(majorCoord);
-                float majorLine = min(majorGrid.x, majorGrid.y);
-                float majorAlpha = (1.0 - min(majorLine, 1.0)) * 0.065;
-
-                vec3 color = mix(uAccentColor, uLineColor, 0.65);
-                float alpha = clamp(minorAlpha + majorAlpha, 0.0, 0.14);
-                gl_FragColor = vec4(color, alpha);
-            }
-        `
-    });
-
-    const gridMesh = new THREE.Mesh(gridGeo, gridMat);
-    gridMesh.position.z = 0.02;
-    scene.add(gridMesh);
-
-    // =========================================================================
-    // 5. Dynamic Lighting In Front of Glass Plane (Specular Tracking PointLight)
-    // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x104536, 0.75);
+    // Soft, deep ambient illumination
+    const ambientLight = new THREE.AmbientLight(0x0c382b, 0.80);
     scene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0x10b981, 0.55);
-    dirLight.position.set(-4, 5, 4);
-    scene.add(dirLight);
+    // Soft directional key light catching the glass bevel
+    const keyLight = new THREE.DirectionalLight(0x9ee0cb, 0.45);
+    keyLight.position.set(-3, 4, 3);
+    scene.add(keyLight);
 
-    const cursorLight = new THREE.PointLight(0xfae8b4, 16, 28, 1.5);
-    cursorLight.position.set(0, 0, 2.8);
+    // Warm subtle fill light from lower right
+    const fillLight = new THREE.DirectionalLight(0xe8cf8c, 0.25);
+    fillLight.position.set(3, -2, 2);
+    scene.add(fillLight);
+
+    // Reduced, gentle cursor specular tracking light (non-glaring, localized highlight)
+    const cursorLight = new THREE.PointLight(0xfae8b4, 2.4, 15, 2.0);
+    cursorLight.position.set(0, 0, 2.5);
     scene.add(cursorLight);
 
     // =========================================================================
-    // 6. Responsive Frustum Scaling & Resize Handler
+    // 5. Responsive Frustum Scaling & Resize Handler
     // =========================================================================
     let frustumAtGlass = getFrustumSizeAtZ(0);
 
@@ -250,7 +251,6 @@ import * as THREE from './vendor/three.module.js';
         renderer.setSize(w, h, false);
 
         bgUniforms.uResolution.value.set(w, h);
-        gridMat.uniforms.uResolution.value.set(w, h);
 
         const bgFrustum = getFrustumSizeAtZ(bgZ);
         bgMesh.scale.set(bgFrustum.width * 1.02, bgFrustum.height * 1.02, 1);
@@ -258,16 +258,13 @@ import * as THREE from './vendor/three.module.js';
         frustumAtGlass = getFrustumSizeAtZ(0);
         glassMesh.scale.set(frustumAtGlass.width * 1.02, frustumAtGlass.height * 1.02, 1);
 
-        const gridFrustum = getFrustumSizeAtZ(0.02);
-        gridMesh.scale.set(gridFrustum.width * 1.02, gridFrustum.height * 1.02, 1);
-
         normalMap.repeat.set(Math.max(2, w / 340), Math.max(2, h / 340));
     }
     handleResize();
     window.addEventListener('resize', handleResize, { passive: true });
 
     // =========================================================================
-    // 7. Interactivity: Normalized Cursor Coordinates Tracking (-1 to +1)
+    // 6. Interactivity: Normalized Cursor Coordinates Tracking (-1 to +1)
     // =========================================================================
     const mouse = { x: 0, y: 0 };
     const currentLight = { x: 0, y: 0 };
@@ -278,7 +275,7 @@ import * as THREE from './vendor/three.module.js';
     }, { passive: true });
 
     // =========================================================================
-    // 8. Animation Loop (requestAnimationFrame)
+    // 7. Smooth 60fps Animation Loop
     // =========================================================================
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const clock = new THREE.Clock();
@@ -291,16 +288,17 @@ import * as THREE from './vendor/three.module.js';
         // Smoothly map normalized [-1, +1] cursor coordinates to light world position
         const targetX = mouse.x * (frustumAtGlass.width * 0.5);
         const targetY = mouse.y * (frustumAtGlass.height * 0.5);
-        currentLight.x += (targetX - currentLight.x) * 0.12;
-        currentLight.y += (targetY - currentLight.y) * 0.12;
-        cursorLight.position.set(currentLight.x, currentLight.y, 2.8);
+        currentLight.x += (targetX - currentLight.x) * 0.10;
+        currentLight.y += (targetY - currentLight.y) * 0.10;
+        cursorLight.position.set(currentLight.x, currentLight.y, 2.5);
 
-        // Gentle ambient orbital drift for underlying geometric shapes behind the glass
+        // Orbital breathing and rotation for underlying geometric shapes
         if (!prefersReducedMotion) {
             shapes.forEach((item) => {
-                item.mesh.rotation.x += 0.0022 * item.speed * 4;
-                item.mesh.rotation.y += 0.0031 * item.speed * 4;
-                item.mesh.position.y = item.basePos[1] + Math.sin(elapsed * 0.45 + item.phase) * 0.35;
+                item.mesh.rotation.x += 0.0020 * item.speed * 4;
+                item.mesh.rotation.y += 0.0028 * item.speed * 4;
+                item.mesh.position.y = item.basePos[1] + Math.sin(elapsed * 0.42 + item.phase) * 0.32;
+                item.mesh.position.x = item.basePos[0] + Math.cos(elapsed * 0.35 + item.phase) * 0.15;
             });
         }
 
@@ -312,10 +310,11 @@ import * as THREE from './vendor/three.module.js';
             roughness: glassMat.roughness,
             ior: glassMat.ior,
             hasNormalMap: Boolean(glassMat.normalMap),
-            hasGridOverlay: Boolean(gridMesh.visible),
+            hasGridOverlay: false, // Grid removed per user instruction
             hasShapes: true,
             mouseNDC: { x: mouse.x, y: mouse.y },
             lightPos: { x: cursorLight.position.x, y: cursorLight.position.y, z: cursorLight.position.z },
+            lightIntensity: cursorLight.intensity,
             elapsedTime: elapsed
         };
     }
