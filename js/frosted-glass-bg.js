@@ -102,27 +102,20 @@ import * as THREE from './vendor/three.module.js';
                 float eddy2 = cos(flowUv2.x * 5.0 - flowUv2.y * 2.6 + uTime * 0.5) * 0.5
                             + sin(flowUv2.x * 3.0 + flowUv2.y * 5.0 - uTime * 0.35) * 0.5;
 
-                // Water caustics refracted by moving waves under ice
-                vec2 cUv1 = flowUv1 * 5.0 + eddy1 * 0.55;
-                vec2 cUv2 = flowUv2 * 6.5 - eddy2 * 0.45;
-                float w1 = sin(cUv1.x + sin(cUv1.y + uTime * 0.7)) + cos(cUv1.y * 1.2 + cos(cUv1.x * 0.9 - uTime * 0.6));
-                float w2 = sin(cUv2.x * 1.2 - sin(cUv2.y * 0.8 - uTime * 0.8)) + cos(cUv2.y + cos(cUv2.x * 1.1 + uTime * 0.6));
-                float caustics = pow(1.0 - clamp(abs(w1 * 0.46), 0.0, 1.0), 3.4) * 0.55
-                               + pow(1.0 - clamp(abs(w2 * 0.46), 0.0, 1.0), 3.6) * 0.45;
+                // Smooth natural fluid ripples (zero sharp lines or caustic cell borders)
+                float ripple1 = sin(flowUv1.x * 2.8 + flowUv1.y * 1.9 + uTime * 0.35) * 0.5 + 0.5;
+                float ripple2 = cos(flowUv2.x * 2.4 - flowUv2.y * 2.2 - uTime * 0.28) * 0.5 + 0.5;
+                float naturalFlow = smoothstep(0.12, 0.88, ripple1 * 0.55 + ripple2 * 0.45);
 
-                // Base liquid layering
-                vec3 col = mix(bedrockNoir, deepEmerald, 0.60 + 0.40 * channel);
-                col = mix(col, royalEmerald, channel * (0.45 + 0.55 * (eddy1 * 0.5 + 0.5)));
+                // Base liquid layering with smooth gradient transitions
+                vec3 col = mix(bedrockNoir, deepEmerald, 0.65 + 0.35 * channel);
+                col = mix(col, royalEmerald, channel * (0.40 + 0.60 * naturalFlow));
 
-                // Living current threads
-                float currentThreads = smoothstep(0.20, 0.80, (eddy1 * eddy2) * 0.5 + 0.5);
-                col += brightGlow * currentThreads * channel * 0.32;
+                // Soft emerald luminescence in main current
+                col += brightGlow * (naturalFlow * channel * 0.20);
 
-                // Subtle refracted caustics in deep emerald water
-                col += vec3(0.78, 0.94, 0.88) * caustics * (0.22 + 0.35 * channel);
-
-                // Soft champagne mineral glints
-                col += champagne * caustics * smoothstep(0.40, 0.90, eddy1 * 0.5 + 0.5) * 0.18 * channel;
+                // Soft champagne mineral glints (smooth diffuse shimmer, zero lines)
+                col += champagne * (ripple1 * ripple2 * channel * 0.12);
 
                 // Deep luxury vignette (keeps center text corridor pristine)
                 float vignette = smoothstep(0.98, 0.36, length(p - 0.5));
@@ -146,65 +139,65 @@ import * as THREE from './vendor/three.module.js';
 
     const shapes = [];
 
-    // 2A. Translucent Emerald Crystal (Icosahedron)
+    // 2A. Translucent Emerald Crystal (Geodesic Sphere - Zero Sharp Polygon Lines)
     const emeraldMat = new THREE.MeshPhysicalMaterial({
         color: new THREE.Color(0x10b981),
         emissive: new THREE.Color(0x063124),
-        emissiveIntensity: 0.65,
-        roughness: 0.22,
-        metalness: 0.15,
-        transmission: 0.45,
-        ior: 1.57,
+        emissiveIntensity: 0.35,
+        roughness: 0.55,
+        metalness: 0.10,
+        transmission: 0.55,
+        ior: 1.52,
         transparent: true,
-        opacity: 0.85
+        opacity: 0.45
     });
-    const icosahedron = new THREE.Mesh(new THREE.IcosahedronGeometry(1.8, 0), emeraldMat);
+    const icosahedron = new THREE.Mesh(new THREE.IcosahedronGeometry(1.7, 3), emeraldMat);
     icosahedron.position.set(-3.4, 1.6, -0.4);
     shapeGroup.add(icosahedron);
     shapes.push({ mesh: icosahedron, basePos: [-3.4, 1.6, -0.4], speed: 0.16, phase: 0 });
 
-    // 2B. Polished Gold Octahedron
+    // 2B. Polished Warm Amber Glow Orb
     const goldMat = new THREE.MeshStandardMaterial({
         color: new THREE.Color(0xdfbe72),
-        emissive: new THREE.Color(0x5a4316),
-        emissiveIntensity: 0.50,
-        roughness: 0.20,
-        metalness: 0.88,
+        emissive: new THREE.Color(0x4a3610),
+        emissiveIntensity: 0.30,
+        roughness: 0.50,
+        metalness: 0.40,
         transparent: true,
-        opacity: 0.80
+        opacity: 0.40
     });
-    const octahedron = new THREE.Mesh(new THREE.OctahedronGeometry(1.45, 0), goldMat);
+    const octahedron = new THREE.Mesh(new THREE.SphereGeometry(1.35, 32, 32), goldMat);
     octahedron.position.set(3.2, -1.4, -0.2);
     shapeGroup.add(octahedron);
     shapes.push({ mesh: octahedron, basePos: [3.2, -1.4, -0.2], speed: -0.18, phase: 1.57 });
 
-    // 2C. Satin Jade Torus
+    // 2C. Satin Jade Soft Ring
     const jadeMat = new THREE.MeshPhysicalMaterial({
         color: new THREE.Color(0x34d399),
         emissive: new THREE.Color(0x04241a),
-        emissiveIntensity: 0.45,
-        roughness: 0.32,
-        clearcoat: 0.35,
-        clearcoatRoughness: 0.3,
+        emissiveIntensity: 0.25,
+        roughness: 0.60,
+        clearcoat: 0.25,
+        clearcoatRoughness: 0.4,
         transparent: true,
-        opacity: 0.72
+        opacity: 0.35
     });
-    const torus = new THREE.Mesh(new THREE.TorusGeometry(2.1, 0.15, 16, 48), jadeMat);
+    const torus = new THREE.Mesh(new THREE.TorusGeometry(2.1, 0.10, 32, 64), jadeMat);
     torus.position.set(0.4, 0.3, -0.7);
     shapeGroup.add(torus);
     shapes.push({ mesh: torus, basePos: [0.4, 0.3, -0.7], speed: 0.10, phase: 3.14 });
 
-    // 2D. Champagne Dodecahedron
+    // 2D. Champagne Soft Glow Orb
     const champMat = new THREE.MeshStandardMaterial({
         color: new THREE.Color(0xfae8b4),
-        emissive: new THREE.Color(0x524018),
-        emissiveIntensity: 0.45,
-        roughness: 0.26,
-        metalness: 0.65,
+        emissive: new THREE.Color(0x3e3012),
+        emissiveIntensity: 0.25,
+        roughness: 0.52,
+        metalness: 0.35,
         transparent: true,
-        opacity: 0.75
+        opacity: 0.40
     });
-    const dodecahedron = new THREE.Mesh(new THREE.DodecahedronGeometry(1.15, 0), champMat);
+    const dodecahedron = new THREE.Mesh(new THREE.SphereGeometry(1.10, 32, 32), champMat);
     dodecahedron.position.set(-1.8, -2.1, -0.1);
     shapeGroup.add(dodecahedron);
     shapes.push({ mesh: dodecahedron, basePos: [-1.8, -2.1, -0.1], speed: 0.20, phase: 4.71 });
@@ -220,22 +213,20 @@ import * as THREE from './vendor/three.module.js';
 
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xf2fcf7),
+        color: new THREE.Color(0xf4fcf8),
         transmission: 0.96,           // High optical transmission
-        roughness: 0.48,              // Refined, tactile frosted ice diffusion
+        roughness: 0.46,              // Realistic frosted ice light scattering
         ior: 1.309,                   // True physical index of refraction for natural water ice
         thickness: 1.8,               // Physical refraction volume
         metalness: 0.02,
-        specularIntensity: 0.92,
+        specularIntensity: 0.90,
         specularColor: new THREE.Color(0xffffff),
-        clearcoat: 0.45,              // Clean, polished top ice sheen
-        clearcoatRoughness: 0.20,     // Sharp surface reflection
+        clearcoat: 0.40,              // Clean, polished top ice sheen
+        clearcoatRoughness: 0.22,     // Natural surface reflection
         attenuationColor: new THREE.Color(0x063124), // Pure emerald crystalline attenuation
-        attenuationDistance: 7.5,     // Natural depth falloff
+        attenuationDistance: 8.0,     // Natural depth falloff
         normalMap,
-        normalScale: new THREE.Vector2(0.42, 0.42),  // Pronounced dendritic frost crystal facets
-        bumpMap: normalMap,
-        bumpScale: 0.016,
+        normalScale: new THREE.Vector2(0.32, 0.32),  // Natural isotropic micro-frost crystal facets
         transparent: true,
         opacity: 1.0
     });
