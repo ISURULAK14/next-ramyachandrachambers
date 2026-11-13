@@ -1,11 +1,10 @@
 /**
  * Ramyachandra Gunasekera Chambers — Staging (next.ramyachandrachambers.com)
- * Original First Frosted Glass (smooth, uncracked) + Hyper-Realistic Natural Flowing Stream
- * Physical Transmission blur, organic river thalweg, Voronoi/wave caustics, riverbed depth & zero backlight.
+ * Three.js Transmissive Frosted Glass + Preserved Geometric Shapes + Uniform Grid + Dynamic Specular Cursor Light
  */
 import * as THREE from './vendor/three.module.js';
 
-(function initFrostedIceStream() {
+(function initFrostedGlassBackground() {
     const canvas = document.getElementById('frosted-glass-canvas');
     if (!canvas) return;
 
@@ -18,7 +17,7 @@ import * as THREE from './vendor/three.module.js';
             powerPreference: 'high-performance'
         });
     } catch (err) {
-        return; // Fallback to CSS #03120e emerald base
+        return; // Graceful fallback to CSS #03120e emerald base
     }
 
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
@@ -27,7 +26,7 @@ import * as THREE from './vendor/three.module.js';
         renderer.transmissionResolutionScale = 0.5;
     }
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.05;
+    renderer.toneMappingExposure = 1.06;
 
     const scene = new THREE.Scene();
 
@@ -39,6 +38,7 @@ import * as THREE from './vendor/three.module.js';
     );
     camera.position.set(0, 0, 10);
 
+    // Helper: compute exact world-space frustum dimensions at given Z plane
     function getFrustumSizeAtZ(zPlane) {
         const dist = camera.position.z - zPlane;
         const vFov = THREE.MathUtils.degToRad(camera.fov);
@@ -48,13 +48,12 @@ import * as THREE from './vendor/three.module.js';
     }
 
     // =========================================================================
-    // 1. Hyper-Realistic Natural Flowing Stream Shader (Beneath Frost at z = -1.5)
+    // 1. Background Environment Layer (Preserved Emerald Colors & Radial Gradients)
     // =========================================================================
-    const bgZ = -1.5;
+    const bgZ = -3.0;
     const bgGeo = new THREE.PlaneGeometry(1, 1);
     const bgUniforms = {
         uTime: { value: 0 },
-        uScroll: { value: 0 },
         uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
     };
 
@@ -71,109 +70,30 @@ import * as THREE from './vendor/three.module.js';
         fragmentShader: `
             varying vec2 vUv;
             uniform float uTime;
-            uniform float uScroll;
             uniform vec2 uResolution;
-
-            // Fast pseudo-hash for riverbed pebbles / texture
-            float hash12(vec2 p) {
-                vec3 p3  = fract(vec3(p.xyx) * 0.1031);
-                p3 += dot(p3, p3.yzx + 33.33);
-                return fract((p3.x + p3.y) * p3.z);
-            }
 
             void main() {
                 vec2 p = vUv;
+                vec3 baseNoir     = vec3(0.0118, 0.0706, 0.0549); // #03120e
+                vec3 deepEmerald  = vec3(0.0196, 0.1569, 0.1216); // #05281f
+                vec3 royalEmerald = vec3(0.0431, 0.2392, 0.1804); // #0b3d2e
+                vec3 champagne    = vec3(0.8863, 0.7608, 0.4588); // #e2c275
 
-                // Natural meandering river thalweg (curving river centerline)
-                float meander1 = sin(p.y * 2.1 + 0.3) * 0.19;
-                float meander2 = sin(p.y * 4.4 - 0.4) * 0.08;
-                float riverCenter = 0.5 + meander1 + meander2;
-                float distToCenter = abs(p.x - riverCenter);
+                float drift1 = sin(uTime * 0.25) * 0.05;
+                float drift2 = cos(uTime * 0.20) * 0.05;
 
-                // River channel cross-section profile: deep center channel, shallow banks
-                float channelWidth = 0.48;
-                float channel = smoothstep(channelWidth, 0.04, distToCenter);
-                float riverBedDepth = channel * (0.65 + 0.35 * sin(p.y * 3.0 + 1.2));
+                float d1 = length(p - vec2(0.18 + drift1, 0.85));
+                float d2 = length(p - vec2(0.86 - drift2, 0.22));
+                float d3 = length(p - vec2(0.50, 0.50 + drift1 * 0.6));
 
-                // Natural velocity gradient: fast current in deep channel, slow near banks
-                float currentSpeed = mix(0.08, 0.16, channel);
-                float scrollOffset = uScroll * 0.00022;
-                float flowTime = uTime * currentSpeed + scrollOffset;
+                vec3 col = baseNoir;
+                col = mix(col, royalEmerald, smoothstep(0.95, 0.05, d1) * 0.88);
+                col = mix(col, deepEmerald, smoothstep(0.90, 0.05, d2) * 0.82);
+                col += royalEmerald * smoothstep(0.75, 0.0, d3) * 0.32;
+                col += champagne * smoothstep(0.55, 0.0, length(p - vec2(0.24, 0.78))) * 0.08;
+                col += champagne * smoothstep(0.50, 0.0, length(p - vec2(0.78, 0.28))) * 0.06;
 
-                // Streamline coordinates following the curving river
-                vec2 streamUv = vec2((p.x - riverCenter) * 2.5, p.y * 2.4 - flowTime);
-
-                // Centrifugal lateral current drift along river bends
-                float bendCurvature = cos(p.y * 2.1 + 0.3) * 0.14;
-                streamUv.x += bendCurvature;
-
-                // Fluid eddies & harmonic turbulence
-                float eddy1 = sin(streamUv.x * 3.8 + streamUv.y * 2.4 + uTime * 0.40) * 0.5
-                            + cos(streamUv.x * 2.4 - streamUv.y * 4.2 - uTime * 0.30) * 0.5;
-                float eddy2 = cos(streamUv.x * 5.2 - streamUv.y * 3.1 + uTime * 0.50) * 0.5
-                            + sin(streamUv.x * 3.6 + streamUv.y * 5.6 - uTime * 0.35) * 0.5;
-
-                // Flowing water coordinate layers with micro-vortices
-                vec2 flowLayer1 = streamUv * 2.4 + vec2(eddy1 * 0.18, -flowTime * 0.6);
-                vec2 flowLayer2 = streamUv * 3.8 + vec2(-eddy2 * 0.14, -flowTime * 1.1);
-
-                // 1. Organic water caustics: dancing liquid light nets refracted by moving waves
-                float cWave1 = sin(flowLayer1.x * 4.2 + sin(flowLayer1.y * 3.6 + uTime * 0.75))
-                             + cos(flowLayer1.y * 4.0 + cos(flowLayer1.x * 3.2 - uTime * 0.65));
-                float cWave2 = sin(flowLayer2.x * 5.4 - sin(flowLayer2.y * 4.2 - uTime * 0.85))
-                             + cos(flowLayer2.y * 5.0 + cos(flowLayer2.x * 4.8 + uTime * 0.60));
-
-                float caustic1 = pow(1.0 - clamp(abs(cWave1 * 0.46), 0.0, 1.0), 3.4);
-                float caustic2 = pow(1.0 - clamp(abs(cWave2 * 0.46), 0.0, 1.0), 3.6);
-                float caustics = (caustic1 * 0.58 + caustic2 * 0.42) * (0.35 + 0.65 * channel);
-
-                // 2. Capillary ripples & surface wave reflections
-                float ripplePattern = sin(flowLayer1.y * 22.0 + eddy1 * 3.5) * cos(flowLayer1.x * 14.0 - eddy2 * 3.0);
-                float surfaceRipples = smoothstep(0.40, 0.92, ripplePattern * 0.5 + 0.5) * (0.2 + 0.8 * channel);
-
-                // 3. Subsurface riverbed stones visible through clear water
-                vec2 pebbleUv = vec2(p.x * 16.0, p.y * 14.0 + meander1 * 2.0);
-                float pebbles = hash12(floor(pebbleUv));
-                float pebbleDetail = smoothstep(0.35, 0.75, sin(pebbles * 6.28 + length(fract(pebbleUv) - 0.5) * 5.0));
-
-                // 4. Foam flecks & laminar flow shear filaments
-                float foamShear = pow(abs(eddy1 - eddy2), 2.2);
-                float foamFlecks = smoothstep(0.55, 0.90, sin(flowLayer2.y * 18.0 + flowLayer2.x * 8.0) * foamShear) * channel;
-
-                // =====================================================================
-                // Deep Imperial Emerald Noir Palette
-                // =====================================================================
-                vec3 bedrockColor   = vec3(0.0118, 0.0471, 0.0392); // #030c0a deep abyss riverbed
-                vec3 pebbleShade    = vec3(0.0196, 0.0980, 0.0784); // #051914 riverbed stones
-                vec3 deepWaterPool  = vec3(0.0235, 0.1412, 0.1098); // #06241c clear emerald pool
-                vec3 rushingThalweg = vec3(0.0431, 0.2824, 0.2118); // #0b4836 main river current
-                vec3 livingEmerald  = vec3(0.0627, 0.7255, 0.5059); // #10b981 emerald current illumination
-                vec3 causticGlint   = vec3(0.8196, 0.9490, 0.8980); // #d1f2e5 pale crystalline seafoam
-                vec3 champagneGlint = vec3(0.9216, 0.8235, 0.5490); // #ebd28c champagne mineral refraction
-
-                // Layered natural fluid rendering
-                vec3 riverbed = mix(bedrockColor, pebbleShade, pebbleDetail * 0.35);
-                vec3 waterColor = mix(riverbed, deepWaterPool, riverBedDepth * 0.85);
-                waterColor = mix(waterColor, rushingThalweg, channel * (0.40 + 0.60 * (eddy1 * 0.5 + 0.5)));
-
-                // Living current threads
-                float currentThreads = smoothstep(0.18, 0.82, (eddy1 * eddy2) * 0.5 + 0.5);
-                waterColor += livingEmerald * currentThreads * channel * 0.34;
-
-                // Dancing water caustics
-                waterColor += causticGlint * caustics * (0.28 + 0.42 * riverBedDepth);
-
-                // Surface capillary wave reflections & champagne sparkles
-                waterColor += champagneGlint * surfaceRipples * caustics * 0.22 * channel;
-
-                // Delicate water foam flecks along current shear
-                waterColor += causticGlint * foamFlecks * 0.18;
-
-                // Vignette for seamless editorial framing
-                float vignette = smoothstep(0.98, 0.36, length(p - 0.5));
-                waterColor *= (0.76 + 0.24 * vignette);
-
-                gl_FragColor = vec4(waterColor, 1.0);
+                gl_FragColor = vec4(col, 1.0);
             }
         `
     });
@@ -183,7 +103,43 @@ import * as THREE from './vendor/three.module.js';
     scene.add(bgMesh);
 
     // =========================================================================
-    // 2. First Frosted Glass Surface Micro-Texture (Smooth, Uncracked Normal Map)
+    // 2. Preserved Underlying Geometric Shapes (Behind Transmissive Glass)
+    // =========================================================================
+    const shapeGroup = new THREE.Group();
+    shapeGroup.position.z = -1.6;
+    scene.add(shapeGroup);
+
+    const shapes = [];
+    const shapeSpecs = [
+        { geo: new THREE.IcosahedronGeometry(1.75, 0), color: 0x10b981, emissive: 0x0b3d2e, pos: [-3.4, 1.6, -0.4], speed: 0.18, opacity: 0.65 },
+        { geo: new THREE.OctahedronGeometry(1.45, 0), color: 0xe2c275, emissive: 0x8a6d2f, pos: [3.2, -1.4, -0.2], speed: -0.22, opacity: 0.55 },
+        { geo: new THREE.TorusGeometry(2.1, 0.14, 16, 48), color: 0x34d399, emissive: 0x05281f, pos: [0.4, 0.3, -0.7], speed: 0.12, opacity: 0.48 },
+        { geo: new THREE.DodecahedronGeometry(1.15, 0), color: 0xfae8b4, emissive: 0x6b5320, pos: [-1.8, -2.1, -0.1], speed: 0.24, opacity: 0.45 }
+    ];
+
+    shapeSpecs.forEach((spec, i) => {
+        const mat = new THREE.MeshStandardMaterial({
+            color: spec.color,
+            emissive: spec.emissive,
+            emissiveIntensity: 0.85,
+            roughness: 0.35,
+            metalness: 0.4,
+            transparent: true,
+            opacity: spec.opacity
+        });
+        const mesh = new THREE.Mesh(spec.geo, mat);
+        mesh.position.set(spec.pos[0], spec.pos[1], spec.pos[2]);
+        shapeGroup.add(mesh);
+        shapes.push({
+            mesh,
+            basePos: [...spec.pos],
+            speed: spec.speed,
+            phase: i * 1.57
+        });
+    });
+
+    // =========================================================================
+    // 3. Frosted Glass Shader (MeshPhysicalMaterial on Full-Screen Plane)
     // =========================================================================
     const textureLoader = new THREE.TextureLoader();
     const normalMap = textureLoader.load('assets/frosted-normal.png');
@@ -191,9 +147,6 @@ import * as THREE from './vendor/three.module.js';
     normalMap.wrapT = THREE.RepeatWrapping;
     normalMap.repeat.set(5.0, 3.0);
 
-    // =========================================================================
-    // 3. First Frosted Glass Material (MeshPhysicalMaterial with Pure Frosted Blur)
-    // =========================================================================
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
         color: new THREE.Color(0xeefcf6),
@@ -219,17 +172,70 @@ import * as THREE from './vendor/three.module.js';
     scene.add(glassMesh);
 
     // =========================================================================
-    // 4. Balanced Ambient & Directional Lighting (NO BACKLIGHT)
+    // 4. Grid Overlay (Fine, Uniform Precision Foreground Mesh at z = 0.02)
     // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x0a2f23, 0.72);
+    const gridGeo = new THREE.PlaneGeometry(1, 1);
+    const gridMat = new THREE.ShaderMaterial({
+        transparent: true,
+        depthWrite: false,
+        uniforms: {
+            uLineColor: { value: new THREE.Color(0x34d399) },
+            uAccentColor: { value: new THREE.Color(0xe2c275) },
+            uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+            uGridScale: { value: 36.0 }
+        },
+        vertexShader: `
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `,
+        fragmentShader: `
+            varying vec2 vUv;
+            uniform vec2 uResolution;
+            uniform float uGridScale;
+            uniform vec3 uLineColor;
+            uniform vec3 uAccentColor;
+
+            void main() {
+                vec2 coord = vUv * vec2(uResolution.x / max(1.0, uResolution.y), 1.0) * uGridScale;
+                vec2 grid = abs(fract(coord - 0.5) - 0.5) / fwidth(coord);
+                float line = min(grid.x, grid.y);
+                float minorAlpha = (1.0 - min(line, 1.0)) * 0.085;
+
+                vec2 majorCoord = coord / 4.0;
+                vec2 majorGrid = abs(fract(majorCoord - 0.5) - 0.5) / fwidth(majorCoord);
+                float majorLine = min(majorGrid.x, majorGrid.y);
+                float majorAlpha = (1.0 - min(majorLine, 1.0)) * 0.065;
+
+                vec3 color = mix(uAccentColor, uLineColor, 0.65);
+                float alpha = clamp(minorAlpha + majorAlpha, 0.0, 0.14);
+                gl_FragColor = vec4(color, alpha);
+            }
+        `
+    });
+
+    const gridMesh = new THREE.Mesh(gridGeo, gridMat);
+    gridMesh.position.z = 0.02;
+    scene.add(gridMesh);
+
+    // =========================================================================
+    // 5. Dynamic Lighting In Front of Glass Plane (Specular Tracking PointLight)
+    // =========================================================================
+    const ambientLight = new THREE.AmbientLight(0x104536, 0.75);
     scene.add(ambientLight);
 
-    const softDirectional = new THREE.DirectionalLight(0xb5e8d8, 0.38);
-    softDirectional.position.set(0.6, 1.2, 2.4);
-    scene.add(softDirectional);
+    const dirLight = new THREE.DirectionalLight(0x10b981, 0.55);
+    dirLight.position.set(-4, 5, 4);
+    scene.add(dirLight);
+
+    const cursorLight = new THREE.PointLight(0xfae8b4, 16, 28, 1.5);
+    cursorLight.position.set(0, 0, 2.8);
+    scene.add(cursorLight);
 
     // =========================================================================
-    // 5. Responsive Frustum Scaling & Resize Handler
+    // 6. Responsive Frustum Scaling & Resize Handler
     // =========================================================================
     let frustumAtGlass = getFrustumSizeAtZ(0);
 
@@ -244,6 +250,7 @@ import * as THREE from './vendor/three.module.js';
         renderer.setSize(w, h, false);
 
         bgUniforms.uResolution.value.set(w, h);
+        gridMat.uniforms.uResolution.value.set(w, h);
 
         const bgFrustum = getFrustumSizeAtZ(bgZ);
         bgMesh.scale.set(bgFrustum.width * 1.02, bgFrustum.height * 1.02, 1);
@@ -251,36 +258,51 @@ import * as THREE from './vendor/three.module.js';
         frustumAtGlass = getFrustumSizeAtZ(0);
         glassMesh.scale.set(frustumAtGlass.width * 1.02, frustumAtGlass.height * 1.02, 1);
 
+        const gridFrustum = getFrustumSizeAtZ(0.02);
+        gridMesh.scale.set(gridFrustum.width * 1.02, gridFrustum.height * 1.02, 1);
+
         normalMap.repeat.set(Math.max(2, w / 340), Math.max(2, h / 340));
     }
     handleResize();
     window.addEventListener('resize', handleResize, { passive: true });
 
     // =========================================================================
-    // 6. Hydrodynamic Scroll Drift
+    // 7. Interactivity: Normalized Cursor Coordinates Tracking (-1 to +1)
     // =========================================================================
-    let smoothScrollY = window.scrollY || 0;
-    let targetScrollY = smoothScrollY;
+    const mouse = { x: 0, y: 0 };
+    const currentLight = { x: 0, y: 0 };
 
-    window.addEventListener('scroll', () => {
-        targetScrollY = window.scrollY || 0;
+    window.addEventListener('mousemove', (event) => {
+        mouse.x = (event.clientX / Math.max(1, window.innerWidth)) * 2 - 1;
+        mouse.y = -(event.clientY / Math.max(1, window.innerHeight)) * 2 + 1;
     }, { passive: true });
 
     // =========================================================================
-    // 7. Smooth 60fps Animation Loop
+    // 8. Animation Loop (requestAnimationFrame)
     // =========================================================================
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const clock = new THREE.Clock();
     let rafId = 0;
 
     function renderFrame() {
-        const dt = Math.min(clock.getDelta(), 0.05);
-        const elapsed = clock.elapsedTime;
-
-        const scrollEase = 1 - Math.exp(-4.5 * dt);
-        smoothScrollY += (targetScrollY - smoothScrollY) * scrollEase;
-
+        const elapsed = clock.getElapsedTime();
         bgUniforms.uTime.value = elapsed;
-        bgUniforms.uScroll.value = smoothScrollY;
+
+        // Smoothly map normalized [-1, +1] cursor coordinates to light world position
+        const targetX = mouse.x * (frustumAtGlass.width * 0.5);
+        const targetY = mouse.y * (frustumAtGlass.height * 0.5);
+        currentLight.x += (targetX - currentLight.x) * 0.12;
+        currentLight.y += (targetY - currentLight.y) * 0.12;
+        cursorLight.position.set(currentLight.x, currentLight.y, 2.8);
+
+        // Gentle ambient orbital drift for underlying geometric shapes behind the glass
+        if (!prefersReducedMotion) {
+            shapes.forEach((item) => {
+                item.mesh.rotation.x += 0.0022 * item.speed * 4;
+                item.mesh.rotation.y += 0.0031 * item.speed * 4;
+                item.mesh.position.y = item.basePos[1] + Math.sin(elapsed * 0.45 + item.phase) * 0.35;
+            });
+        }
 
         renderer.render(scene, camera);
 
@@ -290,10 +312,10 @@ import * as THREE from './vendor/three.module.js';
             roughness: glassMat.roughness,
             ior: glassMat.ior,
             hasNormalMap: Boolean(glassMat.normalMap),
-            hasGridOverlay: false,
-            hasFlowingStream: true,
-            hasCursorBacklight: false,
-            lightPos: null,
+            hasGridOverlay: Boolean(gridMesh.visible),
+            hasShapes: true,
+            mouseNDC: { x: mouse.x, y: mouse.y },
+            lightPos: { x: cursorLight.position.x, y: cursorLight.position.y, z: cursorLight.position.z },
             elapsedTime: elapsed
         };
     }
