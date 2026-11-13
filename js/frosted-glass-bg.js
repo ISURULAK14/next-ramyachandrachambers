@@ -1,11 +1,12 @@
 /**
  * Ramyachandra Gunasekera Chambers — Staging (next.ramyachandrachambers.com)
- * Option C: Heavy Frosted Glass + Thick Gradient Stripes + Peripheral Halo Stripe-Reactive Backlight
- * (Editorial Noir: outer 25% margins glow, central text corridor locked in deep obsidian)
+ * Frosted Ice Sheet + Realistic Natural Flowing Stream (Three.js WebGL)
+ * High-performance analytical stream dynamics (dual wave interference caustics,
+ * meandering current, capillary ripples, physical ice sheet refraction, zero backlight).
  */
 import * as THREE from './vendor/three.module.js';
 
-(function initFrostedGlassBackground() {
+(function initFrostedIceStream() {
     const canvas = document.getElementById('frosted-glass-canvas');
     if (!canvas) return;
 
@@ -18,7 +19,7 @@ import * as THREE from './vendor/three.module.js';
             powerPreference: 'high-performance'
         });
     } catch (err) {
-        return; // Graceful fallback to CSS #03120e emerald base
+        return; // Fallback to CSS #03120e emerald base
     }
 
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
@@ -48,17 +49,16 @@ import * as THREE from './vendor/three.module.js';
     }
 
     // =========================================================================
-    // 1. Background Environment: Thick Gradient Stripes + Option C Peripheral Halo
+    // 1. Realistic Natural Flowing Stream Shader (Beneath the Ice Sheet at z = -1.5)
     // =========================================================================
     const bgZ = -1.5;
     const bgGeo = new THREE.PlaneGeometry(1, 1);
     const bgUniforms = {
         uTime: { value: 0 },
         uScroll: { value: 0 },
-        uActiveSide: { value: 1.0 },
-        uLightY: { value: 0.55 },
         uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
     };
+
     const bgMat = new THREE.ShaderMaterial({
         uniforms: bgUniforms,
         depthWrite: false,
@@ -73,113 +73,125 @@ import * as THREE from './vendor/three.module.js';
             varying vec2 vUv;
             uniform float uTime;
             uniform float uScroll;
-            uniform float uActiveSide;
-            uniform float uLightY;
             uniform vec2 uResolution;
 
             void main() {
                 vec2 p = vUv;
 
-                vec3 baseNoir = vec3(0.0118, 0.0706, 0.0549);      // #03120e
-                vec3 deepEmerald = vec3(0.0235, 0.1451, 0.1137);   // #06251d
-                vec3 royalEmerald = vec3(0.0510, 0.3059, 0.2314);  // #0d4e3b
-                vec3 brightEmerald = vec3(0.0627, 0.7255, 0.5059); // #10b981
-                vec3 champagne = vec3(0.8863, 0.7608, 0.4588);     // #e2c275
-                vec3 warmGold = vec3(0.9804, 0.9098, 0.7059);      // #fae8b4
+                // Natural meandering stream channel topology
+                float meander = sin(p.y * 2.2 + 0.35) * 0.18 + sin(p.y * 4.8 - 0.5) * 0.07;
+                float channelDist = abs(p.x - 0.5 - meander);
 
-                // Thick monumental diagonal gradient stripes
-                float stripeCoord = (p.x * 0.94 + p.y * 0.34) * 3.0 + uTime * 0.04 + uScroll * 0.00022;
-                float thickBand = sin(stripeCoord * 3.14159265) * 0.5 + 0.5;
-                float bandCurve = smoothstep(0.16, 0.86, thickBand);
+                // Hydrodynamic flow velocity (natural downstream current + scroll glide)
+                float flowSpeed = 0.12;
+                float scrollOffset = uScroll * 0.00024;
+                float streamTime = uTime * flowSpeed + scrollOffset;
 
-                // Outer 25% peripheral margin mask; center 50% stays deep obsidian noir
-                float peripheralMask = smoothstep(0.24, 0.49, abs(p.x - 0.5));
+                // Dual-octave flowing coordinates with lateral meandering drift
+                vec2 flowUv1 = vec2(p.x * 2.6 + sin(p.y * 2.8 + streamTime * 2.5) * 0.12, p.y * 2.1 - streamTime);
+                vec2 flowUv2 = vec2(p.x * 3.8 - cos(p.y * 3.4 - streamTime * 2.0) * 0.10, p.y * 3.2 - streamTime * 1.35);
 
-                vec3 col = mix(baseNoir, deepEmerald, bandCurve * (0.35 + 0.60 * peripheralMask));
-                col = mix(col, royalEmerald, pow(bandCurve, 1.8) * peripheralMask * 0.85);
+                // Fluid eddies & harmonic turbulence
+                float turb1 = sin(flowUv1.x * 4.2 + flowUv1.y * 3.1 + uTime * 0.45) * 0.5
+                            + cos(flowUv1.x * 2.8 - flowUv1.y * 4.6 - uTime * 0.35) * 0.5;
+                float turb2 = cos(flowUv2.x * 5.4 - flowUv2.y * 2.8 + uTime * 0.55) * 0.5
+                            + sin(flowUv2.x * 3.2 + flowUv2.y * 5.1 - uTime * 0.40) * 0.5;
 
-                // -------------------------------------------------------------
-                // Option C: Dual-Lobe Peripheral Halo + Stripe-Reactive Backlight
-                // Brightens the thick gradient stripes passing through outer 25%
-                // empty margins near cursor/scroll height; center stays pure noir.
-                // -------------------------------------------------------------
-                float rightWeight = clamp(uActiveSide * 0.5 + 0.5, 0.0, 1.0);
-                float leftWeight = 1.0 - rightWeight;
-                float yPrimary = clamp(uLightY, 0.14, 0.86);
-                float yCounter = 1.0 - yPrimary;
+                // Analytical water caustics (dancing liquid filament nets without loop overhead)
+                vec2 cUv1 = flowUv1 * 5.5 + turb1 * 0.65;
+                vec2 cUv2 = flowUv2 * 7.2 - turb2 * 0.55;
 
-                // Dual smooth peripheral lobes (right & left outer edges)
-                float rightDistY = exp(-pow((p.y - yPrimary) / 0.36, 2.0));
-                float leftDistY = exp(-pow((p.y - yCounter) / 0.38, 2.0));
+                float w1 = sin(cUv1.x + sin(cUv1.y + uTime * 0.8)) + cos(cUv1.y * 1.25 + cos(cUv1.x * 0.95 - uTime * 0.7));
+                float w2 = sin(cUv2.x * 1.2 - sin(cUv2.y * 0.85 - uTime * 0.9)) + cos(cUv2.y + cos(cUv2.x * 1.1 + uTime * 0.65));
 
-                float rightMargin = smoothstep(0.68, 0.98, p.x);
-                float leftMargin = smoothstep(0.32, 0.02, p.x);
+                float causticNet = pow(1.0 - clamp(abs(w1 * 0.48), 0.0, 1.0), 3.2) * 0.6
+                                 + pow(1.0 - clamp(abs(w2 * 0.48), 0.0, 1.0), 3.5) * 0.5;
 
-                float activeRight = rightMargin * mix(leftDistY, rightDistY, rightWeight);
-                float activeLeft = leftMargin * mix(rightDistY, leftDistY, rightWeight);
+                // Capillary wave ripples along flow vectors
+                float rippleWave = sin(flowUv1.y * 24.0 + turb1 * 4.0) * cos(flowUv1.x * 16.0 - turb2 * 3.5);
+                float ripples = smoothstep(0.42, 0.94, rippleWave * 0.5 + 0.5);
 
-                // Stripe-reactive illumination: thick bands catch warm champagne/emerald light
-                float stripeBoost = 0.40 + 0.95 * bandCurve;
+                // Deep Imperial Emerald Noir Palette
+                vec3 bedrockColor   = vec3(0.0118, 0.0549, 0.0431); // #030e0b deep abyss bedrock
+                vec3 deepWater      = vec3(0.0235, 0.1373, 0.1059); // #06231b deep water pool
+                vec3 channelCurrent = vec3(0.0392, 0.2588, 0.1961); // #0a4232 rushing main current
+                vec3 emeraldLight   = vec3(0.0627, 0.7255, 0.5059); // #10b981 emerald current glow
+                vec3 causticsFoam   = vec3(0.7843, 0.9412, 0.8824); // #c8f0e1 crystalline pale seafoam
+                vec3 champagneGlint = vec3(0.8863, 0.7608, 0.4588); // #e2c275 subtle mineral refraction
 
-                vec3 primaryGlow = mix(brightEmerald, warmGold, 0.68);
-                vec3 secondaryGlow = mix(royalEmerald, brightEmerald, 0.72);
+                // Stream channel depth attenuation
+                float channelIntensity = smoothstep(0.52, 0.05, channelDist);
 
-                col += mix(secondaryGlow, primaryGlow, rightWeight) * activeRight * stripeBoost * 0.78;
-                col += mix(secondaryGlow, primaryGlow, leftWeight) * activeLeft * stripeBoost * 0.78;
+                // Base liquid layering
+                vec3 col = mix(bedrockColor, deepWater, 0.65 + 0.35 * channelIntensity);
+                col = mix(col, channelCurrent, channelIntensity * (0.45 + 0.55 * (turb1 * 0.5 + 0.5)));
 
-                // Ultra-soft champagne edge rim on the thick stripes in outer vignette
-                col += champagne * pow(bandCurve, 2.6) * peripheralMask * (activeRight * rightWeight + activeLeft * leftWeight) * 0.36;
+                // Living emerald current flow threads
+                float currentThreads = smoothstep(0.20, 0.80, (turb1 * turb2) * 0.5 + 0.5);
+                col += emeraldLight * currentThreads * channelIntensity * 0.35;
+
+                // Refracted liquid water caustics
+                col += causticsFoam * causticNet * (0.24 + 0.38 * channelIntensity);
+
+                // Fine capillary ripple glints
+                col += champagneGlint * ripples * causticNet * 0.20 * channelIntensity;
+
+                // Soft vignette framing
+                float vignette = smoothstep(0.98, 0.38, length(p - 0.5));
+                col *= (0.78 + 0.22 * vignette);
 
                 gl_FragColor = vec4(col, 1.0);
             }
         `
     });
+
     const bgMesh = new THREE.Mesh(bgGeo, bgMat);
     bgMesh.position.z = bgZ;
     scene.add(bgMesh);
 
     // =========================================================================
-    // 2. Heavy Frosted Surface Micro-Texture (Normal Map via TextureLoader)
+    // 2. Frosted Ice Sheet Surface Micro-Texture (Normal Map via TextureLoader)
     // =========================================================================
     const textureLoader = new THREE.TextureLoader();
     const normalMap = textureLoader.load('assets/frosted-normal.png');
     normalMap.wrapS = THREE.RepeatWrapping;
     normalMap.wrapT = THREE.RepeatWrapping;
-    normalMap.repeat.set(4.5, 3);
+    normalMap.repeat.set(4.0, 3.0);
 
     // =========================================================================
-    // 3. Heavy Frosted Glass Shader (MeshPhysicalMaterial on Full-Screen PlaneGeometry)
+    // 3. Frosted Ice Sheet Material (MeshPhysicalMaterial on Full-Screen PlaneGeometry)
     // =========================================================================
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0x9bd2be),
-        transmission: 0.96,
-        roughness: 0.72,
-        ior: 1.52,
-        thickness: 1.35,
-        metalness: 0.02,
-        clearcoat: 0.06,
-        clearcoatRoughness: 0.8,
-        attenuationColor: new THREE.Color(0x05241a),
-        attenuationDistance: 9.0,
+        color: new THREE.Color(0x9bd8c8),
+        transmission: 0.95,
+        roughness: 0.66,
+        ior: 1.309,              // Physical index of refraction for natural water ice
+        thickness: 1.8,
+        metalness: 0.0,
+        clearcoat: 0.14,
+        clearcoatRoughness: 0.62,
+        attenuationColor: new THREE.Color(0x042218),
+        attenuationDistance: 7.5,
         normalMap,
-        normalScale: new THREE.Vector2(0.22, 0.22),
+        normalScale: new THREE.Vector2(0.25, 0.25),
         transparent: true,
         opacity: 1.0
     });
+
     const glassMesh = new THREE.Mesh(glassGeo, glassMat);
     glassMesh.position.z = 0;
     scene.add(glassMesh);
 
     // =========================================================================
-    // 4. Minimal Ambient + Subtle Telemetry Light (Zero Front Hotspot Glare)
+    // 4. Balanced Ambient & Directional Lighting (NO BACKLIGHT)
     // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x0c382a, 0.42);
+    const ambientLight = new THREE.AmbientLight(0x0a2f23, 0.72);
     scene.add(ambientLight);
 
-    const cursorLight = new THREE.PointLight(0xf6dfa6, 1.2, 18, 2.0);
-    cursorLight.position.set(5.0, 0.5, 4.6);
-    scene.add(cursorLight);
+    const iceFacetLight = new THREE.DirectionalLight(0xb5e8d8, 0.38);
+    iceFacetLight.position.set(0.6, 1.2, 2.4);
+    scene.add(iceFacetLight);
 
     // =========================================================================
     // 5. Responsive Frustum Scaling & Resize Handler
@@ -210,40 +222,17 @@ import * as THREE from './vendor/three.module.js';
     window.addEventListener('resize', handleResize, { passive: true });
 
     // =========================================================================
-    // 6. Fluid Peripheral Halo Cursor Tracking & Scroll Glide
+    // 6. Hydrodynamic Scroll Drift
     // =========================================================================
-    const targetNDC = { x: 0.88, y: 0.15 };
-    const currentNDC = { x: 0.88, y: 0.15 };
-    let targetSide = 1.0;
-    let currentSide = 1.0;
     let smoothScrollY = window.scrollY || 0;
     let targetScrollY = smoothScrollY;
 
-    function projectToEmptySide(ndcX) {
-        const sign = ndcX >= 0 ? 1 : -1;
-        const mag = Math.min(1, Math.abs(ndcX));
-        return sign * (0.80 + mag * 0.14);
-    }
-
-    window.addEventListener('mousemove', (event) => {
-        const rawX = (event.clientX / Math.max(1, window.innerWidth)) * 2 - 1;
-        const rawY = -(event.clientY / Math.max(1, window.innerHeight)) * 2 + 1;
-        targetNDC.x = projectToEmptySide(rawX);
-        targetNDC.y = rawY * 0.78;
-        targetSide = rawX >= 0 ? 1.0 : -1.0;
-    }, { passive: true });
-
     window.addEventListener('scroll', () => {
         targetScrollY = window.scrollY || 0;
-        const scrollPhase = targetScrollY * 0.0032;
-        targetNDC.y = Math.sin(scrollPhase) * 0.68;
-        const sideWave = Math.cos(targetScrollY * 0.0016);
-        targetSide = sideWave >= 0 ? 1.0 : -1.0;
-        targetNDC.x = targetSide * (0.82 + 0.12 * Math.abs(sideWave));
     }, { passive: true });
 
     // =========================================================================
-    // 7. Smooth Frame-Rate Independent Animation Loop
+    // 7. Smooth 60fps Animation Loop
     // =========================================================================
     const clock = new THREE.Clock();
     let rafId = 0;
@@ -252,27 +241,11 @@ import * as THREE from './vendor/three.module.js';
         const dt = Math.min(clock.getDelta(), 0.05);
         const elapsed = clock.elapsedTime;
 
-        const posEase = 1 - Math.exp(-3.6 * dt);
-        const sideEase = 1 - Math.exp(-2.8 * dt);
         const scrollEase = 1 - Math.exp(-4.5 * dt);
-
         smoothScrollY += (targetScrollY - smoothScrollY) * scrollEase;
-        currentSide += (targetSide - currentSide) * sideEase;
-        currentNDC.x += (targetNDC.x - currentNDC.x) * posEase;
-        currentNDC.y += (targetNDC.y - currentNDC.y) * posEase;
-
-        const safeNDCX = Math.abs(currentNDC.x) < 0.76
-            ? (currentNDC.x >= 0 ? 0.76 : -0.76)
-            : currentNDC.x;
 
         bgUniforms.uTime.value = elapsed;
         bgUniforms.uScroll.value = smoothScrollY;
-        bgUniforms.uActiveSide.value = currentSide;
-        bgUniforms.uLightY.value = currentNDC.y * 0.5 + 0.5;
-
-        const worldX = safeNDCX * (frustumAtGlass.width * 0.5);
-        const worldY = currentNDC.y * (frustumAtGlass.height * 0.5);
-        cursorLight.position.set(worldX, worldY, 4.6);
 
         renderer.render(scene, camera);
 
@@ -283,8 +256,10 @@ import * as THREE from './vendor/three.module.js';
             ior: glassMat.ior,
             hasNormalMap: Boolean(glassMat.normalMap),
             hasGridOverlay: false,
-            mouseNDC: { x: safeNDCX, y: currentNDC.y },
-            lightPos: { x: cursorLight.position.x, y: cursorLight.position.y, z: cursorLight.position.z }
+            hasFlowingStream: true,
+            hasCursorBacklight: false,
+            lightPos: null,
+            elapsedTime: elapsed
         };
     }
 

@@ -808,24 +808,23 @@ async function runFullSuite() {
     if (glassCanvas && glassCanvas.state) {
       const st = glassCanvas.state;
       check(
-        st.active && st.transmission >= 0.9 && st.roughness >= 0.65 && st.ior > 1.3 && st.hasNormalMap && st.hasGridOverlay === false,
-        `Three.js Heavy Frosted Glass + Prism Beam active (transmission=${st.transmission}, roughness=${st.roughness}, ior=${st.ior}, normalMap=${st.hasNormalMap}, grid=${st.hasGridOverlay})`
+        st.active && st.transmission >= 0.9 && st.roughness >= 0.6 && st.ior >= 1.3 && st.hasNormalMap && st.hasGridOverlay === false,
+        `Three.js Frosted Ice Sheet active (transmission=${st.transmission}, roughness=${st.roughness}, ior=${st.ior}, normalMap=${st.hasNormalMap}, grid=${st.hasGridOverlay})`
       );
-      await page.mouse.move(100, 100);
-      await new Promise(r => setTimeout(r, 250));
-      const pos1 = await page.evaluate(() => ({ light: window.__rgFrostedGlass.lightPos, ndc: window.__rgFrostedGlass.mouseNDC }));
-      await page.mouse.move(720, 450);
-      await new Promise(r => setTimeout(r, 250));
-      const centerNdc = await page.evaluate(() => window.__rgFrostedGlass.mouseNDC);
-      check(Math.abs(centerNdc.x) >= 0.75, `Backlight remains in empty side margin when mouse near center (|ndcX|=${Math.abs(centerNdc.x).toFixed(2)})`);
-      await page.mouse.move(1300, 800);
-      await new Promise(r => setTimeout(r, 250));
-      const pos2 = await page.evaluate(() => ({ light: window.__rgFrostedGlass.lightPos, ndc: window.__rgFrostedGlass.mouseNDC }));
-      check(pos2.light.x > pos1.light.x && pos2.light.y < pos1.light.y, `Dynamic PointLight tracks normalized cursor coordinates (${pos1.light.x.toFixed(2)},${pos1.light.y.toFixed(2)} -> ${pos2.light.x.toFixed(2)},${pos2.light.y.toFixed(2)})`);
-      await page.evaluate(() => window.scrollTo(0, 600));
-      await new Promise(r => setTimeout(r, 250));
-      const afterScroll = await page.evaluate(() => window.__rgFrostedGlass.mouseNDC);
-      check(afterScroll.y !== pos2.ndc.y && Math.abs(afterScroll.x) >= 0.75, `Scroll triggers involuntary side-margin jump (ndc: ${afterScroll.x.toFixed(2)}, ${afterScroll.y.toFixed(2)})`);
+      check(
+        st.hasFlowingStream === true,
+        'Realistic natural stream flowing active beneath frosted ice sheet'
+      );
+      check(
+        st.hasCursorBacklight === false && st.lightPos === null,
+        'No backlight confirmed (cursor spotlight removed, zero front glare)'
+      );
+      await new Promise(r => setTimeout(r, 300));
+      const st2 = await page.evaluate(() => window.__rgFrostedGlass);
+      check(
+        st2 && st2.elapsedTime > st.elapsedTime,
+        `Stream animation loop actively progressing (time: ${st.elapsedTime.toFixed(2)}s -> ${st2.elapsedTime.toFixed(2)}s)`
+      );
     }
     await page.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
     await new Promise(r => setTimeout(r, 250));
