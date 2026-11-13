@@ -38,6 +38,7 @@ async function runE2ETests() {
 
   const browser = await puppeteer.launch({
     headless: 'new',
+    protocolTimeout: 60000,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
 

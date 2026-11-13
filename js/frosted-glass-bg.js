@@ -1,11 +1,11 @@
 /**
  * Ramyachandra Gunasekera Chambers — Staging (next.ramyachandrachambers.com)
- * Photorealistic Frosted Ice Plane + Deep Luxury Emerald Currents (Three.js WebGL)
- * Physical ice optics (IOR 1.309, dual-layer clearcoat, volumetric attenuation, zero backlight).
+ * One Single Monolithic Frosted Ice Plane with Realistic Hexagonal Dendritic Texture (Three.js WebGL)
+ * 1:1 non-tiled seamless frost mapping (zero grid/tile seams, IOR 1.309, zero backlight).
  */
 import * as THREE from './vendor/three.module.js';
 
-(function initPhotorealisticFrostedIce() {
+(function initSingleFrostedIce() {
     const canvas = document.getElementById('frosted-glass-canvas');
     if (!canvas) return;
 
@@ -48,7 +48,7 @@ import * as THREE from './vendor/three.module.js';
     }
 
     // =========================================================================
-    // 1. Deep Luxury Emerald Environment (Beneath Ice Sheet at z = -2.5)
+    // 1. Deep Luxury Emerald Environment (Beneath Frost at z = -2.5)
     // =========================================================================
     const bgZ = -2.5;
     const bgGeo = new THREE.PlaneGeometry(1, 1);
@@ -210,32 +210,32 @@ import * as THREE from './vendor/three.module.js';
     shapes.push({ mesh: dodecahedron, basePos: [-1.8, -2.1, -0.1], speed: 0.20, phase: 4.71 });
 
     // =========================================================================
-    // 3. Clear, High-Clarity Frosted Ice Sheet (MeshPhysicalMaterial at z = 0)
+    // 3. One Single Monolithic Frosted Ice Sheet (Non-Tiled 1:1 Mapping at z = 0)
     // =========================================================================
     const textureLoader = new THREE.TextureLoader();
     const normalMap = textureLoader.load('assets/frosted-normal.png');
-    normalMap.wrapS = THREE.RepeatWrapping;
-    normalMap.wrapT = THREE.RepeatWrapping;
-    normalMap.repeat.set(4.5, 3.2);
+    normalMap.wrapS = THREE.ClampToEdgeWrapping;
+    normalMap.wrapT = THREE.ClampToEdgeWrapping;
+    normalMap.repeat.set(1.0, 1.0); // Single frost plane: 1:1 continuous mapping, zero seams
 
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xf6fcf9),
-        transmission: 0.97,           // High optical clarity revealing the background
-        roughness: 0.42,              // Crisp frosted diffusion (clean frost without mud)
+        color: new THREE.Color(0xf2fcf7),
+        transmission: 0.96,           // High optical transmission
+        roughness: 0.48,              // Refined, tactile frosted ice diffusion
         ior: 1.309,                   // True physical index of refraction for natural water ice
         thickness: 1.8,               // Physical refraction volume
         metalness: 0.02,
-        specularIntensity: 1.0,
+        specularIntensity: 0.92,
         specularColor: new THREE.Color(0xffffff),
-        clearcoat: 0.70,              // Crisp, distinct physical ice glaze surface
-        clearcoatRoughness: 0.18,     // Sharp surface reflection defining the ice plane
-        attenuationColor: new THREE.Color(0x0a382a), // Pure emerald crystalline attenuation
-        attenuationDistance: 8.0,     // Clear depth falloff
+        clearcoat: 0.45,              // Clean, polished top ice sheen
+        clearcoatRoughness: 0.20,     // Sharp surface reflection
+        attenuationColor: new THREE.Color(0x063124), // Pure emerald crystalline attenuation
+        attenuationDistance: 7.5,     // Natural depth falloff
         normalMap,
-        normalScale: new THREE.Vector2(0.36, 0.36),  // Distinct, discernible frost micro-texture
+        normalScale: new THREE.Vector2(0.42, 0.42),  // Pronounced dendritic frost crystal facets
         bumpMap: normalMap,
-        bumpScale: 0.015,
+        bumpScale: 0.016,
         transparent: true,
         opacity: 1.0
     });
@@ -245,23 +245,21 @@ import * as THREE from './vendor/three.module.js';
     scene.add(glassMesh);
 
     // =========================================================================
-    // 4. Balanced Studio Lighting for Ice Clarity (NO BACKLIGHT)
+    // 4. Balanced Studio Lighting (NO BACKLIGHT)
     // =========================================================================
-    // Clean emerald ambient fill
-    const ambientLight = new THREE.AmbientLight(0x0c382b, 0.75);
+    // Deep emerald ambient fill
+    const ambientLight = new THREE.AmbientLight(0x0c382b, 0.78);
     scene.add(ambientLight);
 
-    // Crisp directional light catching frost facets across the surface
-    const iceGrazeLight = new THREE.DirectionalLight(0xd4f6ed, 0.65);
+    // Cool ice grazing light catching dendritic facets evenly across the single sheet
+    const iceGrazeLight = new THREE.DirectionalLight(0xd4f6ed, 0.58);
     iceGrazeLight.position.set(-2.0, 4.0, 3.0);
     scene.add(iceGrazeLight);
 
-    // Warm champagne rim light bringing out depth
-    const rimLight = new THREE.DirectionalLight(0xf5e6be, 0.35);
+    // Warm champagne rim light balancing the composition
+    const rimLight = new THREE.DirectionalLight(0xf5e6be, 0.28);
     rimLight.position.set(3.0, -2.5, 2.5);
     scene.add(rimLight);
-
-    // ZERO cursor backlight (completely removed per user command)
 
     // =========================================================================
     // 5. Responsive Frustum Scaling & Resize Handler
@@ -286,7 +284,8 @@ import * as THREE from './vendor/three.module.js';
         frustumAtGlass = getFrustumSizeAtZ(0);
         glassMesh.scale.set(frustumAtGlass.width * 1.02, frustumAtGlass.height * 1.02, 1);
 
-        normalMap.repeat.set(Math.max(2, w / 340), Math.max(2, h / 340));
+        // Maintain one single continuous frost texture across the entire screen
+        normalMap.repeat.set(1.0, 1.0);
     }
     handleResize();
     window.addEventListener('resize', handleResize, { passive: true });
@@ -340,6 +339,7 @@ import * as THREE from './vendor/three.module.js';
             hasGridOverlay: false,
             hasShapes: true,
             hasRealisticIce: true,
+            isSingleFrost: true,
             hasCursorBacklight: false,
             lightPos: null,
             elapsedTime: elapsed
