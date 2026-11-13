@@ -808,20 +808,22 @@ async function runFullSuite() {
     if (glassCanvas && glassCanvas.state) {
       const st = glassCanvas.state;
       check(
-        st.active && st.transmission >= 0.9 && st.roughness >= 0.35 && st.ior >= 1.30 && st.hasNormalMap && st.hasGridOverlay === false && st.isSingleFrost === true,
-        `Three.js Single Frosted Ice Sheet active (transmission=${st.transmission}, roughness=${st.roughness}, ior=${st.ior}, isSingleFrost=${st.isSingleFrost}, grid=${st.hasGridOverlay})`
-      );
-      check(
-        st.hasRealisticIce === true,
-        'Physical ice optics active (IOR 1.309 water ice, dual-layer clearcoat, volumetric attenuation)'
+        st.active && st.transmission >= 0.9 && st.roughness >= 0.20 && st.ior >= 1.30 && st.hasNormalMap && st.hasGridOverlay === false,
+        `Three.js Video-Matched Hammered Glass active without square grid (transmission=${st.transmission}, roughness=${st.roughness}, ior=${st.ior}, grid=${st.hasGridOverlay})`
       );
       check(
         st.hasShapes === true,
-        'Physical underlying geometric solids rendered behind transmissive glass plane'
+        'Physical underlying botanical emerald assets rendered behind transmissive glass plane'
       );
+      await page.mouse.move(100, 100);
+      await new Promise(r => setTimeout(r, 250));
+      const pos1 = await page.evaluate(() => window.__rgFrostedGlass.lightPos);
+      await page.mouse.move(1300, 800);
+      await new Promise(r => setTimeout(r, 250));
+      const pos2 = await page.evaluate(() => window.__rgFrostedGlass.lightPos);
       check(
-        st.hasCursorBacklight === false && st.lightPos === null,
-        'Backlight completely removed (zero front glare or hotspot over text)'
+        pos2 && pos1 && pos2.x > pos1.x && pos2.y < pos1.y,
+        `Dynamic PointLight tracks normalized cursor coordinates (${pos1?.x.toFixed(2)},${pos1?.y.toFixed(2)} -> ${pos2?.x.toFixed(2)},${pos2?.y.toFixed(2)})`
       );
       await new Promise(r => setTimeout(r, 250));
       const st2 = await page.evaluate(() => window.__rgFrostedGlass);
