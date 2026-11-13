@@ -808,8 +808,8 @@ async function runFullSuite() {
     if (glassCanvas && glassCanvas.state) {
       const st = glassCanvas.state;
       check(
-        st.active && st.transmission >= 0.9 && st.roughness >= 0.65 && st.ior >= 1.30 && st.hasNormalMap && st.hasGridOverlay === false,
-        `Three.js Heavy Frosted Translucent Ice Sheet active (transmission=${st.transmission}, roughness=${st.roughness}, ior=${st.ior}, normalMap=${st.hasNormalMap}, grid=${st.hasGridOverlay})`
+        st.active && st.transmission >= 0.9 && st.roughness >= 0.35 && st.ior >= 1.30 && st.hasNormalMap && st.hasGridOverlay === false,
+        `Three.js Clear Frosted Ice Sheet active (transmission=${st.transmission}, roughness=${st.roughness}, ior=${st.ior}, normalMap=${st.hasNormalMap}, grid=${st.hasGridOverlay})`
       );
       check(
         st.hasRealisticIce === true,

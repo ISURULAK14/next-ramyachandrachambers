@@ -210,32 +210,32 @@ import * as THREE from './vendor/three.module.js';
     shapes.push({ mesh: dodecahedron, basePos: [-1.8, -2.1, -0.1], speed: 0.20, phase: 4.71 });
 
     // =========================================================================
-    // 3. Photorealistic Frosted Translucent Ice Sheet (MeshPhysicalMaterial at z = 0)
+    // 3. Clear, High-Clarity Frosted Ice Sheet (MeshPhysicalMaterial at z = 0)
     // =========================================================================
     const textureLoader = new THREE.TextureLoader();
     const normalMap = textureLoader.load('assets/frosted-normal.png');
     normalMap.wrapS = THREE.RepeatWrapping;
     normalMap.wrapT = THREE.RepeatWrapping;
-    normalMap.repeat.set(4.0, 3.0);
+    normalMap.repeat.set(4.5, 3.2);
 
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xdcf5ea),
-        transmission: 0.94,
-        roughness: 0.72,              // Heavy frosted ice diffusion and light scattering
-        ior: 1.309,                   // True physical index of refraction for water ice
-        thickness: 2.8,               // Thick translucent ice slab with deep internal refraction
-        metalness: 0.0,
-        specularIntensity: 0.92,
-        specularColor: new THREE.Color(0xe0fcf3),
-        clearcoat: 0.28,              // Soft crystalline frost glaze
-        clearcoatRoughness: 0.52,
-        attenuationColor: new THREE.Color(0x052a1d), // Deep emerald absorption inside the ice slab
-        attenuationDistance: 5.0,
+        color: new THREE.Color(0xf6fcf9),
+        transmission: 0.97,           // High optical clarity revealing the background
+        roughness: 0.42,              // Crisp frosted diffusion (clean frost without mud)
+        ior: 1.309,                   // True physical index of refraction for natural water ice
+        thickness: 1.8,               // Physical refraction volume
+        metalness: 0.02,
+        specularIntensity: 1.0,
+        specularColor: new THREE.Color(0xffffff),
+        clearcoat: 0.70,              // Crisp, distinct physical ice glaze surface
+        clearcoatRoughness: 0.18,     // Sharp surface reflection defining the ice plane
+        attenuationColor: new THREE.Color(0x0a382a), // Pure emerald crystalline attenuation
+        attenuationDistance: 8.0,     // Clear depth falloff
         normalMap,
-        normalScale: new THREE.Vector2(0.48, 0.48),  // Pronounced tactile frost micro-surface
+        normalScale: new THREE.Vector2(0.36, 0.36),  // Distinct, discernible frost micro-texture
         bumpMap: normalMap,
-        bumpScale: 0.022,
+        bumpScale: 0.015,
         transparent: true,
         opacity: 1.0
     });
@@ -245,20 +245,20 @@ import * as THREE from './vendor/three.module.js';
     scene.add(glassMesh);
 
     // =========================================================================
-    // 4. Balanced Studio Lighting (NO BACKLIGHT)
+    // 4. Balanced Studio Lighting for Ice Clarity (NO BACKLIGHT)
     // =========================================================================
-    // Deep emerald ambient fill
-    const ambientLight = new THREE.AmbientLight(0x0c3427, 0.82);
+    // Clean emerald ambient fill
+    const ambientLight = new THREE.AmbientLight(0x0c382b, 0.75);
     scene.add(ambientLight);
 
-    // Cool ice graze directional light from high angle
-    const iceGrazeLight = new THREE.DirectionalLight(0xb2eee0, 0.45);
-    iceGrazeLight.position.set(-2.5, 4.0, 3.5);
+    // Crisp directional light catching frost facets across the surface
+    const iceGrazeLight = new THREE.DirectionalLight(0xd4f6ed, 0.65);
+    iceGrazeLight.position.set(-2.0, 4.0, 3.0);
     scene.add(iceGrazeLight);
 
-    // Warm champagne rim light balancing the composition
-    const rimLight = new THREE.DirectionalLight(0xe8d59a, 0.22);
-    rimLight.position.set(3.0, -3.0, 2.5);
+    // Warm champagne rim light bringing out depth
+    const rimLight = new THREE.DirectionalLight(0xf5e6be, 0.35);
+    rimLight.position.set(3.0, -2.5, 2.5);
     scene.add(rimLight);
 
     // ZERO cursor backlight (completely removed per user command)
