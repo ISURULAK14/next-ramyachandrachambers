@@ -2,14 +2,13 @@
  * Ramyachandra Gunasekera Chambers — Staging (next.ramyachandrachambers.com)
  * 4K Photorealistic Animated Frosted Glass (Zero Gaps, 100% Seamless Coverage)
  * Deep Royal Green Palette (#01140d / #032517 / #08442a / #0e5e3a)
- * Dynamic Animated Frost Refraction & Micro-Crystalline Liquid Drift
- * Authentic Fluid Mechanics: Divergence-Free Incompressible Curl-Noise Field,
- * Soap-Water Pepper Powder Repulsion (Marangoni Shockwave + Toroidal Rim Vortices),
- * Hydrodynamic Wake Advection, Stokes Viscous Drag, and Deep Royal Green Caustic Swirls.
+ * Brand New Kinetic 3D Armillary & Polyhedral Geometry (Concentric Gyroscopic Rings)
+ * Autonomous Ambient Fluid Motion (Zero Mouse Cursor Disturbance / Completely Serene)
+ * Micro-Crystalline Animated Frost Refraction & Gentle Liquid Drift
  */
 import * as THREE from './vendor/three.module.js';
 
-(function initDeepLuxury4KFrostedGlass() {
+(function initRoyalKinetic3DFrostedGlass() {
     const canvas = document.getElementById('frosted-glass-canvas');
     if (!canvas) return;
 
@@ -52,16 +51,14 @@ import * as THREE from './vendor/three.module.js';
     }
 
     // =========================================================================
-    // 1. Fluid Dynamics 4K Deep Royal Green Background (#01140d / #032517 / #08442a)
+    // 1. Procedural 4K Deep Royal Green Background (#01140d / #032517 / #08442a)
     // =========================================================================
     const bgZ = -2.8;
     const bgGeo = new THREE.PlaneGeometry(1, 1);
     const bgUniforms = {
         uTime: { value: 0 },
         uScroll: { value: 0 },
-        uResolution: { value: new THREE.Vector2(window.innerWidth * dpr, window.innerHeight * dpr) },
-        uCursor: { value: new THREE.Vector3(-999, -999, 0) }, // (x, y, active)
-        uCursorVel: { value: new THREE.Vector2(0, 0) }
+        uResolution: { value: new THREE.Vector2(window.innerWidth * dpr, window.innerHeight * dpr) }
     };
 
     const bgMat = new THREE.ShaderMaterial({
@@ -79,13 +76,11 @@ import * as THREE from './vendor/three.module.js';
             uniform float uTime;
             uniform float uScroll;
             uniform vec2 uResolution;
-            uniform vec3 uCursor;
-            uniform vec2 uCursorVel;
 
             void main() {
                 vec2 p = vUv;
 
-                // Calibrated Deep Royal Green Palette (Opulent Crown/Velvet Aesthetics):
+                // Calibrated Deep Royal Green Palette (Crown & Velvet Architecture):
                 // Abyss Bedrock: #01140d -> Imperial Royal Green: #032517 -> Luminous Royal Jade: #08442a
                 vec3 bedrockNoir    = vec3(0.0018, 0.0125, 0.0085); // #01140d ultra deep malachite bedrock
                 vec3 royalGreen     = vec3(0.0055, 0.0340, 0.0210); // #032517 deep imperial royal green
@@ -98,25 +93,16 @@ import * as THREE from './vendor/three.module.js';
                 float distCenter = abs(p.x - 0.5 - meander);
                 float channel = smoothstep(0.48, 0.05, distCenter);
 
-                float streamTime = uTime * 0.06 + uScroll * 0.00018;
+                float streamTime = uTime * 0.05 + uScroll * 0.00018;
 
-                // Incompressible fluid domain warping with curl vortices
-                vec2 flowUv1 = vec2(p.x * 2.2 + sin(p.y * 2.8 + streamTime * 1.8) * 0.08, p.y * 1.8 - streamTime);
-                vec2 flowUv2 = vec2(p.x * 3.0 - cos(p.y * 3.0 - streamTime * 1.4) * 0.07, p.y * 2.6 - streamTime * 1.1);
-
-                // Hydrodynamic cursor fluid wake on background
-                if (uCursor.z > 0.5) {
-                    vec2 cPos = uCursor.xy * 0.5 + 0.5; // UV space
-                    float cDist = length(p - cPos);
-                    float cInfluence = exp(-cDist * cDist * 28.0);
-                    flowUv1 += uCursorVel * cInfluence * 0.20;
-                    flowUv2 -= uCursorVel * cInfluence * 0.16;
-                }
+                // Autonomous fluid domain silk warping
+                vec2 flowUv1 = vec2(p.x * 2.2 + sin(p.y * 2.8 + streamTime * 1.6) * 0.08, p.y * 1.8 - streamTime);
+                vec2 flowUv2 = vec2(p.x * 3.0 - cos(p.y * 3.0 - streamTime * 1.3) * 0.07, p.y * 2.6 - streamTime * 1.0);
 
                 // Multi-octave 4K harmonic royal caustics & fluid silk waves
-                float wave1 = sin(flowUv1.x * 2.8 + flowUv1.y * 1.8 + uTime * 0.24) * 0.5 + 0.5;
-                float wave2 = cos(flowUv2.x * 2.4 - flowUv2.y * 2.1 - uTime * 0.20) * 0.5 + 0.5;
-                float wave3 = sin((flowUv1.x + flowUv2.x) * 1.6 + uTime * 0.14) * 0.5 + 0.5;
+                float wave1 = sin(flowUv1.x * 2.8 + flowUv1.y * 1.8 + uTime * 0.22) * 0.5 + 0.5;
+                float wave2 = cos(flowUv2.x * 2.4 - flowUv2.y * 2.1 - uTime * 0.18) * 0.5 + 0.5;
+                float wave3 = sin((flowUv1.x + flowUv2.x) * 1.6 + uTime * 0.12) * 0.5 + 0.5;
 
                 float caustic = pow(wave1 * 0.45 + wave2 * 0.35 + wave3 * 0.20, 1.35);
                 float filament = smoothstep(0.40, 0.76, wave1 * wave2 + wave3 * 0.28);
@@ -140,59 +126,98 @@ import * as THREE from './vendor/three.module.js';
     scene.add(bgMesh);
 
     // =========================================================================
-    // 2. Sculptural 3D Royal Forms (Botanical & Geometric Depth at z = -1.8)
+    // 2. BRAND NEW 3D ANIMATION GEOMETRY: Kinetic Armillary Celestial Core
     // =========================================================================
+    // User request: "no reaction to mouse cursor needed. new 3d animation geometry needed . brandnew design ."
+    // Concentric interlocking gyroscopic rings + faceted nucleus floating at z = -1.8
     const shapeGroup = new THREE.Group();
     shapeGroup.position.z = -1.8;
     scene.add(shapeGroup);
 
-    const shapes = [];
+    // Common premium royal materials
+    const goldRingMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0xb8923a), // Brushed heirloom gold
+        roughness: 0.38,
+        metalness: 0.75,
+        transparent: true,
+        opacity: 0.24
+    });
 
-    // Faceted Royal Emerald Crystal (diamond-cut facets that catch the light)
-    const emeraldMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x053322),
+    const emeraldRingMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0x063d2a), // Polished royal emerald bronze
+        roughness: 0.42,
+        metalness: 0.60,
+        transparent: true,
+        opacity: 0.22
+    });
+
+    const champagneRingMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0xd4af37), // Luminous imperial gold
+        roughness: 0.35,
+        metalness: 0.80,
+        transparent: true,
+        opacity: 0.22
+    });
+
+    const crystalCoreMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0x0a4d36), // Deep faceted royal emerald
+        roughness: 0.30,
+        metalness: 0.20,
+        flatShading: true,
+        transparent: true,
+        opacity: 0.25
+    });
+
+    // Outer Armillary Ring (Heirloom Gold, radius 1.55, thickness 0.024)
+    const outerRingGeo = new THREE.TorusGeometry(1.55, 0.024, 16, 96);
+    const outerRing = new THREE.Mesh(outerRingGeo, goldRingMat);
+    shapeGroup.add(outerRing);
+
+    // Middle Gyroscopic Ring (Royal Emerald, radius 1.25, thickness 0.022)
+    const midRingGeo = new THREE.TorusGeometry(1.25, 0.022, 16, 84);
+    const midRing = new THREE.Mesh(midRingGeo, emeraldRingMat);
+    shapeGroup.add(midRing);
+
+    // Inner Gyroscopic Ring (Imperial Gold, radius 0.95, thickness 0.020)
+    const innerRingGeo = new THREE.TorusGeometry(0.95, 0.020, 16, 72);
+    const innerRing = new THREE.Mesh(innerRingGeo, champagneRingMat);
+    shapeGroup.add(innerRing);
+
+    // Central Faceted Royal Crystal Nucleus (Stellated Polyhedron)
+    const coreGeo = new THREE.OctahedronGeometry(0.52, 0);
+    const coreMesh = new THREE.Mesh(coreGeo, crystalCoreMat);
+    shapeGroup.add(coreMesh);
+
+    // Left Flanking Kinetic Satellite: Elegant Torus Knot (radius 0.65, tube 0.022)
+    const leftSatelliteMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0x073f2c),
+        roughness: 0.48,
+        metalness: 0.30,
+        transparent: true,
+        opacity: 0.18
+    });
+    const leftSatelliteGeo = new THREE.TorusKnotGeometry(0.65, 0.022, 96, 16, 3, 2);
+    const leftSatellite = new THREE.Mesh(leftSatelliteGeo, leftSatelliteMat);
+    leftSatellite.position.set(-1.85, 0.85, -0.3);
+    shapeGroup.add(leftSatellite);
+
+    // Right Flanking Kinetic Satellite: Faceted Geodesic Sphere (radius 0.58)
+    const rightSatelliteMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0x423414),
         roughness: 0.45,
-        metalness: 0.15,
+        metalness: 0.40,
         flatShading: true,
         transparent: true,
         opacity: 0.18
     });
-    const icosahedron = new THREE.Mesh(new THREE.IcosahedronGeometry(0.85, 0), emeraldMat);
-    icosahedron.position.set(-1.7, 1.1, -0.4);
-    shapeGroup.add(icosahedron);
-    shapes.push({ mesh: icosahedron, basePos: [-1.7, 1.1, -0.4], speed: 0.10, phase: 0 });
-
-    // Sculptural Royal Torus Knot (Möbius Ribbon Loop)
-    const jadeMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x073b2a),
-        roughness: 0.50,
-        metalness: 0.20,
-        transparent: true,
-        opacity: 0.16
-    });
-    const torusKnot = new THREE.Mesh(new THREE.TorusKnotGeometry(0.95, 0.042, 128, 20, 2, 3), jadeMat);
-    torusKnot.position.set(0.2, 0.1, -0.6);
-    shapeGroup.add(torusKnot);
-    shapes.push({ mesh: torusKnot, basePos: [0.2, 0.1, -0.6], speed: 0.08, phase: 3.14 });
-
-    // Warm Antique Gold Astral Sphere
-    const goldMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x36270e),
-        roughness: 0.55,
-        metalness: 0.25,
-        transparent: true,
-        opacity: 0.15
-    });
-    const goldOrb = new THREE.Mesh(new THREE.SphereGeometry(0.70, 32, 32), goldMat);
-    goldOrb.position.set(1.7, -0.9, -0.3);
-    shapeGroup.add(goldOrb);
-    shapes.push({ mesh: goldOrb, basePos: [1.7, -0.9, -0.3], speed: -0.11, phase: 1.57 });
+    const rightSatelliteGeo = new THREE.IcosahedronGeometry(0.58, 1);
+    const rightSatellite = new THREE.Mesh(rightSatelliteGeo, rightSatelliteMat);
+    rightSatellite.position.set(1.85, -0.75, -0.2);
+    shapeGroup.add(rightSatellite);
 
     // =========================================================================
-    // 3. Fluid Mechanics Particle Simulation (Soap-Pepper Repulsion & Curl Noise)
+    // 3. Autonomous Ambient Pixie Starlight Spores (Completely Calm Fluid Flow)
     // =========================================================================
-    // User requirement: "fluid mechaniscs are not working. fix . not what i requested rerun"
-    // User requirement: "cursor must repel pixie dots . like soap water repeling pepper powder"
     const pixieCount = isMobile ? 180 : 360;
 
     // High-resolution 24-segment smooth spherical dots (anti-aliased at 4K, zero polygon facets)
@@ -208,7 +233,7 @@ import * as THREE from './vendor/three.module.js';
         new THREE.Color(0xfde047).multiplyScalar(2.4), // luminous honey gold
         new THREE.Color(0xf59e0b).multiplyScalar(2.2), // radiant amber
         new THREE.Color(0xfffbeb).multiplyScalar(3.0), // celestial diamond starlight
-        new THREE.Color(0x6ee7b7).multiplyScalar(2.4), // glowing aquamarine
+        new THREE.Color(0x6ee7b7).multiplyScalar(2.4), // glowing royal aquamarine
         new THREE.Color(0x34d399).multiplyScalar(2.2), // luminous emerald mint
         new THREE.Color(0xffffff).multiplyScalar(3.2)  // pure brilliant starlight
     ];
@@ -249,9 +274,8 @@ import * as THREE from './vendor/three.module.js';
             vy: 0,
             baseRadius: radius,
             seed: Math.random() * 100.0,
-            twinkleSpeed: 1.5 + Math.random() * 2.2,
-            twinklePhase: Math.random() * Math.PI * 2,
-            haloInfluence: 0
+            twinkleSpeed: 1.2 + Math.random() * 1.8,
+            twinklePhase: Math.random() * Math.PI * 2
         };
         pixieData.push(p);
 
@@ -265,7 +289,7 @@ import * as THREE from './vendor/three.module.js';
     scene.add(pixieMesh);
 
     // =========================================================================
-    // 4. Realistic 4K Frosted Glass Texture (Zero Gaps, 100% Seamless Coverage)
+    // 4. Photorealistic Animated Frosted Glass (Zero Gaps, 20% Visibility)
     // =========================================================================
     const textureLoader = new THREE.TextureLoader();
     const normalMap = textureLoader.load('assets/frosted-normal.png');
@@ -347,80 +371,35 @@ import * as THREE from './vendor/three.module.js';
     // =========================================================================
     // 7. Divergence-Free Incompressible Fluid Velocity Field (Curl Noise)
     // =========================================================================
-    // Analytical multi-scale stream function psi(x, y, t)
-    // Velocity: u = d(psi)/dy, v = -d(psi)/dx => div(u) = d^2(psi)/dxdy - d^2(psi)/dydx == 0
     function getFluidVelocity(x, y, t) {
         const eps = 0.02;
 
         // Octave 1: broad meandering river current & lazy gyres
-        const s1 = 0.32;
-        const psi1 = Math.sin(x * s1 + t * 0.22) * Math.cos(y * s1 - t * 0.18);
-        const u1 = (Math.sin(x * s1 + t * 0.22) * Math.cos((y + eps) * s1 - t * 0.18) - psi1) / eps;
-        const v1 = -(Math.sin((x + eps) * s1 + t * 0.22) * Math.cos(y * s1 - t * 0.18) - psi1) / eps;
+        const s1 = 0.30;
+        const psi1 = Math.sin(x * s1 + t * 0.18) * Math.cos(y * s1 - t * 0.15);
+        const u1 = (Math.sin(x * s1 + t * 0.18) * Math.cos((y + eps) * s1 - t * 0.15) - psi1) / eps;
+        const v1 = -(Math.sin((x + eps) * s1 + t * 0.18) * Math.cos(y * s1 - t * 0.15) - psi1) / eps;
 
         // Octave 2: medium swirling fluid vortices
-        const s2 = 0.75;
-        const psi2 = Math.sin(x * s2 - t * 0.35 + 1.2) * Math.cos(y * s2 + t * 0.30 - 0.8);
-        const u2 = (Math.sin(x * s2 - t * 0.35 + 1.2) * Math.cos((y + eps) * s2 + t * 0.30 - 0.8) - psi2) / eps;
-        const v2 = -(Math.sin((x + eps) * s2 - t * 0.35 + 1.2) * Math.cos(y * s2 + t * 0.30 - 0.8) - psi2) / eps;
+        const s2 = 0.70;
+        const psi2 = Math.sin(x * s2 - t * 0.28 + 1.2) * Math.cos(y * s2 + t * 0.24 - 0.8);
+        const u2 = (Math.sin(x * s2 - t * 0.28 + 1.2) * Math.cos((y + eps) * s2 + t * 0.24 - 0.8) - psi2) / eps;
+        const v2 = -(Math.sin((x + eps) * s2 - t * 0.28 + 1.2) * Math.cos(y * s2 + t * 0.24 - 0.8) - psi2) / eps;
 
         return {
-            u: u1 * 0.038 + u2 * 0.018,
-            v: v1 * 0.038 + v2 * 0.018 + 0.024 // upward buoyant drift
+            u: u1 * 0.032 + u2 * 0.015,
+            v: v1 * 0.032 + v2 * 0.015 + 0.020 // gentle upward buoyant drift
         };
     }
 
     // =========================================================================
-    // 8. Soap-Water Repelling Pepper Powder & Cursor Fluid Interaction
+    // 8. Smooth Autonomous Scroll & Frame Animation (ZERO CURSOR REACTION)
     // =========================================================================
     let smoothScrollY = window.scrollY || 0;
     let targetScrollY = smoothScrollY;
     window.addEventListener('scroll', () => {
         targetScrollY = window.scrollY || 0;
     }, { passive: true });
-
-    let rawMouseNDC = new THREE.Vector2(-999, -999);
-    let smoothMouseNDC = new THREE.Vector2(-999, -999);
-    let mouseActive = false;
-
-    function onPointerMove(e) {
-        rawMouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
-        rawMouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
-        if (!mouseActive) {
-            smoothMouseNDC.copy(rawMouseNDC);
-            mouseActive = true;
-        }
-    }
-
-    window.addEventListener('pointermove', onPointerMove, { passive: true });
-    window.addEventListener('mousemove', onPointerMove, { passive: true });
-    window.addEventListener('touchmove', (e) => {
-        if (e.touches && e.touches[0]) {
-            onPointerMove(e.touches[0]);
-        }
-    }, { passive: true });
-
-    window.addEventListener('pointerleave', () => {
-        mouseActive = false;
-        rawMouseNDC.set(-999, -999);
-    }, { passive: true });
-
-    // Exact geometric raycaster projection onto particle plane z = -0.8
-    const raycaster = new THREE.Raycaster();
-    const pixiePlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0.8);
-    const hitPoint = new THREE.Vector3();
-
-    // Cursor tracking with velocity calculation for hydrodynamic wake
-    let lastCursorX = 0;
-    let lastCursorY = 0;
-    let cursorVx = 0;
-    let cursorVy = 0;
-
-    // Soap-Water Repelling Pepper Powder Physics parameters:
-    // Marangoni surface tension collapse creates explosive radial expulsion
-    const soapRadius = 2.40; // World unit clearing radius (~220px)
-    const soapRadiusSq = soapRadius * soapRadius;
-    const marangoniBurst = 68.0; // Explosive radial acceleration
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const clock = new THREE.Clock();
@@ -437,113 +416,52 @@ import * as THREE from './vendor/three.module.js';
 
         // Animated Frost Refraction & Micro-Crystalline Liquid Drift
         if (normalMap) {
-            normalMap.offset.x = (elapsed * 0.005) % 1.0;
-            normalMap.offset.y = (elapsed * 0.003) % 1.0;
+            normalMap.offset.x = (elapsed * 0.004) % 1.0;
+            normalMap.offset.y = (elapsed * 0.0025) % 1.0;
         }
         // Subtle organic breathing of normal scale
         const normalBreathe = 0.20 + 0.035 * Math.sin(elapsed * 0.35);
         glassMat.normalScale.set(normalBreathe, normalBreathe);
 
-        if (mouseActive) {
-            smoothMouseNDC.x += (rawMouseNDC.x - smoothMouseNDC.x) * 0.18;
-            smoothMouseNDC.y += (rawMouseNDC.y - smoothMouseNDC.y) * 0.18;
-        } else {
-            smoothMouseNDC.set(-999, -999);
-        }
-
-        const normX = mouseActive ? smoothMouseNDC.x : 0;
-        const normY = mouseActive ? smoothMouseNDC.y : 0;
-
-        camera.position.x = normX * 0.18;
-        camera.position.y = normY * 0.12 - (smoothScrollY * 0.0004);
+        // Gentle camera parallax linked purely to scroll (zero cursor reaction)
+        camera.position.y = -(smoothScrollY * 0.0004);
         camera.lookAt(0, -(smoothScrollY * 0.0004), 0);
 
-        // 100% exact world intersection using Three.js Raycaster
-        let cursorWorldX = 0;
-        let cursorWorldY = 0;
-        if (mouseActive) {
-            raycaster.setFromCamera(smoothMouseNDC, camera);
-            raycaster.ray.intersectPlane(pixiePlane, hitPoint);
-            cursorWorldX = hitPoint.x;
-            cursorWorldY = hitPoint.y;
-
-            // Compute cursor velocity vector for hydrodynamic wake advection
-            const rawCursorVx = (cursorWorldX - lastCursorX) / Math.max(dt, 0.01);
-            const rawCursorVy = (cursorWorldY - lastCursorY) / Math.max(dt, 0.01);
-            cursorVx = cursorVx * 0.8 + rawCursorVx * 0.2;
-            cursorVy = cursorVy * 0.8 + rawCursorVy * 0.2;
-            lastCursorX = cursorWorldX;
-            lastCursorY = cursorWorldY;
-
-            // Pass cursor position & velocity to background fluid caustics
-            bgUniforms.uCursor.value.set(normX, normY, 1.0);
-            bgUniforms.uCursorVel.value.set(cursorVx * 0.04, cursorVy * 0.04);
-        } else {
-            bgUniforms.uCursor.value.set(-999, -999, 0.0);
-            bgUniforms.uCursorVel.value.set(0, 0);
-        }
-
         if (!prefersReducedMotion) {
-            shapes.forEach((item) => {
-                item.mesh.rotation.x += 0.0012 * Math.abs(item.speed) * 4;
-                item.mesh.rotation.y += 0.0016 * Math.abs(item.speed) * 4;
-                item.mesh.rotation.z += 0.0008 * Math.abs(item.speed) * 2;
-                item.mesh.position.y = item.basePos[1] + Math.sin(elapsed * 0.25 + item.phase) * 0.18;
-                item.mesh.position.x = item.basePos[0] + Math.cos(elapsed * 0.20 + item.phase) * 0.12;
-            });
+            // Gyroscopic rotation of concentric armillary rings
+            outerRing.rotation.x = elapsed * 0.22;
+            outerRing.rotation.y = elapsed * 0.16;
 
-            // Pixie particles: True fluid mechanics (Navier-Stokes Curl Field + Marangoni Pepper Expulsion)
+            midRing.rotation.y = -elapsed * 0.26;
+            midRing.rotation.z = elapsed * 0.18;
+
+            innerRing.rotation.x = -elapsed * 0.20;
+            innerRing.rotation.z = -elapsed * 0.24;
+
+            // Central faceted nucleus spins & pulses gently
+            coreMesh.rotation.x = elapsed * 0.35;
+            coreMesh.rotation.y = elapsed * 0.45;
+            const corePulse = 1.0 + 0.08 * Math.sin(elapsed * 1.2);
+            coreMesh.scale.set(corePulse, corePulse, corePulse);
+
+            // Flanking satellites orbit & rotate
+            leftSatellite.rotation.x = elapsed * 0.18;
+            leftSatellite.rotation.y = elapsed * 0.24;
+            leftSatellite.position.y = 0.85 + Math.sin(elapsed * 0.35) * 0.15;
+
+            rightSatellite.rotation.y = -elapsed * 0.20;
+            rightSatellite.rotation.z = elapsed * 0.15;
+            rightSatellite.position.y = -0.75 + Math.cos(elapsed * 0.30) * 0.14;
+
+            // Pixie particles: Autonomous divergence-free fluid streamlines (zero cursor perturbation)
             for (let i = 0; i < pixieCount; i++) {
                 const p = pixieData[i];
 
-                // 1. Ambient fluid flow field (incompressible curl noise)
+                // Ambient fluid flow field (incompressible curl noise)
                 const fluidVel = getFluidVelocity(p.x, p.y, elapsed);
 
-                p.haloInfluence = 0;
-
-                // 2. Soap-water repelling pepper powder physics + hydrodynamic wake
-                if (mouseActive) {
-                    const dx = p.x - cursorWorldX;
-                    const dy = p.y - cursorWorldY;
-                    const distSq = dx * dx + dy * dy;
-
-                    if (distSq < soapRadiusSq) {
-                        const dist = Math.sqrt(distSq) + 0.0001;
-                        const nx = dx / dist;
-                        const ny = dy / dist;
-
-                        // Explosive radial Marangoni surface tension expulsion
-                        const push = Math.pow(1.0 - dist / soapRadius, 0.65) * marangoniBurst;
-                        p.vx += nx * push * dt * 60.0;
-                        p.vy += ny * push * dt * 60.0;
-
-                        // Tangential vortex curling (toroidal eddy along halo rim)
-                        const swirlDir = (i % 2 === 0) ? 1.0 : -1.0;
-                        const tx = -ny * swirlDir;
-                        const ty = nx * swirlDir;
-                        p.vx += tx * push * 0.24 * dt * 60.0;
-                        p.vy += ty * push * 0.24 * dt * 60.0;
-
-                        // Hydrodynamic wake advection: cursor drags fluid in its direction
-                        const wakeFactor = Math.exp(-distSq / (soapRadius * 1.4)) * 0.40;
-                        p.vx += cursorVx * wakeFactor * dt * 30.0;
-                        p.vy += cursorVy * wakeFactor * dt * 30.0;
-
-                        // Hard core exclusion: soap completely clears the central void
-                        if (dist < soapRadius * 0.55) {
-                            const pushOut = (soapRadius * 0.55 - dist);
-                            p.x += nx * pushOut * 0.45;
-                            p.y += ny * pushOut * 0.45;
-                        }
-
-                        // Luminous halo boost along the rim where dots crowd together
-                        p.haloInfluence = Math.max(0, 1.0 - Math.abs(dist - soapRadius * 0.90) / (soapRadius * 0.55));
-                    }
-                }
-
-                // 3. Stokes viscous fluid coupling (particles accelerate toward fluid stream)
-                // Produces natural fluid inertia: particles smoothly glide and follow eddies
-                const dragRate = 4.2;
+                // Stokes viscous coupling for calm, natural fluid gliding
+                const dragRate = 3.5;
                 p.vx += (fluidVel.u - p.vx) * (dragRate * dt);
                 p.vy += (fluidVel.v - p.vy) * (dragRate * dt);
 
@@ -557,10 +475,9 @@ import * as THREE from './vendor/three.module.js';
                 if (p.y > boundY) p.y = -boundY;
                 else if (p.y < -boundY) p.y = boundY;
 
-                // 4. Smooth anti-aliased twinkling & halo perimeter illumination
+                // Smooth anti-aliased twinkling
                 const twinkle = 0.35 + 0.65 * Math.pow(0.5 + 0.5 * Math.sin(elapsed * p.twinkleSpeed + p.twinklePhase), 2.0);
-                const haloBoost = p.haloInfluence * 0.95;
-                const scale = p.baseRadius * (twinkle + haloBoost);
+                const scale = p.baseRadius * twinkle;
 
                 dummy.position.set(p.x, p.y, p.z);
                 dummy.scale.set(scale, scale, scale);
@@ -587,13 +504,12 @@ import * as THREE from './vendor/three.module.js';
             pixieCount,
             visibilityPercent: 20,
             hasCursorBacklight: false,
-            hasFluidHalo: true,
-            hasSoapRepulsion: true,
-            hasFluidMechanics: true,
+            hasCursorReaction: false,
             hasRoyalGreenTheme: true,
+            hasKineticArmillaryGeometry: true,
             hasAnimatedFrost: true,
             lightPos: null,
-            mouseNDC: mouseActive ? { x: smoothMouseNDC.x, y: smoothMouseNDC.y } : null,
+            mouseNDC: null,
             elapsedTime: elapsed
         };
     }
