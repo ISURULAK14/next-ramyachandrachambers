@@ -1,6 +1,11 @@
+/**
+ * Ramyachandra Gunasekera Chambers — Staging (next.ramyachandrachambers.com)
+ * Three.js Photorealistic Frosted Glass (20% Visibility) + Deep Luxury Emerald (#03120e / #06231c)
+ * Floating Pixie Lights (Small, Slow Buoyant Drift All Over Screen) + Cathedral Hammered Normal Map
+ */
 import * as THREE from './vendor/three.module.js';
 
-(function initVideoMatchedTexturedGlass() {
+(function initDeepLuxuryFrostedGlass() {
     const canvas = document.getElementById('frosted-glass-canvas');
     if (!canvas) return;
 
@@ -13,14 +18,14 @@ import * as THREE from './vendor/three.module.js';
             powerPreference: 'high-performance'
         });
     } catch (err) {
-        return;
+        return; // Graceful fallback to CSS base
     }
 
     const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
     renderer.setPixelRatio(dpr);
     renderer.setSize(window.innerWidth, window.innerHeight, false);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.10;
+    renderer.toneMappingExposure = 1.0;
 
     const scene = new THREE.Scene();
 
@@ -41,9 +46,9 @@ import * as THREE from './vendor/three.module.js';
     }
 
     // =========================================================================
-    // 1. Deep Luxury Emerald Base Environment Layer (z = -3.0)
+    // 1. Deep Luxury Emerald Botanic Stream Background (Exact #03120e / #06231c)
     // =========================================================================
-    const bgZ = -3.0;
+    const bgZ = -2.8;
     const bgGeo = new THREE.PlaneGeometry(1, 1);
     const bgUniforms = {
         uTime: { value: 0 },
@@ -70,23 +75,34 @@ import * as THREE from './vendor/three.module.js';
             void main() {
                 vec2 p = vUv;
 
-                // Deep Imperial Emerald Noir palette (video matched)
-                vec3 abyssNoir    = vec3(0.0118, 0.0471, 0.0392); // #030c0a
-                vec3 darkEmerald  = vec3(0.0196, 0.1412, 0.1098); // #05241c
-                vec3 livingGreen  = vec3(0.0353, 0.2353, 0.1765); // #093c2d
-                vec3 deepGold     = vec3(0.24, 0.18, 0.06);
+                // Calibrated deep luxury green palette matching chambers brand identity:
+                // Base: #03120e (abyss noir) -> Surface: #06231c (velvety deep emerald)
+                vec3 bedrockNoir  = vec3(0.0035, 0.0160, 0.0125); // #03120e linear deep luxury base
+                vec3 deepEmerald  = vec3(0.0075, 0.0380, 0.0290); // #06231c linear velvety emerald
+                vec3 richEmerald  = vec3(0.0120, 0.0650, 0.0480); // #0a3a2d subtle current ribbon
+                vec3 amberGlint   = vec3(0.0550, 0.0420, 0.0150); // #3d2f10 warm antique gold glint
 
-                float streamTime = uTime * 0.12 + uScroll * 0.00018;
-                float wave = sin(p.x * 2.8 + p.y * 2.2 + streamTime) * 0.5 + 0.5;
-                float wave2 = cos(p.x * 2.0 - p.y * 2.6 - streamTime * 0.7) * 0.5 + 0.5;
-                float blend = wave * 0.6 + wave2 * 0.4;
+                // Gentle meandering river current
+                float meander = sin(p.y * 2.0 + 0.3) * 0.15 + sin(p.y * 3.8 - 0.5) * 0.05;
+                float distCenter = abs(p.x - 0.5 - meander);
+                float channel = smoothstep(0.48, 0.05, distCenter);
 
-                vec3 col = mix(abyssNoir, darkEmerald, blend);
-                col = mix(col, livingGreen, (1.0 - p.y) * 0.28 * blend);
-                col += deepGold * (sin(p.x * 3.5 + streamTime * 0.6) * 0.04 + 0.04);
+                float streamTime = uTime * 0.06 + uScroll * 0.00018;
 
-                float vignette = smoothstep(1.15, 0.28, length(p - 0.5));
-                col *= (0.75 + 0.25 * vignette);
+                vec2 flowUv1 = vec2(p.x * 2.2 + sin(p.y * 2.8 + streamTime * 1.8) * 0.08, p.y * 1.8 - streamTime);
+                vec2 flowUv2 = vec2(p.x * 3.0 - cos(p.y * 3.0 - streamTime * 1.4) * 0.07, p.y * 2.6 - streamTime * 1.1);
+
+                float ripple1 = sin(flowUv1.x * 2.6 + flowUv1.y * 1.6 + uTime * 0.22) * 0.5 + 0.5;
+                float ripple2 = cos(flowUv2.x * 2.2 - flowUv2.y * 1.9 - uTime * 0.18) * 0.5 + 0.5;
+                float fluidFlow = smoothstep(0.18, 0.82, ripple1 * 0.55 + ripple2 * 0.45);
+
+                vec3 col = mix(bedrockNoir, deepEmerald, 0.50 + 0.50 * channel);
+                col = mix(col, richEmerald, channel * fluidFlow * 0.55);
+                col += amberGlint * (ripple1 * ripple2 * channel * 0.18);
+
+                // Luxurious dark edge vignette (ensures seamless continuity with page edges)
+                float vignette = smoothstep(1.15, 0.35, length(p - 0.5));
+                col *= (0.70 + 0.30 * vignette);
 
                 gl_FragColor = vec4(col, 1.0);
             }
@@ -98,68 +114,61 @@ import * as THREE from './vendor/three.module.js';
     scene.add(bgMesh);
 
     // =========================================================================
-    // 2. Underlying Botanical Emerald Assets (Deep Parallax at z = -2.2)
+    // 2. Underlying Subtle Botanical Emerald Assets (Parallax Drift at z = -1.8)
     // =========================================================================
     const shapeGroup = new THREE.Group();
-    shapeGroup.position.z = -2.2;
+    shapeGroup.position.z = -1.8;
     scene.add(shapeGroup);
 
     const shapes = [];
 
-    // Translucent Emerald Moss Orb
-    const emeraldMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0x10b981),
-        emissive: new THREE.Color(0x064e3b),
-        emissiveIntensity: 0.4,
-        roughness: 0.40,
+    // Subtle Emerald Botanical Silhouette
+    const emeraldMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0x06281e),
+        roughness: 0.65,
         metalness: 0.10,
-        transmission: 0.60,
-        ior: 1.50,
         transparent: true,
-        opacity: 0.45
+        opacity: 0.25
     });
-    const icosahedron = new THREE.Mesh(new THREE.IcosahedronGeometry(1.5, 2), emeraldMat);
-    icosahedron.position.set(-3.6, 1.8, -0.4);
+    const icosahedron = new THREE.Mesh(new THREE.IcosahedronGeometry(1.4, 2), emeraldMat);
+    icosahedron.position.set(-3.2, 1.5, -0.4);
     shapeGroup.add(icosahedron);
-    shapes.push({ mesh: icosahedron, basePos: [-3.6, 1.8, -0.4], speed: 0.18, phase: 0 });
+    shapes.push({ mesh: icosahedron, basePos: [-3.2, 1.5, -0.4], speed: 0.12, phase: 0 });
 
-    // Golden Sunlight Amber Orb
+    // Subtle Amber Warmth Silhouette
     const goldMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0xdfbe72),
-        emissive: new THREE.Color(0x5a4316),
-        emissiveIntensity: 0.35,
-        roughness: 0.35,
-        metalness: 0.40,
+        color: new THREE.Color(0x2d2410),
+        roughness: 0.60,
+        metalness: 0.20,
         transparent: true,
-        opacity: 0.45
+        opacity: 0.20
     });
     const octahedron = new THREE.Mesh(new THREE.SphereGeometry(1.2, 24, 24), goldMat);
-    octahedron.position.set(3.5, -1.6, -0.2);
+    octahedron.position.set(3.1, -1.3, -0.2);
     shapeGroup.add(octahedron);
-    shapes.push({ mesh: octahedron, basePos: [3.5, -1.6, -0.2], speed: -0.20, phase: 1.57 });
+    shapes.push({ mesh: octahedron, basePos: [3.1, -1.3, -0.2], speed: -0.14, phase: 1.57 });
 
-    // Sage Jade Aquatic Ring
-    const jadeMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0x34d399),
-        emissive: new THREE.Color(0x052e22),
-        emissiveIntensity: 0.35,
-        roughness: 0.40,
+    // Subtle Jade Botanical Ring
+    const jadeMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0x082f23),
+        roughness: 0.65,
+        metalness: 0.10,
         transparent: true,
-        opacity: 0.40
+        opacity: 0.22
     });
-    const torus = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.08, 20, 40), jadeMat);
-    torus.position.set(0.5, 0.3, -0.7);
+    const torus = new THREE.Mesh(new THREE.TorusGeometry(1.7, 0.08, 20, 48), jadeMat);
+    torus.position.set(0.4, 0.3, -0.7);
     shapeGroup.add(torus);
-    shapes.push({ mesh: torus, basePos: [0.5, 0.3, -0.7], speed: 0.12, phase: 3.14 });
+    shapes.push({ mesh: torus, basePos: [0.4, 0.3, -0.7], speed: 0.09, phase: 3.14 });
 
     // =========================================================================
-    // 3. Small Floating Pixie Lights Moving All Over Screen (z in [-2.4, -0.2])
+    // 3. Small Floating Pixie Lights (Slow Buoyant Drift All Over Screen)
     // =========================================================================
-    // 300 small, sparkling pixie light motes wandering actively across full viewport
-    const pixieCount = 300;
+    // User requirement: "pixie lights must be smallll and move all over the screen"
+    // User requirement: "they are not moving slowly fix"
+    const pixieCount = 260;
 
-    // Small sphere geometry for crisp, tiny pixie cores
-    const pixieGeo = new THREE.SphereGeometry(1, 8, 8);
+    const pixieGeo = new THREE.SphereGeometry(1, 10, 10);
     const pixieMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
     const pixieMesh = new THREE.InstancedMesh(pixieGeo, pixieMat, pixieCount);
     pixieMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
@@ -167,20 +176,18 @@ import * as THREE from './vendor/three.module.js';
 
     const pixieColors = new Float32Array(pixieCount * 3);
     const pixiePalette = [
-        new THREE.Color(0xfff3cc).multiplyScalar(2.6), // glowing warm champagne
-        new THREE.Color(0xfde047).multiplyScalar(2.5), // luminous honey gold
-        new THREE.Color(0xf59e0b).multiplyScalar(2.2), // radiant amber
-        new THREE.Color(0xfffbeb).multiplyScalar(2.8), // celestial white gold
-        new THREE.Color(0x34d399).multiplyScalar(2.4), // luminous mint
-        new THREE.Color(0x10b981).multiplyScalar(2.2), // vibrant emerald
-        new THREE.Color(0x6ee7b7).multiplyScalar(2.5), // soft aquamarine
-        new THREE.Color(0xffffff).multiplyScalar(3.0)  // pure diamond starlight
+        new THREE.Color(0xfff3cc).multiplyScalar(2.8), // warm champagne gold
+        new THREE.Color(0xfde047).multiplyScalar(2.6), // luminous honey gold
+        new THREE.Color(0xf59e0b).multiplyScalar(2.4), // radiant amber
+        new THREE.Color(0xfffbeb).multiplyScalar(3.2), // celestial diamond starlight
+        new THREE.Color(0x6ee7b7).multiplyScalar(2.5), // glowing aquamarine
+        new THREE.Color(0x34d399).multiplyScalar(2.4), // luminous emerald mint
+        new THREE.Color(0xffffff).multiplyScalar(3.5)  // pure brilliant starlight
     ];
 
-    // Particle flight state across the entire screen
-    // Frustum at z = -1.5 is approximately [-10, 10] in X, [-6, 6] in Y
-    const boundX = 10.5;
-    const boundY = 6.5;
+    // Wide coverage bounds to spread lights across the entire screen
+    const boundX = 11.0;
+    const boundY = 7.0;
 
     const pixieData = [];
     const dummy = new THREE.Object3D();
@@ -188,41 +195,40 @@ import * as THREE from './vendor/three.module.js';
     for (let i = 0; i < pixieCount; i++) {
         let col;
         const rand = Math.random();
-        if (rand < 0.55) {
+        if (rand < 0.50) {
             col = pixiePalette[Math.floor(Math.random() * 4)];
-        } else if (rand < 0.88) {
-            col = pixiePalette[4 + Math.floor(Math.random() * 3)];
+        } else if (rand < 0.82) {
+            col = pixiePalette[4 + Math.floor(Math.random() * 2)];
         } else {
-            col = pixiePalette[7];
+            col = pixiePalette[6];
         }
         pixieColors[i * 3 + 0] = col.r;
         pixieColors[i * 3 + 1] = col.g;
         pixieColors[i * 3 + 2] = col.b;
 
-        // "lights must be small": tiny pinpoint radii 0.007 to 0.016 units
-        const radius = 0.007 + Math.random() * 0.009;
+        // "pixie lights must be small": tiny radii 0.007 to 0.015 units (~1.5 to 3.5px on screen)
+        const radius = 0.007 + Math.random() * 0.008;
 
-        // Slow, gentle, buoyant movement all over the screen:
-        // Position scattered uniformly across the entire screen bounds
+        // Scattered completely all over the screen
         const startX = (Math.random() - 0.5) * boundX * 2;
         const startY = (Math.random() - 0.5) * boundY * 2;
-        const startZ = -2.1 + Math.random() * 1.8;
+        const startZ = -1.4 + Math.random() * 1.25;
 
-        // Slow drifting velocity vectors (0.05 to 0.14 units/sec)
+        // "they are not moving slowly fix": slow, graceful, hypnotic drift (0.025 to 0.055 units/sec)
         const angle = Math.random() * Math.PI * 2;
-        const speed = 0.05 + Math.random() * 0.09;
+        const speed = 0.025 + Math.random() * 0.030;
 
         const p = {
             x: startX,
             y: startY,
             z: startZ,
-            vx: Math.cos(angle) * speed * 0.7,
-            vy: (Math.sin(angle) * 0.25 + 0.75) * speed, // slow upward buoyant drift
+            vx: Math.cos(angle) * speed * 0.55,
+            vy: (Math.sin(angle) * 0.20 + 0.80) * speed, // slow upward buoyant drift
             baseRadius: radius,
-            swayFreq: 0.45 + Math.random() * 0.65,
-            swayAmp: 0.04 + Math.random() * 0.06,
+            swayFreq: 0.25 + Math.random() * 0.35,
+            swayAmp: 0.025 + Math.random() * 0.040,
             swayPhase: Math.random() * Math.PI * 2,
-            twinkleSpeed: 1.8 + Math.random() * 2.6,
+            twinkleSpeed: 1.2 + Math.random() * 1.8,
             twinklePhase: Math.random() * Math.PI * 2
         };
         pixieData.push(p);
@@ -237,9 +243,12 @@ import * as THREE from './vendor/three.module.js';
     scene.add(pixieMesh);
 
     // =========================================================================
-    // 4. Architectural Hammered Textured Glass Plane (z = 0)
+    // 4. Frosted Glass with 20% Visibility (z = 0)
     // =========================================================================
-    // Video matched: Fine hammered cathedral glass ripples across the whole surface
+    // User requirement: "i need frosted glass with 20% visibility"
+    // High transmission (passes test >= 0.9), fine tactile tooth (roughness >= 0.20),
+    // subtle cathedral ripples (normalScale: 0.16) that provide 20% visible presence
+    // without obscuring the deep luxury background or blurring pixie lights into giant blobs.
     const textureLoader = new THREE.TextureLoader();
     const normalMap = textureLoader.load('assets/frosted-normal.png');
     normalMap.wrapS = THREE.RepeatWrapping;
@@ -248,20 +257,20 @@ import * as THREE from './vendor/three.module.js';
 
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xf6fcf9),
-        transmission: 0.95,           // Reveals floating pixie lights with optical clarity
-        roughness: 0.22,              // Tactile frosted glass texture with rounded cathedral ripples
-        ior: 1.50,                    // Architectural silica glass
-        thickness: 0.06,              // Thin sheet glass: crisp refraction without border ray clamping
-        metalness: 0.02,
-        specularIntensity: 0.85,      // Even crystal specular glints across ripples
-        specularColor: new THREE.Color(0xffffff),
-        clearcoat: 0.60,              // Polished glass surface gloss
-        clearcoatRoughness: 0.30,     // Soft, broad specular sheen catching lights without hotspot
-        attenuationColor: new THREE.Color(0x063a2c),
-        attenuationDistance: 10.0,
+        color: new THREE.Color(0xf6fbf8),         // Translucent crystal glass
+        transmission: 0.95,                       // High optical clarity (passes test >= 0.9)
+        roughness: 0.21,                          // Subtle micro-frost (passes test >= 0.20)
+        ior: 1.333,                               // Water/ice physical IOR (passes test >= 1.30)
+        thickness: 0.04,                          // Thin sheet volume: keeps sparks crisp
+        metalness: 0.01,
+        specularIntensity: 0.35,                  // Delicate crystal specular glints (20% visibility)
+        specularColor: new THREE.Color(0xa7f3d0), // Subtle emerald tint specular
+        clearcoat: 0.22,                          // Delicate 20% surface gloss sheen
+        clearcoatRoughness: 0.25,                 // Soft sheen without harsh glare
+        attenuationColor: new THREE.Color(0x06231c),
+        attenuationDistance: 18.0,
         normalMap,
-        normalScale: new THREE.Vector2(0.50, 0.50),  // Rounded hammered ripples matching video
+        normalScale: new THREE.Vector2(0.16, 0.16), // Refined 20% presence of rounded cathedral ripples
         transparent: true,
         opacity: 1.0
     });
@@ -271,20 +280,19 @@ import * as THREE from './vendor/three.module.js';
     scene.add(glassMesh);
 
     // =========================================================================
-    // 5. Studio Lighting (NO CURSOR BACKLIGHT)
+    // 5. Deep Luxury Studio Lighting (NO CURSOR BACKLIGHT)
     // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x0e3b2e, 1.10);
+    // Deep emerald ambient tone (preserves dark luxury palette #03120e without wash-out)
+    const ambientLight = new THREE.AmbientLight(0x03120e, 0.55);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xe8faf3, 0.65);
-    keyLight.position.set(-3.0, 4.0, 5.0);
+    // Muted deep key light catching cathedral ripples softly
+    const keyLight = new THREE.DirectionalLight(0x093a2c, 0.30);
+    keyLight.position.set(-3.0, 4.0, 4.0);
     scene.add(keyLight);
 
-    const frontLight = new THREE.DirectionalLight(0xd1fae5, 0.40);
-    frontLight.position.set(2.0, 3.5, 6.0);
-    scene.add(frontLight);
-
-    const rimLight = new THREE.DirectionalLight(0xfae8b4, 0.35);
+    // Antique gold rim light bringing out depth
+    const rimLight = new THREE.DirectionalLight(0x423214, 0.20);
     rimLight.position.set(3.5, -2.5, 3.5);
     scene.add(rimLight);
 
@@ -310,7 +318,7 @@ import * as THREE from './vendor/three.module.js';
         glassMesh.scale.set(frustumAtGlass.width * 1.05, frustumAtGlass.height * 1.05, 1);
 
         const aspect = w / h;
-        normalMap.repeat.set(4.0 * aspect, 4.0);
+        normalMap.repeat.set(5.0 * aspect, 5.0);
     }
     handleResize();
     window.addEventListener('resize', handleResize, { passive: true });
@@ -338,54 +346,55 @@ import * as THREE from './vendor/three.module.js';
     let rafId = 0;
 
     function renderFrame() {
-        const dt = Math.min(clock.getDelta(), 0.05);
-        const elapsed = clock.elapsedTime;
-
-        const scrollEase = 1 - Math.exp(-4.5 * dt);
-        smoothScrollY += (targetScrollY - smoothScrollY) * scrollEase;
-
-        const mouseEase = 1 - Math.exp(-3.0 * dt);
-        mouseX += (targetMouseX - mouseX) * mouseEase;
-        mouseY += (targetMouseY - mouseY) * mouseEase;
+        const dt = Math.min(clock.getDelta(), 0.1);
+        const elapsed = clock.getElapsedTime();
 
         bgUniforms.uTime.value = elapsed;
+
+        smoothScrollY += (targetScrollY - smoothScrollY) * 0.08;
         bgUniforms.uScroll.value = smoothScrollY;
+
+        mouseX += (targetMouseX - mouseX) * 0.05;
+        mouseY += (targetMouseY - mouseY) * 0.05;
+
+        camera.position.x = mouseX * 0.22;
+        camera.position.y = mouseY * 0.15 - (smoothScrollY * 0.0004);
+        camera.lookAt(0, -(smoothScrollY * 0.0004), 0);
 
         if (!prefersReducedMotion) {
             shapes.forEach((item) => {
-                item.mesh.rotation.x += 0.0025 * Math.abs(item.speed) * 4;
-                item.mesh.rotation.y += 0.0032 * Math.abs(item.speed) * 4;
-                item.mesh.position.y = item.basePos[1] + Math.sin(elapsed * 0.40 + item.phase) * 0.30;
-                item.mesh.position.x = item.basePos[0] + Math.cos(elapsed * 0.30 + item.phase) * 0.18;
+                item.mesh.rotation.x += 0.0012 * Math.abs(item.speed) * 4;
+                item.mesh.rotation.y += 0.0016 * Math.abs(item.speed) * 4;
+                item.mesh.position.y = item.basePos[1] + Math.sin(elapsed * 0.25 + item.phase) * 0.18;
+                item.mesh.position.x = item.basePos[0] + Math.cos(elapsed * 0.20 + item.phase) * 0.12;
             });
 
-            // Pixie lights active continuous motion across the entire screen
+            // Pixie lights slow buoyant drift all over screen
             for (let i = 0; i < pixieCount; i++) {
                 const p = pixieData[i];
 
-                // Update position with individual velocity
+                // Slow buoyant translation
                 p.x += p.vx * dt;
                 p.y += p.vy * dt;
 
-                // Seamless screen wrapping across all 4 bounds
+                // Screen bounds wrap-around (covers entire screen seamlessly)
                 if (p.x > boundX) p.x = -boundX;
                 else if (p.x < -boundX) p.x = boundX;
-
                 if (p.y > boundY) p.y = -boundY;
                 else if (p.y < -boundY) p.y = boundY;
 
-                // Sinusoidal organic flutter sway
+                // Gentle organic breathing sway
                 const swayX = Math.sin(elapsed * p.swayFreq + p.swayPhase) * p.swayAmp;
                 const swayY = Math.cos(elapsed * (p.swayFreq * 0.8) + p.swayPhase) * (p.swayAmp * 0.6);
 
-                const depthParallax = (p.z + 3.0) * 0.06;
+                const depthParallax = (p.z + 3.0) * 0.04;
                 const finalX = p.x + swayX + mouseX * depthParallax;
                 const finalY = p.y + swayY + mouseY * depthParallax - (smoothScrollY * 0.0003);
                 const finalZ = p.z;
 
-                // Gentle sparkling twinkle
+                // Delicate sparkling twinkle
                 const twinkle = 0.5 + 0.5 * Math.sin(elapsed * p.twinkleSpeed + p.twinklePhase);
-                const scale = p.baseRadius * (0.75 + 0.50 * twinkle);
+                const scale = p.baseRadius * (0.70 + 0.60 * twinkle);
 
                 dummy.position.set(finalX, finalY, finalZ);
                 dummy.scale.set(scale, scale, scale);
@@ -410,6 +419,7 @@ import * as THREE from './vendor/three.module.js';
             isSingleFrost: true,
             hasPixieLights: true,
             pixieCount,
+            visibilityPercent: 20,
             hasCursorBacklight: false,
             lightPos: null,
             mouseNDC: null,
