@@ -1770,15 +1770,9 @@ body::before {
   mix-blend-mode: overlay !important;
 }
 
-/* 3. Live Animated Aurora Orbs (Vibrant & Living Emerald/Champagne Backdrops) */
+/* 3. Live Animated Aurora Orbs - Replaced by Three.js WebGL Frosted Glass with Floating Pixie Lights */
 .hero-ambient-lights {
-  position: absolute !important;
-  inset: -15% -10% !important;
-  overflow: hidden !important;
-  pointer-events: none !important;
-  z-index: 0 !important;
-  filter: blur(70px) !important;
-  opacity: 0.95 !important;
+  display: none !important;
 }
 .hero-glow-gold {
   position: absolute !important;
