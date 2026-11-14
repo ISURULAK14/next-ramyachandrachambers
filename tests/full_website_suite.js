@@ -815,15 +815,9 @@ async function runFullSuite() {
         st.hasShapes === true,
         'Physical underlying botanical emerald assets rendered behind transmissive glass plane'
       );
-      await page.mouse.move(100, 100);
-      await new Promise(r => setTimeout(r, 250));
-      const pos1 = await page.evaluate(() => window.__rgFrostedGlass.lightPos);
-      await page.mouse.move(1300, 800);
-      await new Promise(r => setTimeout(r, 250));
-      const pos2 = await page.evaluate(() => window.__rgFrostedGlass.lightPos);
       check(
-        pos2 && pos1 && pos2.x > pos1.x && pos2.y < pos1.y,
-        `Dynamic PointLight tracks normalized cursor coordinates (${pos1?.x.toFixed(2)},${pos1?.y.toFixed(2)} -> ${pos2?.x.toFixed(2)},${pos2?.y.toFixed(2)})`
+        st.hasCursorBacklight === false && st.lightPos === null,
+        'Cursor backlight completely removed (zero front glare or cursor hotspot over text)'
       );
       await new Promise(r => setTimeout(r, 250));
       const st2 = await page.evaluate(() => window.__rgFrostedGlass);

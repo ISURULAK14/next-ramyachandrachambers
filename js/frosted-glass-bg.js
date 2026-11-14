@@ -200,9 +200,9 @@ import * as THREE from './vendor/three.module.js';
     const glassMat = new THREE.MeshPhysicalMaterial({
         color: new THREE.Color(0xf6fcf9),
         transmission: 0.96,           // High optical clarity revealing background
-        roughness: 0.22,              // Glossy architectural glass with crisp ripple highlights (video matched)
+        roughness: 0.26,              // Architectural textured glass with tactile ripple facets (video matched)
         ior: 1.52,                    // Architectural silica glass refraction
-        thickness: 1.4,               // Physical refraction volume
+        thickness: 1.5,               // Physical refraction volume
         metalness: 0.02,
         specularIntensity: 1.0,
         specularColor: new THREE.Color(0xffffff),
@@ -211,7 +211,7 @@ import * as THREE from './vendor/three.module.js';
         attenuationColor: new THREE.Color(0x0a3d2e),
         attenuationDistance: 8.0,
         normalMap,
-        normalScale: new THREE.Vector2(0.88, 0.88),  // Pronounced hammered glass ripples
+        normalScale: new THREE.Vector2(0.95, 0.95),  // High-frequency hammered glass ripples
         transparent: true,
         opacity: 1.0
     });
@@ -221,24 +221,19 @@ import * as THREE from './vendor/three.module.js';
     scene.add(glassMesh);
 
     // =========================================================================
-    // 4. Dynamic Lighting: Interactive Specular Tracking PointLight + Studio Fill
+    // 4. Balanced Studio Lighting (NO CURSOR BACKLIGHT)
     // =========================================================================
-    // Moving specular highlight tracking mouse cursor in front of glass (video matched)
-    const cursorLight = new THREE.PointLight(0xf4fdf8, 2.6, 25, 1.4);
-    cursorLight.position.set(-1.5, 2.0, 3.2);
-    scene.add(cursorLight);
-
     // Ambient fill
-    const ambientLight = new THREE.AmbientLight(0x08261e, 0.65);
+    const ambientLight = new THREE.AmbientLight(0x0a2f24, 0.76);
     scene.add(ambientLight);
 
-    // Soft grazing key light catching glass ripples
-    const keyLight = new THREE.DirectionalLight(0xdcf8ee, 0.75);
-    keyLight.position.set(-3.0, 4.0, 3.5);
+    // High-angle grazing key light catching fine glass ripples evenly across surface
+    const keyLight = new THREE.DirectionalLight(0xdcf8ee, 0.72);
+    keyLight.position.set(-2.5, 4.5, 3.5);
     scene.add(keyLight);
 
-    // Warm rim light
-    const rimLight = new THREE.DirectionalLight(0xf5e6be, 0.30);
+    // Warm champagne rim light balancing depth
+    const rimLight = new THREE.DirectionalLight(0xf5e6be, 0.32);
     rimLight.position.set(3.0, -2.5, 2.5);
     scene.add(rimLight);
 
@@ -271,25 +266,8 @@ import * as THREE from './vendor/three.module.js';
     window.addEventListener('resize', handleResize, { passive: true });
 
     // =========================================================================
-    // 6. Interactive Cursor Tracking (Video Matched)
+    // 6. Hydrodynamic Scroll
     // =========================================================================
-    let targetLightX = 0;
-    let targetLightY = 1.5;
-    const mouseNDC = { x: 0, y: 0.3 };
-
-    window.addEventListener('mousemove', (e) => {
-        const ndcX = (e.clientX / window.innerWidth) * 2 - 1;
-        const ndcY = -(e.clientY / window.innerHeight) * 2 + 1;
-        mouseNDC.x = ndcX;
-        mouseNDC.y = ndcY;
-
-        if (frustumAtGlass) {
-            targetLightX = ndcX * (frustumAtGlass.width * 0.45);
-            targetLightY = ndcY * (frustumAtGlass.height * 0.45);
-        }
-    }, { passive: true });
-
-    // Hydrodynamic scroll
     let smoothScrollY = window.scrollY || 0;
     let targetScrollY = smoothScrollY;
     window.addEventListener('scroll', () => {
@@ -314,11 +292,6 @@ import * as THREE from './vendor/three.module.js';
         bgUniforms.uTime.value = elapsed;
         bgUniforms.uScroll.value = smoothScrollY;
 
-        // Smoothly lerp PointLight toward cursor position (or gentle breathing orbit if idle)
-        const lerpFactor = 1 - Math.exp(-6.0 * dt);
-        cursorLight.position.x += (targetLightX - cursorLight.position.x) * lerpFactor;
-        cursorLight.position.y += (targetLightY - cursorLight.position.y) * lerpFactor;
-
         // Gentle orbital drift for underlying botanical assets
         if (!prefersReducedMotion) {
             shapes.forEach((item) => {
@@ -341,9 +314,9 @@ import * as THREE from './vendor/three.module.js';
             hasShapes: true,
             hasRealisticIce: true,
             isSingleFrost: true,
-            hasCursorBacklight: true,
-            lightPos: { x: cursorLight.position.x, y: cursorLight.position.y },
-            mouseNDC: { x: mouseNDC.x, y: mouseNDC.y },
+            hasCursorBacklight: false, // Explicitly removed per user command
+            lightPos: null,
+            mouseNDC: null,
             elapsedTime: elapsed
         };
     }
