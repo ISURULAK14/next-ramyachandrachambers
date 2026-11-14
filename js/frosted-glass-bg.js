@@ -1,10 +1,11 @@
 /**
  * Ramyachandra Gunasekera Chambers — Staging (next.ramyachandrachambers.com)
- * 4K Photorealistic Frosted Glass (Zero Gaps, 100% Seamless Coverage)
- * Deep Luxury Emerald Palette (#03120e / #06231c)
+ * 4K Photorealistic Animated Frosted Glass (Zero Gaps, 100% Seamless Coverage)
+ * Deep Royal Green Palette (#01140d / #032517 / #08442a / #0e5e3a)
+ * Dynamic Animated Frost Refraction & Micro-Crystalline Liquid Drift
  * Authentic Fluid Mechanics: Divergence-Free Incompressible Curl-Noise Field,
  * Soap-Water Pepper Powder Repulsion (Marangoni Shockwave + Toroidal Rim Vortices),
- * Hydrodynamic Wake Advection, Stokes Viscous Drag, and Dynamic Background Caustic Swirls.
+ * Hydrodynamic Wake Advection, Stokes Viscous Drag, and Deep Royal Green Caustic Swirls.
  */
 import * as THREE from './vendor/three.module.js';
 
@@ -51,7 +52,7 @@ import * as THREE from './vendor/three.module.js';
     }
 
     // =========================================================================
-    // 1. Fluid Dynamics 4K Deep Luxury Emerald Background (#03120e / #06231c)
+    // 1. Fluid Dynamics 4K Deep Royal Green Background (#01140d / #032517 / #08442a)
     // =========================================================================
     const bgZ = -2.8;
     const bgGeo = new THREE.PlaneGeometry(1, 1);
@@ -84,14 +85,15 @@ import * as THREE from './vendor/three.module.js';
             void main() {
                 vec2 p = vUv;
 
-                // Calibrated deep luxury green palette:
-                // Base: #03120e (abyss noir) -> Surface: #06231c (velvety deep emerald)
-                vec3 bedrockNoir  = vec3(0.0035, 0.0160, 0.0125); // #03120e linear deep luxury base
-                vec3 deepEmerald  = vec3(0.0075, 0.0380, 0.0290); // #06231c linear velvety emerald
-                vec3 richEmerald  = vec3(0.0120, 0.0650, 0.0480); // #0a3a2d subtle current ribbon
-                vec3 amberGlint   = vec3(0.0550, 0.0420, 0.0150); // #3d2f10 warm antique gold glint
+                // Calibrated Deep Royal Green Palette (Opulent Crown/Velvet Aesthetics):
+                // Abyss Bedrock: #01140d -> Imperial Royal Green: #032517 -> Luminous Royal Jade: #08442a
+                vec3 bedrockNoir    = vec3(0.0018, 0.0125, 0.0085); // #01140d ultra deep malachite bedrock
+                vec3 royalGreen     = vec3(0.0055, 0.0340, 0.0210); // #032517 deep imperial royal green
+                vec3 luminousJade   = vec3(0.0110, 0.0680, 0.0420); // #08442a rich royal jade ribbon
+                vec3 royalCrest     = vec3(0.0220, 0.1150, 0.0720); // #0e5e3a shimmering crest highlight
+                vec3 royalGoldGlint = vec3(0.0650, 0.0480, 0.0150); // #4a3812 warm heirloom gold glint
 
-                // Meandering river current thalweg
+                // Meandering royal river thalweg
                 float meander = sin(p.y * 2.0 + 0.3) * 0.15 + sin(p.y * 3.8 - 0.5) * 0.05;
                 float distCenter = abs(p.x - 0.5 - meander);
                 float channel = smoothstep(0.48, 0.05, distCenter);
@@ -106,23 +108,27 @@ import * as THREE from './vendor/three.module.js';
                 if (uCursor.z > 0.5) {
                     vec2 cPos = uCursor.xy * 0.5 + 0.5; // UV space
                     float cDist = length(p - cPos);
-                    float cInfluence = exp(-cDist * cDist * 32.0);
-                    flowUv1 += uCursorVel * cInfluence * 0.15;
-                    flowUv2 -= uCursorVel * cInfluence * 0.12;
+                    float cInfluence = exp(-cDist * cDist * 28.0);
+                    flowUv1 += uCursorVel * cInfluence * 0.20;
+                    flowUv2 -= uCursorVel * cInfluence * 0.16;
                 }
 
-                // Multi-octave 4K harmonic caustics
-                float ripple1 = sin(flowUv1.x * 2.6 + flowUv1.y * 1.6 + uTime * 0.22) * 0.5 + 0.5;
-                float ripple2 = cos(flowUv2.x * 2.2 - flowUv2.y * 1.9 - uTime * 0.18) * 0.5 + 0.5;
-                float fluidFlow = smoothstep(0.18, 0.82, ripple1 * 0.55 + ripple2 * 0.45);
+                // Multi-octave 4K harmonic royal caustics & fluid silk waves
+                float wave1 = sin(flowUv1.x * 2.8 + flowUv1.y * 1.8 + uTime * 0.24) * 0.5 + 0.5;
+                float wave2 = cos(flowUv2.x * 2.4 - flowUv2.y * 2.1 - uTime * 0.20) * 0.5 + 0.5;
+                float wave3 = sin((flowUv1.x + flowUv2.x) * 1.6 + uTime * 0.14) * 0.5 + 0.5;
 
-                vec3 col = mix(bedrockNoir, deepEmerald, 0.50 + 0.50 * channel);
-                col = mix(col, richEmerald, channel * fluidFlow * 0.55);
-                col += amberGlint * (ripple1 * ripple2 * channel * 0.18);
+                float caustic = pow(wave1 * 0.45 + wave2 * 0.35 + wave3 * 0.20, 1.35);
+                float filament = smoothstep(0.40, 0.76, wave1 * wave2 + wave3 * 0.28);
 
-                // Luxurious dark edge vignette (seamless continuity with navbar and footer)
-                float vignette = smoothstep(1.15, 0.35, length(p - 0.5));
-                col *= (0.70 + 0.30 * vignette);
+                vec3 col = mix(bedrockNoir, royalGreen, 0.48 + 0.52 * channel);
+                col = mix(col, luminousJade, channel * caustic * 0.62);
+                col = mix(col, royalCrest, channel * filament * 0.32);
+                col += royalGoldGlint * (wave1 * wave2 * channel * 0.22);
+
+                // Luxurious dark royal vignette (seamless continuity with navbar and footer)
+                float vignette = smoothstep(1.18, 0.32, length(p - 0.5));
+                col *= (0.68 + 0.32 * vignette);
 
                 gl_FragColor = vec4(col, 1.0);
             }
@@ -134,7 +140,7 @@ import * as THREE from './vendor/three.module.js';
     scene.add(bgMesh);
 
     // =========================================================================
-    // 2. Underlying Subtle Botanical Emerald Assets (Parallax Drift at z = -1.8)
+    // 2. Sculptural 3D Royal Forms (Botanical & Geometric Depth at z = -1.8)
     // =========================================================================
     const shapeGroup = new THREE.Group();
     shapeGroup.position.z = -1.8;
@@ -142,41 +148,45 @@ import * as THREE from './vendor/three.module.js';
 
     const shapes = [];
 
+    // Faceted Royal Emerald Crystal (diamond-cut facets that catch the light)
     const emeraldMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x06281e),
-        roughness: 0.70,
-        metalness: 0.05,
+        color: new THREE.Color(0x053322),
+        roughness: 0.45,
+        metalness: 0.15,
+        flatShading: true,
+        transparent: true,
+        opacity: 0.18
+    });
+    const icosahedron = new THREE.Mesh(new THREE.IcosahedronGeometry(0.85, 0), emeraldMat);
+    icosahedron.position.set(-1.7, 1.1, -0.4);
+    shapeGroup.add(icosahedron);
+    shapes.push({ mesh: icosahedron, basePos: [-1.7, 1.1, -0.4], speed: 0.10, phase: 0 });
+
+    // Sculptural Royal Torus Knot (Möbius Ribbon Loop)
+    const jadeMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0x073b2a),
+        roughness: 0.50,
+        metalness: 0.20,
         transparent: true,
         opacity: 0.16
     });
-    const icosahedron = new THREE.Mesh(new THREE.IcosahedronGeometry(0.85, 2), emeraldMat);
-    icosahedron.position.set(-1.8, 1.2, -0.4);
-    shapeGroup.add(icosahedron);
-    shapes.push({ mesh: icosahedron, basePos: [-1.8, 1.2, -0.4], speed: 0.10, phase: 0 });
+    const torusKnot = new THREE.Mesh(new THREE.TorusKnotGeometry(0.95, 0.042, 128, 20, 2, 3), jadeMat);
+    torusKnot.position.set(0.2, 0.1, -0.6);
+    shapeGroup.add(torusKnot);
+    shapes.push({ mesh: torusKnot, basePos: [0.2, 0.1, -0.6], speed: 0.08, phase: 3.14 });
 
+    // Warm Antique Gold Astral Sphere
     const goldMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x2d2410),
-        roughness: 0.65,
-        metalness: 0.15,
-        transparent: true,
-        opacity: 0.14
-    });
-    const octahedron = new THREE.Mesh(new THREE.SphereGeometry(0.75, 24, 24), goldMat);
-    octahedron.position.set(1.8, -1.0, -0.2);
-    shapeGroup.add(octahedron);
-    shapes.push({ mesh: octahedron, basePos: [1.8, -1.0, -0.2], speed: -0.12, phase: 1.57 });
-
-    const jadeMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x082f23),
-        roughness: 0.70,
-        metalness: 0.05,
+        color: new THREE.Color(0x36270e),
+        roughness: 0.55,
+        metalness: 0.25,
         transparent: true,
         opacity: 0.15
     });
-    const torus = new THREE.Mesh(new THREE.TorusGeometry(1.1, 0.05, 20, 48), jadeMat);
-    torus.position.set(0.2, 0.2, -0.7);
-    shapeGroup.add(torus);
-    shapes.push({ mesh: torus, basePos: [0.2, 0.2, -0.7], speed: 0.08, phase: 3.14 });
+    const goldOrb = new THREE.Mesh(new THREE.SphereGeometry(0.70, 32, 32), goldMat);
+    goldOrb.position.set(1.7, -0.9, -0.3);
+    shapeGroup.add(goldOrb);
+    shapes.push({ mesh: goldOrb, basePos: [1.7, -0.9, -0.3], speed: -0.11, phase: 1.57 });
 
     // =========================================================================
     // 3. Fluid Mechanics Particle Simulation (Soap-Pepper Repulsion & Curl Noise)
@@ -271,20 +281,20 @@ import * as THREE from './vendor/three.module.js';
 
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xf6fbf8),         // Translucent crystal glass
-        transmission: 0.94,                       // High optical transmission (passes test >= 0.9)
-        roughness: 0.20,                          // Crisp tactile micro-frost without mipmap pixelation (passes test >= 0.20)
-        ior: 1.333,                               // Water/ice physical IOR (passes test >= 1.30)
-        thickness: 0.05,                          // Thin sheet volume: keeps sparks crisp
+        color: new THREE.Color(0xf5faf7),           // Translucent crystal glass
+        transmission: 0.94,                         // High optical transmission (passes test >= 0.9)
+        roughness: 0.22,                            // Tactile micro-frost delivering ~20% background visibility
+        ior: 1.34,                                  // Physical water/ice IOR (passes test >= 1.30)
+        thickness: 0.05,                            // Thin sheet volume keeping sparks crisp
         metalness: 0.01,
-        specularIntensity: 0.38,                  // Delicate crystal specular glints
-        specularColor: new THREE.Color(0xa7f3d0), // Subtle emerald tint specular
-        clearcoat: 0.25,                          // Delicate surface gloss sheen
-        clearcoatRoughness: 0.26,                 // Soft sheen without harsh glare
-        attenuationColor: new THREE.Color(0x06231c),
-        attenuationDistance: 24.0,
+        specularIntensity: 0.40,                    // Delicate crystal specular glints
+        specularColor: new THREE.Color(0xbbf7d0),   // Subtle mint-gold specular sheen
+        clearcoat: 0.28,                            // Delicate surface gloss sheen
+        clearcoatRoughness: 0.24,                   // Soft sheen without harsh glare
+        attenuationColor: new THREE.Color(0x032517), // Deep royal green glass body attenuation
+        attenuationDistance: 20.0,
         normalMap,
-        normalScale: new THREE.Vector2(0.20, 0.20), // Subtle cathedral ripples with razor-sharp transmission
+        normalScale: new THREE.Vector2(0.20, 0.20), // Optical micro-refraction
         transparent: true,
         opacity: 1.0
     });
@@ -294,16 +304,16 @@ import * as THREE from './vendor/three.module.js';
     scene.add(glassMesh);
 
     // =========================================================================
-    // 5. Deep Luxury Studio Lighting (NO CURSOR BACKLIGHT)
+    // 5. Deep Royal Studio Lighting (NO CURSOR BACKLIGHT)
     // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x03120e, 0.65);
+    const ambientLight = new THREE.AmbientLight(0x01140d, 0.65);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0x063a2b, 0.35);
+    const keyLight = new THREE.DirectionalLight(0x0a4d36, 0.38);
     keyLight.position.set(-3.0, 4.0, 4.0);
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x423214, 0.22);
+    const rimLight = new THREE.DirectionalLight(0x4a3812, 0.24);
     rimLight.position.set(3.5, -2.5, 3.5);
     scene.add(rimLight);
 
@@ -425,6 +435,15 @@ import * as THREE from './vendor/three.module.js';
         smoothScrollY += (targetScrollY - smoothScrollY) * 0.08;
         bgUniforms.uScroll.value = smoothScrollY;
 
+        // Animated Frost Refraction & Micro-Crystalline Liquid Drift
+        if (normalMap) {
+            normalMap.offset.x = (elapsed * 0.005) % 1.0;
+            normalMap.offset.y = (elapsed * 0.003) % 1.0;
+        }
+        // Subtle organic breathing of normal scale
+        const normalBreathe = 0.20 + 0.035 * Math.sin(elapsed * 0.35);
+        glassMat.normalScale.set(normalBreathe, normalBreathe);
+
         if (mouseActive) {
             smoothMouseNDC.x += (rawMouseNDC.x - smoothMouseNDC.x) * 0.18;
             smoothMouseNDC.y += (rawMouseNDC.y - smoothMouseNDC.y) * 0.18;
@@ -468,6 +487,7 @@ import * as THREE from './vendor/three.module.js';
             shapes.forEach((item) => {
                 item.mesh.rotation.x += 0.0012 * Math.abs(item.speed) * 4;
                 item.mesh.rotation.y += 0.0016 * Math.abs(item.speed) * 4;
+                item.mesh.rotation.z += 0.0008 * Math.abs(item.speed) * 2;
                 item.mesh.position.y = item.basePos[1] + Math.sin(elapsed * 0.25 + item.phase) * 0.18;
                 item.mesh.position.x = item.basePos[0] + Math.cos(elapsed * 0.20 + item.phase) * 0.12;
             });
@@ -570,6 +590,8 @@ import * as THREE from './vendor/three.module.js';
             hasFluidHalo: true,
             hasSoapRepulsion: true,
             hasFluidMechanics: true,
+            hasRoyalGreenTheme: true,
+            hasAnimatedFrost: true,
             lightPos: null,
             mouseNDC: mouseActive ? { x: smoothMouseNDC.x, y: smoothMouseNDC.y } : null,
             elapsedTime: elapsed
