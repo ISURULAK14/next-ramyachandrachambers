@@ -199,35 +199,30 @@ import * as THREE from './vendor/three.module.js';
         pixieColors[i * 3 + 1] = col.g;
         pixieColors[i * 3 + 2] = col.b;
 
-        // "lights must be smallll": tiny radii 0.025 to 0.055 units
-        let radius;
-        if (rand < 0.70) {
-            radius = 0.025 + Math.random() * 0.020; // 0.025 to 0.045: tiny sparkling dust motes
-        } else {
-            radius = 0.045 + Math.random() * 0.020; // 0.045 to 0.065: slightly brighter firefly motes
-        }
+        // "lights must be small": tiny pinpoint radii 0.007 to 0.016 units
+        const radius = 0.007 + Math.random() * 0.009;
 
-        // Active omnidirectional movement all over the screen:
+        // Slow, gentle, buoyant movement all over the screen:
         // Position scattered uniformly across the entire screen bounds
         const startX = (Math.random() - 0.5) * boundX * 2;
         const startY = (Math.random() - 0.5) * boundY * 2;
-        const startZ = -2.3 + Math.random() * 2.0;
+        const startZ = -2.1 + Math.random() * 1.8;
 
-        // Visibly active velocity vectors
+        // Slow drifting velocity vectors (0.05 to 0.14 units/sec)
         const angle = Math.random() * Math.PI * 2;
-        const speed = 0.45 + Math.random() * 0.85; // visibly moving each second
+        const speed = 0.05 + Math.random() * 0.09;
 
         const p = {
             x: startX,
             y: startY,
             z: startZ,
-            vx: Math.cos(angle) * speed,
-            vy: (Math.sin(angle) * 0.4 + 0.6) * speed, // upward-biased natural buoyant drift
+            vx: Math.cos(angle) * speed * 0.7,
+            vy: (Math.sin(angle) * 0.25 + 0.75) * speed, // slow upward buoyant drift
             baseRadius: radius,
-            swayFreq: 1.5 + Math.random() * 2.5,
-            swayAmp: 0.15 + Math.random() * 0.25,
+            swayFreq: 0.45 + Math.random() * 0.65,
+            swayAmp: 0.04 + Math.random() * 0.06,
             swayPhase: Math.random() * Math.PI * 2,
-            twinkleSpeed: 2.5 + Math.random() * 4.0,
+            twinkleSpeed: 1.8 + Math.random() * 2.6,
             twinklePhase: Math.random() * Math.PI * 2
         };
         pixieData.push(p);
@@ -249,24 +244,24 @@ import * as THREE from './vendor/three.module.js';
     const normalMap = textureLoader.load('assets/frosted-normal.png');
     normalMap.wrapS = THREE.RepeatWrapping;
     normalMap.wrapT = THREE.RepeatWrapping;
-    normalMap.repeat.set(6.0, 6.0);
+    normalMap.repeat.set(5.0, 5.0);
 
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
         color: new THREE.Color(0xf6fcf9),
         transmission: 0.95,           // Reveals floating pixie lights with optical clarity
-        roughness: 0.20,              // Tactile frosted glass texture with crystalline micro-facets
-        ior: 1.52,                    // Architectural silica glass
-        thickness: 0.05,              // Thin sheet glass: crisp refraction without border ray clamping
+        roughness: 0.22,              // Tactile frosted glass texture with rounded cathedral ripples
+        ior: 1.50,                    // Architectural silica glass
+        thickness: 0.06,              // Thin sheet glass: crisp refraction without border ray clamping
         metalness: 0.02,
-        specularIntensity: 1.2,       // Crisp crystal specular glints
+        specularIntensity: 0.85,      // Even crystal specular glints across ripples
         specularColor: new THREE.Color(0xffffff),
-        clearcoat: 1.0,               // Polished ice surface gloss
-        clearcoatRoughness: 0.08,     // Sparkling specular glints catching lights
+        clearcoat: 0.60,              // Polished glass surface gloss
+        clearcoatRoughness: 0.30,     // Soft, broad specular sheen catching lights without hotspot
         attenuationColor: new THREE.Color(0x063a2c),
         attenuationDistance: 10.0,
         normalMap,
-        normalScale: new THREE.Vector2(0.45, 0.45),  // Tactile hammered ripples matching video
+        normalScale: new THREE.Vector2(0.50, 0.50),  // Rounded hammered ripples matching video
         transparent: true,
         opacity: 1.0
     });
@@ -278,15 +273,19 @@ import * as THREE from './vendor/three.module.js';
     // =========================================================================
     // 5. Studio Lighting (NO CURSOR BACKLIGHT)
     // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x082b21, 0.85);
+    const ambientLight = new THREE.AmbientLight(0x0e3b2e, 1.10);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xe2fbf0, 0.85);
-    keyLight.position.set(-3.0, 5.0, 4.0);
+    const keyLight = new THREE.DirectionalLight(0xe8faf3, 0.65);
+    keyLight.position.set(-3.0, 4.0, 5.0);
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0xfae8b4, 0.45);
-    rimLight.position.set(3.5, -3.0, 3.0);
+    const frontLight = new THREE.DirectionalLight(0xd1fae5, 0.40);
+    frontLight.position.set(2.0, 3.5, 6.0);
+    scene.add(frontLight);
+
+    const rimLight = new THREE.DirectionalLight(0xfae8b4, 0.35);
+    rimLight.position.set(3.5, -2.5, 3.5);
     scene.add(rimLight);
 
     // =========================================================================
@@ -311,7 +310,7 @@ import * as THREE from './vendor/three.module.js';
         glassMesh.scale.set(frustumAtGlass.width * 1.05, frustumAtGlass.height * 1.05, 1);
 
         const aspect = w / h;
-        normalMap.repeat.set(5.5 * aspect, 5.5);
+        normalMap.repeat.set(4.0 * aspect, 4.0);
     }
     handleResize();
     window.addEventListener('resize', handleResize, { passive: true });
@@ -384,9 +383,9 @@ import * as THREE from './vendor/three.module.js';
                 const finalY = p.y + swayY + mouseY * depthParallax - (smoothScrollY * 0.0003);
                 const finalZ = p.z;
 
-                // Rapid sparkling twinkle
+                // Gentle sparkling twinkle
                 const twinkle = 0.5 + 0.5 * Math.sin(elapsed * p.twinkleSpeed + p.twinklePhase);
-                const scale = p.baseRadius * (0.60 + 0.75 * twinkle);
+                const scale = p.baseRadius * (0.75 + 0.50 * twinkle);
 
                 dummy.position.set(finalX, finalY, finalZ);
                 dummy.scale.set(scale, scale, scale);
