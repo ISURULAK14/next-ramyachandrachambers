@@ -199,13 +199,13 @@
                 vec2 uv = vUv;
                 vec2 p = (uv - 0.5) * vec2(uResolution.x / uResolution.y, 1.0);
 
-                // Autonomous viscous flow time rate (smooth 60 FPS while idle)
+                // Autonomous viscous flow time rate (smooth 60 FPS while idle across whole screen)
                 float t = uTime * 0.10 + uScroll * 0.00014;
 
-                // River-like glacial current advection: steady vertical drift with gentle meanders
+                // Full-screen river-like glacial current advection: active multi-directional waves across all coordinates
                 vec2 flow = vec2(
-                    sin(p.y * 1.8 + t * 0.7) * 0.14 + cos(p.x * 1.4 - t * 0.45) * 0.07,
-                    -t * 0.32 + cos(p.y * 1.5 + t * 0.5) * 0.09
+                    sin(p.y * 2.2 + t * 0.65) * 0.12 + cos(p.x * 1.8 - t * 0.45) * 0.08 + sin((p.x + p.y) * 1.5 + t * 0.35) * 0.06,
+                    -t * 0.28 + cos(p.y * 1.6 + t * 0.50) * 0.10 + sin(p.x * 2.0 + t * 0.40) * 0.07
                 );
                 vec2 flowP = p * 1.35 + flow;
 
@@ -213,34 +213,40 @@
                 if (uCursor.z > 0.5) {
                     vec2 cPos = uCursor.xy * 0.5 * vec2(uResolution.x / uResolution.y, 1.0);
                     float cDist = length(p - cPos);
-                    float cInfluence = exp(-cDist * cDist * 22.0);
-                    flowP += uCursorVel * cInfluence * 0.16;
+                    float cInfluence = exp(-cDist * cDist * 18.0);
+                    flowP += uCursorVel * cInfluence * 0.18;
                 }
 
                 // Thick ice internal refraction domain warping
                 vec2 warp;
-                warp.x = fbm(flowP * 2.0 + vec2(t * 0.22, -t * 0.18));
-                warp.y = fbm(flowP * 2.0 + vec2(-t * 0.18, t * 0.26) + 3.14159);
-                vec2 warpedP = flowP + warp * 0.28;
+                warp.x = fbm(flowP * 2.0 + vec2(t * 0.20, -t * 0.16));
+                warp.y = fbm(flowP * 2.0 + vec2(-t * 0.16, t * 0.22) + 3.14159);
+                vec2 warpedP = flowP + warp * 0.30;
 
-                // Procedural Deep Jungle Velvet Moss Synthesis:
+                // Procedural Deep Jungle Velvet Moss Synthesis (Active across full screen):
                 // 1. Spongy cushion clusters (F1 Voronoi + FBM macro strata)
-                vec2 vMacro = voronoi2(warpedP * 3.4 + warp * 0.45);
-                float spongyCushions = smoothstep(0.86, 0.12, vMacro.x);
+                vec2 vMacro = voronoi2(warpedP * 3.2 + warp * 0.45);
+                float spongyCushions = smoothstep(0.85, 0.12, vMacro.x);
                 float macroMoss = fbm(warpedP * 1.5 + vec2(t * 0.06, -t * 0.10));
 
                 // 2. Botanical vein networks (F2 - F1 boundary ridges)
                 float botanicalVeins = smoothstep(0.04, 0.24, vMacro.y - vMacro.x);
 
                 // 3. Organic lichen filaments & micro-spores
-                vec2 vMicro = voronoi2(warpedP * 7.5 + warp * 0.7);
+                vec2 vMicro = voronoi2(warpedP * 7.5 + warp * 0.70);
                 float microMoss = vMicro.x;
-                float lichenFilaments = fbm(warpedP * 16.0 + warp * 1.1);
+                float lichenFilaments = fbm(warpedP * 16.0 + warp * 1.10);
+
+                // Dynamic botanical color splashes:
+                // Organic pigment blooms drifting through the glacial current
+                float splashBloom = fbm(warpedP * 1.8 + vec2(-t * 0.12, t * 0.14));
+                float splashEddy = sin((warpedP.x * 1.6 + warpedP.y * 1.4) * 2.2 + t * 0.55) * 0.5 + 0.5;
+                float splashLichen = fbm(warpedP * 2.8 + vec2(t * 0.09, t * 0.16));
 
                 // Thick Glacial Ice Sheet Optics:
-                // Crystalline stress fractures flowing through thick ice
-                float iceVein1 = abs(sin((warpedP.x * 2.0 + warpedP.y * 1.5) * 2.3 + t * 0.50));
-                float iceVein2 = abs(cos((warpedP.x * 1.6 - warpedP.y * 2.2) * 2.0 - t * 0.40));
+                // Realistic crystalline stress fractures flowing through thick ice
+                float iceVein1 = abs(sin((warpedP.x * 2.2 + warpedP.y * 1.6) * 2.4 + t * 0.48));
+                float iceVein2 = abs(cos((warpedP.x * 1.8 - warpedP.y * 2.3) * 2.1 - t * 0.38));
                 float iceStress = smoothstep(0.92, 0.985, 1.0 - (iceVein1 * 0.55 + iceVein2 * 0.45));
 
                 // Prismatic dispersion caustics with dynamic chromatic separation
@@ -255,35 +261,34 @@
                 float godRay2 = pow(sin(rayAngle * 6.2 - t * 0.60) * 0.5 + 0.5, 2.8);
                 float godRays = godRay1 * 0.65 + godRay2 * 0.45;
 
-                // Calibrated Botanical Moss Palette:
-                vec3 colBedrockNoir     = vec3(1.0 / 255.0, 21.0 / 255.0, 12.0 / 255.0);   // #01150c bedrock noir
-                vec3 colVelvetMoss      = vec3(3.0 / 255.0, 46.0 / 255.0, 29.0 / 255.0);   // #032e1d dense velvet moss
-                vec3 colTropicalEmerald = vec3(6.0 / 255.0, 72.0 / 255.0, 46.0 / 255.0);   // #06482e tropical emerald
-                vec3 colLuminousMoss    = vec3(12.0 / 255.0, 106.0 / 255.0, 67.0 / 255.0); // #0c6a43 luminous moss cushions
-                vec3 colSunlitSpore     = vec3(20.0 / 255.0, 149.0 / 255.0, 95.0 / 255.0); // #14955f sunlit spore crests
-                vec3 colGoldLichen      = vec3(107.0 / 255.0, 86.0 / 255.0, 28.0 / 255.0); // #6b561c golden lichen filaments
-                vec3 colIceRefract      = vec3(0.14, 0.56, 0.42);                          // Crystalline ice core
+                // Calibrated Botanical Moss & Ice Palette:
+                vec3 colBedrockNoir     = vec3(2.0 / 255.0, 24.0 / 255.0, 16.0 / 255.0);   // #021810 deep uniform emerald noir
+                vec3 colVelvetMoss      = vec3(4.0 / 255.0, 52.0 / 255.0, 34.0 / 255.0);   // #043422 uniform velvet moss
+                vec3 colTropicalEmerald = vec3(7.0 / 255.0, 82.0 / 255.0, 53.0 / 255.0);   // #075235 rich emerald splash
+                vec3 colLuminousMoss    = vec3(14.0 / 255.0, 118.0 / 255.0, 75.0 / 255.0); // #0e764b luminous moss splash
+                vec3 colSunlitSpore     = vec3(22.0 / 255.0, 158.0 / 255.0, 102.0 / 255.0);// #169e66 sunlit spore crests
+                vec3 colGoldLichen      = vec3(118.0 / 255.0, 94.0 / 255.0, 32.0 / 255.0); // #765e20 golden lichen splash
+                vec3 colIceSplash       = vec3(0.12, 0.58, 0.46);                          // Crystalline glacial cyan/emerald splash
 
                 // Composite flowing botanical moss layers:
-                vec3 mossColor = mix(colBedrockNoir, colVelvetMoss, smoothstep(0.08, 0.58, macroMoss));
-                mossColor = mix(mossColor, colTropicalEmerald, smoothstep(0.18, 0.70, macroMoss * 0.65 + spongyCushions * 0.35));
-                mossColor = mix(mossColor, colLuminousMoss, smoothstep(0.32, 0.82, spongyCushions * (1.0 - microMoss * 0.30)));
-                mossColor = mix(mossColor, colSunlitSpore, smoothstep(0.48, 0.90, spongyCushions * lichenFilaments));
+                vec3 mossColor = mix(colBedrockNoir, colVelvetMoss, smoothstep(0.08, 0.56, macroMoss));
+                mossColor = mix(mossColor, colTropicalEmerald, smoothstep(0.18, 0.68, macroMoss * 0.60 + spongyCushions * 0.40));
+                mossColor = mix(mossColor, colLuminousMoss, smoothstep(0.30, 0.80, spongyCushions * (1.0 - microMoss * 0.25)));
+                mossColor = mix(mossColor, colSunlitSpore, smoothstep(0.45, 0.88, spongyCushions * lichenFilaments));
 
                 // Layer botanical vein networks (depressed dark channels between cushions)
-                mossColor = mix(mossColor, colVelvetMoss * 0.75, (1.0 - botanicalVeins) * 0.40);
+                mossColor = mix(mossColor, colVelvetMoss * 0.78, (1.0 - botanicalVeins) * 0.38);
 
-                // Golden lichen filaments illuminated by light shafts
-                mossColor += colGoldLichen * (godRays * 0.40 * macroMoss + lichenFilaments * 0.25 * spongyCushions);
+                // Organic color splashes (vivid emerald blooms & golden lichen splashes across full canvas)
+                mossColor += colLuminousMoss * (splashBloom * splashEddy * 0.30);
+                mossColor += colGoldLichen * (godRays * 0.36 * macroMoss + splashLichen * 0.28 * spongyCushions);
+                mossColor += colIceSplash * (iceStress * 0.35 + smoothstep(0.75, 0.98, splashEddy) * 0.15);
 
-                // Thick ice sheet internal stress fractures & prismatic dispersion
-                mossColor += colIceRefract * (iceStress * 0.32);
-                mossColor += prismaticCaustics * 0.20;
+                // Thick ice sheet prismatic caustics
+                mossColor += prismaticCaustics * 0.22;
 
-                // Deep luxury vignette (seamless continuity with dark navbar and footer)
-                float vignette = smoothstep(1.45, 0.30, length(p));
-                mossColor *= (0.78 + 0.22 * vignette);
-
+                // UNIFORM BACKGROUND:
+                // Full edge-to-edge coverage without darkening vignette.
                 gl_FragColor = vec4(mossColor, 1.0);
             }
         `
@@ -294,7 +299,7 @@
     scene.add(bgMesh);
 
     // =========================================================================
-    // 2. Submerged 3D Sculptural Botanical & Ice Forms (Depth at z = -1.8)
+    // 2. Submerged 3D Sculptural Botanical & Ice Forms (Full Viewport Spread at z = -1.8)
     // =========================================================================
     const shapeGroup = new THREE.Group();
     shapeGroup.position.z = -1.8;
@@ -302,21 +307,21 @@
 
     const shapes = [];
 
-    // Faceted Botanical Emerald Crystal (diamond-cut facets catching light through ice)
+    // Form 1: Left Flank - Faceted Botanical Emerald Crystal
     const emeraldMat = new THREE.MeshStandardMaterial({
         color: new THREE.Color(0x06482e),
         roughness: 0.45,
         metalness: 0.16,
         flatShading: true,
         transparent: true,
-        opacity: 0.25
+        opacity: 0.24
     });
     const icosahedron = new THREE.Mesh(new THREE.IcosahedronGeometry(0.85, 0), emeraldMat);
-    icosahedron.position.set(-1.7, 1.1, -0.4);
+    icosahedron.position.set(-2.2, 0.9, -0.4);
     shapeGroup.add(icosahedron);
-    shapes.push({ mesh: icosahedron, basePos: [-1.7, 1.1, -0.4], speedX: 0.08, speedY: 0.11, phase: 0 });
+    shapes.push({ mesh: icosahedron, basePos: [-2.2, 0.9, -0.4], speedX: 0.08, speedY: 0.11, phase: 0 });
 
-    // Sculptural Glacial Ice Ribbon (Möbius loop twisting in the current)
+    // Form 2: Mid-Left - Sculptural Glacial Ice Ribbon (Möbius loop)
     const jadeIceMat = new THREE.MeshStandardMaterial({
         color: new THREE.Color(0x043824),
         roughness: 0.38,
@@ -324,12 +329,26 @@
         transparent: true,
         opacity: 0.22
     });
-    const torusKnot = new THREE.Mesh(new THREE.TorusKnotGeometry(0.95, 0.042, 128, 20, 2, 3), jadeIceMat);
-    torusKnot.position.set(0.2, 0.1, -0.6);
+    const torusKnot = new THREE.Mesh(new THREE.TorusKnotGeometry(0.85, 0.040, 128, 20, 2, 3), jadeIceMat);
+    torusKnot.position.set(-0.9, -0.6, -0.5);
     shapeGroup.add(torusKnot);
-    shapes.push({ mesh: torusKnot, basePos: [0.2, 0.1, -0.6], speedX: 0.06, speedY: 0.09, phase: 3.14 });
+    shapes.push({ mesh: torusKnot, basePos: [-0.9, -0.6, -0.5], speedX: 0.06, speedY: 0.09, phase: 3.14 });
 
-    // Warm Golden Lichen Astral Sphere
+    // Form 3: Center Drifting - Glacial Ice Octahedron Prism
+    const icePrismMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0x0a583a),
+        roughness: 0.35,
+        metalness: 0.20,
+        flatShading: true,
+        transparent: true,
+        opacity: 0.22
+    });
+    const octahedron = new THREE.Mesh(new THREE.OctahedronGeometry(0.75, 0), icePrismMat);
+    octahedron.position.set(0.1, 0.3, -0.6);
+    shapeGroup.add(octahedron);
+    shapes.push({ mesh: octahedron, basePos: [0.1, 0.3, -0.6], speedX: -0.07, speedY: 0.08, phase: 1.0 });
+
+    // Form 4: Mid-Right - Warm Golden Lichen Astral Sphere
     const goldMat = new THREE.MeshStandardMaterial({
         color: new THREE.Color(0x4a3812),
         roughness: 0.48,
@@ -338,9 +357,23 @@
         opacity: 0.20
     });
     const goldOrb = new THREE.Mesh(new THREE.SphereGeometry(0.70, 32, 32), goldMat);
-    goldOrb.position.set(1.7, -0.9, -0.3);
+    goldOrb.position.set(1.2, -0.7, -0.4);
     shapeGroup.add(goldOrb);
-    shapes.push({ mesh: goldOrb, basePos: [1.7, -0.9, -0.3], speedX: -0.07, speedY: 0.08, phase: 1.57 });
+    shapes.push({ mesh: goldOrb, basePos: [1.2, -0.7, -0.4], speedX: -0.07, speedY: 0.08, phase: 1.57 });
+
+    // Form 5: Right Flank - Botanical Velvet Dodecahedron Core
+    const velvetMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0x074e32),
+        roughness: 0.42,
+        metalness: 0.18,
+        flatShading: true,
+        transparent: true,
+        opacity: 0.24
+    });
+    const dodecahedron = new THREE.Mesh(new THREE.DodecahedronGeometry(0.80, 0), velvetMat);
+    dodecahedron.position.set(2.2, 0.8, -0.5);
+    shapeGroup.add(dodecahedron);
+    shapes.push({ mesh: dodecahedron, basePos: [2.2, 0.8, -0.5], speedX: 0.09, speedY: -0.07, phase: 2.4 });
 
     // =========================================================================
     // 3. ZERO PIXIE LIGHTS: User explicitly requested: "no pixie lights"
