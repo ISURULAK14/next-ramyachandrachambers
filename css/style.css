@@ -204,7 +204,7 @@ section{padding:3.5rem 1.25rem 2.25rem}.sr-only{position:absolute;width:1px;heig
    ========================================================================== */
 .legal-modal{position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;padding:1.5rem;visibility:hidden;opacity:0;pointer-events:none;transition:opacity 0.35s ease}
 .legal-modal:not([hidden]){visibility:visible;opacity:1;pointer-events:auto}
-.legal-modal-backdrop{position:absolute;inset:0;background:rgba(4,12,20,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.legal-modal-backdrop{position:fixed;inset:0;background:rgba(4,12,20,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .legal-modal-dialog{position:relative;width:min(100%,620px);max-height:85vh;overflow-y:auto;background:rgba(10,26,42,0.95);border:1px solid rgba(214,183,124,0.45);border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,0.7),inset 0 1px 0 rgba(255,255,255,0.15);padding:2.2rem;z-index:2}
 .legal-modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid rgba(214,183,124,0.25)}
 .legal-modal-header h3{font-size:1.6rem;color:#ffffff;margin:0}
@@ -2070,6 +2070,8 @@ header.site-header {
   font-weight: 700 !important;
 }
 .legal-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
   z-index: 100005 !important;
 }
 .rg-preloader {

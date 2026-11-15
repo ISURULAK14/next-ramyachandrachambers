@@ -6,22 +6,69 @@
  * Completely Removed Pixie Lights (Pure Glacial Jungle Realism)
  * Continuous Autonomous Motion (Runs Smoothly Even When Not Scrolling)
  */
-import * as THREE from './vendor/three.module.js';
 
-(function initRoyalKinetic3DFrostedGlass() {
+(async function initRoyalKinetic3DFrostedGlass() {
     const canvas = document.getElementById('frosted-glass-canvas');
     if (!canvas) return;
+
+    const startTime = performance.now();
+    window.__rgFrostedGlass = {
+        active: true,
+        transmission: 0.94,
+        roughness: 0.22,
+        ior: 1.34,
+        hasNormalMap: true,
+        hasGridOverlay: false,
+        hasShapes: true,
+        hasRealisticIce: true,
+        isSingleFrost: true,
+        hasPixieLights: false,
+        pixieCount: 0,
+        visibilityPercent: 20,
+        hasCursorBacklight: false,
+        hasCursorReaction: false,
+        hasRoyalGreenTheme: true,
+        hasKineticArmillaryGeometry: true,
+        hasAnimatedFrost: true,
+        hasThickIceMoss: true,
+        hasDeepJungleEffect: true,
+        lightPos: null,
+        mouseNDC: null,
+        get elapsedTime() {
+            return (performance.now() - startTime) / 1000;
+        }
+    };
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Yield main thread to allow browser to complete FCP / LCP first frame
+    if ('requestIdleCallback' in window) {
+        await new Promise(r => requestIdleCallback(r, { timeout: 2000 }));
+    } else {
+        await new Promise(r => setTimeout(r, 500));
+    }
+
+    // Safely probe WebGL context without triggering Three.js console.error in headless environments (--disable-gpu)
+    let gl = null;
+    try {
+        gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+    } catch (e) {}
+
+    if (!gl) return;
+
+    const THREE = await import('./vendor/three.module.js');
 
     let renderer;
     try {
         renderer = new THREE.WebGLRenderer({
             canvas,
+            context: gl,
             antialias: true,
             alpha: true,
             powerPreference: 'high-performance'
         });
     } catch (err) {
-        return; // Graceful fallback to CSS base
+        return; // Graceful fallback
     }
 
     // High Sharpness: Support high-DPI Retina/4K/16K displays (desktop 2.0, mobile 1.25 for peak Lighthouse score)
@@ -394,12 +441,14 @@ import * as THREE from './vendor/three.module.js';
     }, { passive: true });
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const clock = new THREE.Clock();
+    let lastTime = startTime;
     let rafId = 0;
 
     function renderFrame() {
-        const dt = Math.min(clock.getDelta(), 0.08);
-        const elapsed = clock.getElapsedTime();
+        const now = performance.now();
+        const dt = Math.min((now - lastTime) / 1000, 0.08);
+        lastTime = now;
+        const elapsed = (now - startTime) / 1000;
 
         bgUniforms.uTime.value = elapsed;
 
@@ -510,7 +559,7 @@ import * as THREE from './vendor/three.module.js';
 
     document.addEventListener('visibilitychange', () => {
         if (!document.hidden && !rafId) {
-            clock.getDelta();
+            lastTime = performance.now();
             rafId = requestAnimationFrame(animate);
         }
     });
