@@ -17,15 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const sections = [...document.querySelectorAll('section[id]')];
     const navEl = document.querySelector('nav.site-nav') || document.querySelector('nav');
     let cachedNavHeight = 70;
-    let sectionOffsets = null;
-    const getMeasurements = () => {
-        if (!sectionOffsets) {
-            if (navEl) cachedNavHeight = navEl.offsetHeight || 70;
-            sectionOffsets = sections.map(sec => ({ id: sec.id, top: sec.offsetTop }));
-        }
-        return sectionOffsets;
+    let sectionOffsets = [];
+    const updateMeasurements = () => {
+        if (navEl) cachedNavHeight = navEl.offsetHeight || 70;
+        sectionOffsets = sections.map(sec => ({ id: sec.id, top: sec.offsetTop }));
     };
-    window.addEventListener('resize', () => { sectionOffsets = null; }, { passive: true });
+    if ('requestIdleCallback' in window) { requestIdleCallback(updateMeasurements); } else { setTimeout(updateMeasurements, 200); }
+    window.addEventListener('resize', updateMeasurements, { passive: true });
+    window.addEventListener('load', () => setTimeout(updateMeasurements, 400), { passive: true });
 
     let activeNavId = '';
     function setActiveNav(targetId) {
@@ -85,13 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     isScrolledCached = isScrolled;
                     navEl.classList.toggle('scrolled', isScrolled);
                 }
-                const offsets = getMeasurements();
-                if (offsets.length) {
+                if (sectionOffsets.length) {
                     const marker = scrollY + (cachedNavHeight || 70) + 100;
-                    let current = offsets[0].id;
-                    for (let i = 0; i < offsets.length; i++) {
-                        if (marker >= offsets[i].top) {
-                            current = offsets[i].id;
+                    let current = sectionOffsets[0].id;
+                    for (let i = 0; i < sectionOffsets.length; i++) {
+                        if (marker >= sectionOffsets[i].top) {
+                            current = sectionOffsets[i].id;
                         }
                     }
                     setActiveNav(current);
@@ -186,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (!isRunning) {
                             if (!hasInitialDeferredRun) {
                                 hasInitialDeferredRun = true;
-                                setTimeout(runCountCycle, 2800);
+                                setTimeout(runCountCycle, 1500);
                             } else {
                                 runCountCycle();
                             }
@@ -198,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, { threshold: 0.05, rootMargin: '50px' });
             statsObserver.observe(statsBanner);
         } else {
-            setTimeout(runCountCycle, 2800);
+            setTimeout(runCountCycle, 1500);
         }
     }
 
@@ -564,24 +562,119 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 9. Stardust Ambient Canvas (Hero Cosmos - Retired per user request to remove pixie/stardust lights)
+    // 9. Stardust Ambient Canvas (Hero Cosmos)
     const canvas = document.getElementById('ambient-cosmos-canvas');
-    if (canvas) {
-        canvas.style.display = 'none';
+    if (canvas && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const ctx = canvas.getContext('2d', { alpha: true });
+        if (ctx) {
+            let width = 0, height = 0;
+            let particles = [];
+            let animId = 0;
+            let mouseX = -1000, mouseY = -1000;
+            const isMobile = window.innerWidth <= 768;
+            const particleCount = isMobile ? 36 : 48;
+
+            const resize = () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            };
+            resize();
+            window.addEventListener('resize', resize, { passive: true });
+
+            class StardustParticle {
+                constructor() { this.reset(true); }
+                reset(initial = false) {
+                    this.x = Math.random() * width;
+                    this.y = initial ? Math.random() * height : height + 10;
+                    this.baseSize = Math.random() * 1.5 + 1.0;
+                    this.size = this.baseSize;
+                    this.vx = (Math.random() - 0.5) * 0.22;
+                    this.vy = -(Math.random() * 0.28 + 0.14);
+                    this.alpha = Math.random() * 0.40 + 0.35;
+                    this.pulseSpeed = Math.random() * 0.022 + 0.010;
+                    this.pulsePhase = Math.random() * Math.PI * 2;
+                    const colors = ['rgba(223, 179, 93, ', 'rgba(244, 208, 138, ', 'rgba(202, 239, 231, ', 'rgba(255, 255, 255, '];
+                    this.colorPrefix = colors[Math.floor(Math.random() * colors.length)];
+                }
+                update(scrollDelta) {
+                    this.pulsePhase += this.pulseSpeed;
+                    const pulse = Math.sin(this.pulsePhase) * 0.15;
+                    this.currentAlpha = Math.max(0.15, Math.min(0.85, this.alpha + pulse));
+                    this.x += this.vx;
+                    this.y += this.vy - (scrollDelta * 0.08);
+                    if (this.y < -15) this.y = height + 10;
+                    else if (this.y > height + 15) this.y = -10;
+                    if (this.x < -15) this.x = width + 10;
+                    else if (this.x > width + 15) this.x = -10;
+                }
+                draw() {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.colorPrefix + this.currentAlpha + ')';
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) particles.push(new StardustParticle());
+
+            let isTabActive = true;
+            let scrollDelta = 0;
+            let lastScrollY = 0;
+
+            window.addEventListener('scroll', () => {
+                const nowY = window.pageYOffset || document.documentElement.scrollTop || 0;
+                scrollDelta = nowY - lastScrollY;
+                lastScrollY = nowY;
+            }, { passive: true });
+
+            document.addEventListener('visibilitychange', () => {
+                isTabActive = !document.hidden;
+                if (isTabActive) {
+                    scrollDelta = 0;
+                    renderCosmos();
+                } else {
+                    cancelAnimationFrame(animId);
+                }
+            });
+
+            const renderCosmos = () => {
+                if (!isTabActive) return;
+                const delta = scrollDelta;
+                scrollDelta = 0;
+                ctx.clearRect(0, 0, width, height);
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update(delta);
+                    particles[i].draw();
+                }
+                animId = requestAnimationFrame(renderCosmos);
+            };
+            const heroSec = document.getElementById('home') || canvas;
+            if ('IntersectionObserver' in window && heroSec) {
+                const cosmosObserver = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            if (!animId) animId = requestAnimationFrame(renderCosmos);
+                        } else {
+                            if (animId) {
+                                cancelAnimationFrame(animId);
+                                animId = 0;
+                            }
+                        }
+                    });
+                }, { threshold: 0.05 });
+                cosmosObserver.observe(heroSec);
+            } else {
+                animId = requestAnimationFrame(renderCosmos);
+            }
+        }
     }
 
     // 10. Service Worker Registration for Instant Load & PWA Offline Caching
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            if ('requestIdleCallback' in window) {
-                requestIdleCallback(() => {
-                    navigator.serviceWorker.register('/sw.js').catch(() => {});
-                }, { timeout: 3000 });
-            } else {
-                setTimeout(() => {
-                    navigator.serviceWorker.register('/sw.js').catch(() => {});
-                }, 2000);
-            }
+            navigator.serviceWorker.register('/sw.js').catch(() => {});
         });
     }
 
