@@ -46,7 +46,7 @@ import * as THREE from './vendor/three.module.js';
     renderer.setPixelRatio(dpr);
     renderer.setSize(window.innerWidth, window.innerHeight, false);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.08;
+    renderer.toneMappingExposure = 1.04;
 
     const scene = new THREE.Scene();
 
@@ -209,42 +209,42 @@ import * as THREE from './vendor/three.module.js';
                 float godRay2 = pow(sin(rayAngle * 5.2 - t * 0.60) * 0.5 + 0.5, 2.5);
                 float godRays = godRay1 * 0.65 + godRay2 * 0.45;
 
-                // Calibrated Botanical Moss Palette:
-                vec3 colBedrockNoir     = vec3(1.0 / 255.0, 21.0 / 255.0, 12.0 / 255.0);   // #01150c bedrock noir
-                vec3 colVelvetMoss      = vec3(3.0 / 255.0, 46.0 / 255.0, 29.0 / 255.0);   // #032e1d dense velvet moss
-                vec3 colTropicalEmerald = vec3(6.0 / 255.0, 72.0 / 255.0, 46.0 / 255.0);   // #06482e tropical emerald
-                vec3 colLuminousMoss    = vec3(12.0 / 255.0, 106.0 / 255.0, 67.0 / 255.0); // #0c6a43 luminous moss cushions
-                vec3 colSunlitSpore     = vec3(20.0 / 255.0, 149.0 / 255.0, 95.0 / 255.0); // #14955f sunlit spore crests
-                vec3 colGoldLichen      = vec3(107.0 / 255.0, 86.0 / 255.0, 28.0 / 255.0); // #6b561c golden lichen filaments
-                vec3 colIceRefract      = vec3(0.14, 0.56, 0.42);                          // Crystalline ice core
+                // Calibrated Deep Saturated Botanical Moss Palette (Rich Bottle/Forest Emerald):
+                vec3 colBedrockNoir     = vec3(1.0 / 255.0, 32.0 / 255.0, 18.0 / 255.0);   // #012012 deep bedrock noir
+                vec3 colVelvetMoss      = vec3(3.0 / 255.0, 58.0 / 255.0, 32.0 / 255.0);   // #033a20 dense deep velvet moss
+                vec3 colTropicalEmerald = vec3(5.0 / 255.0, 96.0 / 255.0, 52.0 / 255.0);   // #056034 rich deep forest emerald
+                vec3 colLuminousMoss    = vec3(8.0 / 255.0, 132.0 / 255.0, 72.0 / 255.0);  // #088448 saturated botanical moss
+                vec3 colSunlitSpore     = vec3(14.0 / 255.0, 168.0 / 255.0, 88.0 / 255.0); // #0ea858 deep crest highlight (pure deep green)
+                vec3 colGoldLichen      = vec3(92.0 / 255.0, 74.0 / 255.0, 22.0 / 255.0);  // #5c4a16 golden lichen filaments
+                vec3 colIceRefract      = vec3(6.0 / 255.0, 110.0 / 255.0, 68.0 / 255.0);  // Deep glacial emerald core
 
-                // Wide Stream Envelope (Spans wide across horizontal viewport)
+                // Wide Stream Envelope (Spans broad across horizontal viewport)
                 float meander = sin(p.y * 1.3 + t * 0.4) * 0.16 + sin(p.y * 2.5 - t * 0.3) * 0.06;
                 float distCenter = abs(p.x - meander);
-                float wideStream = smoothstep(1.30, 0.15, distCenter);
+                float wideStream = smoothstep(1.35, 0.15, distCenter);
 
-                // Composite flowing botanical moss layers:
-                vec3 mossColor = mix(colBedrockNoir, colVelvetMoss, smoothstep(0.08, 0.58, macroMoss));
-                mossColor = mix(mossColor, colTropicalEmerald, smoothstep(0.16, 0.68, macroMoss * 0.60 + spongyCushions * 0.40) * (0.65 + 0.35 * wideStream));
-                mossColor = mix(mossColor, colLuminousMoss, smoothstep(0.30, 0.80, spongyCushions * (1.0 - microMoss * 0.28)) * (0.60 + 0.40 * wideStream));
-                mossColor = mix(mossColor, colSunlitSpore, smoothstep(0.46, 0.88, spongyCushions * lichenFilaments) * wideStream);
+                // Composite flowing botanical moss layers with rich saturated deep greens:
+                vec3 mossColor = mix(colBedrockNoir, colVelvetMoss, smoothstep(0.06, 0.54, macroMoss));
+                mossColor = mix(mossColor, colTropicalEmerald, smoothstep(0.14, 0.65, macroMoss * 0.60 + spongyCushions * 0.40) * (0.70 + 0.30 * wideStream));
+                mossColor = mix(mossColor, colLuminousMoss, smoothstep(0.28, 0.78, spongyCushions * (1.0 - microMoss * 0.28)) * (0.65 + 0.35 * wideStream));
+                mossColor = mix(mossColor, colSunlitSpore, smoothstep(0.44, 0.86, spongyCushions * lichenFilaments) * wideStream * 0.85);
 
                 // Layer botanical vein networks (depressed dark channels between cushions)
-                mossColor = mix(mossColor, colVelvetMoss * 0.75, (1.0 - botanicalVeins) * 0.38);
+                mossColor = mix(mossColor, colVelvetMoss * 0.75, (1.0 - botanicalVeins) * 0.40);
 
                 // Golden lichen filaments illuminated by wide light shafts
-                mossColor += colGoldLichen * (godRays * 0.40 * macroMoss + lichenFilaments * 0.25 * spongyCushions * wideStream);
+                mossColor += colGoldLichen * (godRays * 0.35 * macroMoss + lichenFilaments * 0.22 * spongyCushions * wideStream);
 
-                // Thick ice sheet internal stress fractures & prismatic dispersion
-                mossColor += colIceRefract * (iceStress * 0.32);
-                mossColor += prismaticCaustics * 0.20;
+                // Thick ice sheet internal stress fractures & deep emerald caustics
+                mossColor += colIceRefract * (iceStress * 0.30);
+                mossColor += prismaticCaustics * vec3(0.10, 0.75, 0.35) * 0.16;
 
-                // Wide stream vignette (soft horizontal falloff so stream width spans across the display)
-                float horizDist = abs(p.x) * 0.54;
+                // Wide stream vignette (soft horizontal falloff preserving deep green richness across width)
+                float horizDist = abs(p.x) * 0.52;
                 float vertDist = abs(p.y) * 0.95;
                 float vignetteDist = sqrt(horizDist * horizDist + vertDist * vertDist);
-                float vignette = smoothstep(1.65, 0.45, vignetteDist);
-                mossColor *= (0.80 + 0.20 * vignette);
+                float vignette = smoothstep(1.70, 0.45, vignetteDist);
+                mossColor *= (0.82 + 0.18 * vignette);
 
                 gl_FragColor = vec4(mossColor, 1.0);
             }
@@ -326,18 +326,18 @@ import * as THREE from './vendor/three.module.js';
 
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xf5faf7),           // Translucent crystal ice
+        color: new THREE.Color(0xf0fdf4),           // Translucent crystal ice
         transmission: 0.94,                         // High optical transmission (passes test >= 0.9)
         roughness: 0.22,                            // Tactile micro-frost delivering ~20% visibility of underlying scene
         ior: 1.34,                                  // Physical water/ice IOR (passes test >= 1.30)
-        thickness: 0.85,                            // Thick physical ice slab volume
+        thickness: 0.90,                            // Thick physical ice slab volume
         metalness: 0.02,
-        specularIntensity: 0.45,                    // Crystal specular glints
-        specularColor: new THREE.Color(0xa7f3d0),   // Mint-emerald ice specular sheen
-        clearcoat: 0.32,                            // Glacial ice surface sheen
-        clearcoatRoughness: 0.20,                   // Soft sheen without harsh glare
-        attenuationColor: new THREE.Color(0x02301c), // Deep moss emerald ice body attenuation (#02301c)
-        attenuationDistance: 12.0,
+        specularIntensity: 0.35,                    // Softened specular glints
+        specularColor: new THREE.Color(0x34d399),   // Deep emerald ice specular sheen
+        clearcoat: 0.28,                            // Glacial ice surface sheen
+        clearcoatRoughness: 0.22,                   // Soft sheen without harsh glare
+        attenuationColor: new THREE.Color(0x02381e), // Deep rich forest emerald volume attenuation
+        attenuationDistance: 9.5,                   // Rich volume absorption
         normalMap,
         normalScale: new THREE.Vector2(0.20, 0.20), // Optical micro-refraction
         transparent: true,
@@ -351,14 +351,14 @@ import * as THREE from './vendor/three.module.js';
     // =========================================================================
     // 5. Deep Botanical Studio Lighting (NO CURSOR BACKLIGHT)
     // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x01150c, 0.85);
+    const ambientLight = new THREE.AmbientLight(0x012012, 0.80);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0x0c6a43, 0.50);
+    const keyLight = new THREE.DirectionalLight(0x056034, 0.44);
     keyLight.position.set(-3.0, 4.0, 4.0);
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x6b561c, 0.32);
+    const rimLight = new THREE.DirectionalLight(0x5c4a16, 0.26);
     rimLight.position.set(3.5, -2.5, 3.5);
     scene.add(rimLight);
 
