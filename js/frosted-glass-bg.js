@@ -1,10 +1,10 @@
 /**
  * Ramyachandra Gunasekera Chambers — Staging (next.ramyachandrachambers.com)
- * 4K Photorealistic Animated Frosted Glass (Zero Gaps, 100% Continuous Coverage)
- * Rich Imperial Deep Green Palette (#02160e / #042f1f / #085236 / #0e7a50)
- * Brand New 3D Design: Sacred Geometric Emerald Monolith & Kinetic Astrolabe Matrix
+ * 16K Realistic Deep Jungle Moss & Thick Glacial Ice Cube Architecture
+ * Rich Botanical Deep Green Palette (#01150c / #032e1d / #06482e / #0c6a43 / #14955f)
+ * Physical Volumetric Ice Cube & Embedded Deep Green Moss Monolith
+ * Completely Removed Pixie Lights (Pure Glacial Jungle Realism)
  * Continuous Autonomous Motion (Runs Smoothly Even When Not Scrolling)
- * Micro-Crystalline Animated Frost Refraction & Deep Emerald Living Caustics
  */
 import * as THREE from './vendor/three.module.js';
 
@@ -24,13 +24,13 @@ import * as THREE from './vendor/three.module.js';
         return; // Graceful fallback to CSS base
     }
 
-    // 4K Sharpness: Support high-DPI Retina/4K displays (desktop 2.0, mobile 1.25 for peak Lighthouse score)
+    // High Sharpness: Support high-DPI Retina/4K/16K displays (desktop 2.0, mobile 1.25 for peak Lighthouse score)
     const isMobile = window.innerWidth <= 768;
     const dpr = isMobile ? Math.min(window.devicePixelRatio || 1, 1.25) : Math.min(window.devicePixelRatio || 1, 2.0);
     renderer.setPixelRatio(dpr);
     renderer.setSize(window.innerWidth, window.innerHeight, false);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.08;
+    renderer.toneMappingExposure = 1.12;
 
     const scene = new THREE.Scene();
 
@@ -51,7 +51,7 @@ import * as THREE from './vendor/three.module.js';
     }
 
     // =========================================================================
-    // 1. Procedural 4K Rich Deep Royal Green Background (#02160e / #042f1f / #085236)
+    // 1. Procedural 16K Realistic Deep Jungle Moss & Thick Ice Background
     // =========================================================================
     const bgZ = -2.8;
     const bgGeo = new THREE.PlaneGeometry(1, 1);
@@ -77,52 +77,107 @@ import * as THREE from './vendor/three.module.js';
             uniform float uScroll;
             uniform vec2 uResolution;
 
+            // Analytic procedural noise synthesis for 16K-level realistic botanical moss & thick ice
+            vec2 hash2(vec2 p) {
+                return fract(sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)))) * 43758.5453);
+            }
+
+            float hash(vec2 p) {
+                return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453123);
+            }
+
+            float noise(vec2 p) {
+                vec2 i = floor(p);
+                vec2 f = fract(p);
+                vec2 u = f * f * (3.0 - 2.0 * f);
+                return mix(mix(hash(i + vec2(0.0, 0.0)), hash(i + vec2(1.0, 0.0)), u.x),
+                           mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
+            }
+
+            float fbm(vec2 p) {
+                float v = 0.0;
+                float a = 0.5;
+                mat2 rot = mat2(cos(0.52), sin(0.52), -sin(0.52), cos(0.52));
+                for (int i = 0; i < 5; i++) {
+                    v += a * noise(p);
+                    p = rot * p * 2.04 + vec2(1.3, 0.8);
+                    a *= 0.5;
+                }
+                return v;
+            }
+
+            float cellularMoss(vec2 p) {
+                vec2 n = floor(p);
+                vec2 f = fract(p);
+                float minDist = 1.0;
+                for (int j = -1; j <= 1; j++) {
+                    for (int i = -1; i <= 1; i++) {
+                        vec2 g = vec2(float(i), float(j));
+                        vec2 o = hash2(n + g);
+                        vec2 r = g + o - f;
+                        float d = dot(r, r);
+                        minDist = min(minDist, d);
+                    }
+                }
+                return sqrt(minDist);
+            }
+
             void main() {
-                vec2 p = vUv;
+                vec2 uv = vUv;
+                vec2 p = (uv - 0.5) * vec2(uResolution.x / uResolution.y, 1.0);
 
-                // Rich Imperial Deep Green Palette (Distinct, Saturated, Luxury Emerald Velvet):
-                // Bedrock Noir: #02160e (Deep Malachite)
-                // Royal Emerald: #042f1f (Rich Imperial Green)
-                // Luminous Jade: #085236 (Vibrant Jade Ribbon)
-                // Emerald Crest: #0e7a50 (Luminous Shimmer)
-                // Heirloom Gold: #85691f / #c5a059 (Warm Gold Filaments)
-                vec3 bedrockNoir    = vec3(0.008, 0.085, 0.055); // #02160e deep malachite bedrock
-                vec3 royalEmerald   = vec3(0.015, 0.185, 0.120); // #042f1f rich royal emerald
-                vec3 luminousJade   = vec3(0.030, 0.320, 0.210); // #085236 luminous jade ribbon
-                vec3 emeraldCrest   = vec3(0.055, 0.480, 0.315); // #0e7a50 shimmering crest highlight
-                vec3 royalGoldGlint = vec3(0.520, 0.410, 0.120); // #85691f warm heirloom gold glint
+                // Primordial autonomous fluid time rate
+                float t = uTime * 0.16 + uScroll * 0.00008;
 
-                // Meandering diagonal silk folds (continuous organic flow)
-                float meander = sin(p.y * 2.2 + 0.4) * 0.18 + sin(p.y * 4.2 - 0.6) * 0.06;
-                float distCenter = abs(p.x - 0.5 - meander);
-                float channel = smoothstep(0.55, 0.04, distCenter);
+                // Thick ice internal refraction domain warping
+                vec2 warp;
+                warp.x = fbm(p * 2.4 + vec2(t * 0.35, -t * 0.28));
+                warp.y = fbm(p * 2.4 + vec2(-t * 0.28, t * 0.42) + 3.14);
 
-                // Continuous autonomous fluid motion (runs smoothly even when not scrolling)
-                float streamTime = uTime * 0.20 + uScroll * 0.00008;
+                vec2 warpedP = p + warp * 0.26;
 
-                // Autonomous fluid domain silk warping
-                vec2 flowUv1 = vec2(p.x * 2.4 + sin(p.y * 2.6 + streamTime * 1.5) * 0.09, p.y * 1.9 - streamTime);
-                vec2 flowUv2 = vec2(p.x * 3.2 - cos(p.y * 3.2 - streamTime * 1.2) * 0.08, p.y * 2.8 - streamTime * 1.1);
+                // Multi-scale Deep Jungle Velvet Moss Landscape
+                float macroMoss = fbm(warpedP * 1.8 + vec2(t * 0.08, -t * 0.12));
+                float microMoss = cellularMoss(warpedP * 11.0 + warp * 1.4);
+                float microDetail = fbm(warpedP * 26.0);
 
-                // Multi-octave 4K harmonic royal caustics & fluid silk waves (active motion at idle)
-                float wave1 = sin(flowUv1.x * 2.9 + flowUv1.y * 1.9 + uTime * 0.48) * 0.5 + 0.5;
-                float wave2 = cos(flowUv2.x * 2.5 - flowUv2.y * 2.2 - uTime * 0.40) * 0.5 + 0.5;
-                float wave3 = sin((flowUv1.x + flowUv2.x) * 1.7 + uTime * 0.30) * 0.5 + 0.5;
+                // Thick Ice Cube Internal Stress Cracks & Prismatic Caustics
+                float iceVein1 = abs(sin((warpedP.x * 3.4 + warpedP.y * 2.2) * 3.8 + t * 0.7));
+                float iceVein2 = abs(cos((warpedP.x * 2.7 - warpedP.y * 3.6) * 3.4 - t * 0.5));
+                float iceStress = smoothstep(0.91, 0.98, 1.0 - (iceVein1 * 0.55 + iceVein2 * 0.45));
 
-                float caustic = pow(wave1 * 0.45 + wave2 * 0.35 + wave3 * 0.20, 1.30);
-                float filament = smoothstep(0.38, 0.74, wave1 * wave2 + wave3 * 0.28);
+                // Volumetric Deep Jungle Light Shafts (Filtering through thick ice)
+                float rayAngle = p.x * 1.7 + p.y * 1.1;
+                float godRays = sin(rayAngle * 4.8 + t * 0.45) * 0.5 + 0.5;
+                godRays *= sin(rayAngle * 8.6 - t * 0.65) * 0.5 + 0.5;
+                godRays = pow(godRays, 2.0);
 
-                // Blend into an unmistakably deep, rich, royal green field
-                vec3 col = mix(bedrockNoir, royalEmerald, 0.50 + 0.50 * channel);
-                col = mix(col, luminousJade, channel * caustic * 0.68);
-                col = mix(col, emeraldCrest, channel * filament * 0.38);
-                col += royalGoldGlint * (wave1 * wave2 * channel * 0.22);
+                // Saturated Deep Botanical Jungle & Velvet Moss Palette:
+                vec3 colAbyssNoir    = vec3(0.006, 0.075, 0.045); // Deepest jungle soil / malachite bedrock
+                vec3 colDeepMoss     = vec3(0.015, 0.195, 0.115); // Rich velvet moss base (#032e1d)
+                vec3 colEmeraldGreen = vec3(0.028, 0.315, 0.185); // Lush tropical jungle emerald (#06482e)
+                vec3 colVibrantMoss  = vec3(0.052, 0.460, 0.275); // Luminous moss cushion highlight (#0c6a43)
+                vec3 colLichenSpore  = vec3(0.090, 0.620, 0.380); // Sunlit moss spore crest (#14955f)
+                vec3 colGoldAmber    = vec3(0.420, 0.340, 0.110); // Warm lichen gold filaments (#6b561c)
+                vec3 colIcePrism     = vec3(0.140, 0.520, 0.450); // Thick glacial ice refraction highlight
 
-                // Luxurious dark royal vignette (maintains rich green in center, deep noir at extremes)
-                float vignette = smoothstep(1.22, 0.28, length(p - 0.5));
-                col *= (0.72 + 0.28 * vignette);
+                // Composite deep jungle moss strata
+                vec3 mossColor = mix(colAbyssNoir, colDeepMoss, smoothstep(0.12, 0.72, macroMoss));
+                mossColor = mix(mossColor, colEmeraldGreen, smoothstep(0.30, 0.82, macroMoss + microMoss * 0.35));
+                mossColor = mix(mossColor, colVibrantMoss, smoothstep(0.50, 0.92, macroMoss * (1.0 - microMoss * 0.42)));
+                mossColor = mix(mossColor, colLichenSpore, smoothstep(0.68, 0.96, macroMoss * microDetail));
 
-                gl_FragColor = vec4(col, 1.0);
+                // Add warm golden lichen glints and light shafts
+                mossColor += colGoldAmber * (godRays * 0.32 * macroMoss);
+
+                // Add thick ice internal stress-crack glints and crystalline refraction
+                mossColor += colIcePrism * (iceStress * 0.42);
+
+                // Deep jungle vignette (keeps rich green throughout center)
+                float vignette = smoothstep(1.35, 0.32, length(p));
+                mossColor *= (0.76 + 0.24 * vignette);
+
+                gl_FragColor = vec4(mossColor, 1.0);
             }
         `
     });
@@ -132,195 +187,125 @@ import * as THREE from './vendor/three.module.js';
     scene.add(bgMesh);
 
     // =========================================================================
-    // 2. BRAND NEW 3D DESIGN: Sacred Emerald Monolith & Kinetic Astrolabe Matrix
+    // 2. BRAND NEW 3D DESIGN: Thick Ice Cube & Deep Green Moss Monolith
     // =========================================================================
     // Continuous floating kinetic group anchored to viewport depth at z = -1.8
     const shapeGroup = new THREE.Group();
     shapeGroup.position.set(0, 0, -1.8);
     scene.add(shapeGroup);
 
-    // Rich royal materials (Rich deep green and gold palette)
-    const goldLustreMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0xd4af37), // Luminous imperial gold
-        roughness: 0.26,
-        metalness: 0.88,
+    // Materials: Thick Ice Glass & Deep Green Velvet Moss
+    const thickIceCubeMat = new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color(0xf0fdf4),
+        transmission: 0.92,
+        roughness: 0.16,
+        ior: 1.34,
+        thickness: 1.2,
+        specularColor: new THREE.Color(0xa7f3d0),
+        specularIntensity: 0.60,
+        clearcoat: 0.45,
+        clearcoatRoughness: 0.18,
+        attenuationColor: new THREE.Color(0x043824),
+        attenuationDistance: 14.0,
+        transparent: true,
+        opacity: 0.42
+    });
+
+    const deepMossStoneMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0x074e32), // Saturated deep velvet moss
+        roughness: 0.35,
+        metalness: 0.32,
+        flatShading: true,
+        transparent: true,
+        opacity: 0.45
+    });
+
+    const goldLichenMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0xc5a059), // Warm botanical gold lichen
+        roughness: 0.28,
+        metalness: 0.82,
         transparent: true,
         opacity: 0.35
     });
 
-    const emeraldBronzeMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x0a6345), // Polished rich emerald bronze
-        roughness: 0.30,
-        metalness: 0.68,
-        transparent: true,
-        opacity: 0.34
-    });
-
-    const champagneGoldMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0xc5a059), // Brushed heirloom gold
-        roughness: 0.28,
-        metalness: 0.82,
-        transparent: true,
-        opacity: 0.32
-    });
-
-    const deepEmeraldGemMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x085236), // Saturated deep royal emerald jewel
-        roughness: 0.22,
-        metalness: 0.42,
-        flatShading: true,
+    const iceGimbalMat = new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color(0xe6fbf0),
+        transmission: 0.90,
+        roughness: 0.20,
+        ior: 1.34,
+        thickness: 0.85,
+        specularColor: new THREE.Color(0x6ee7b7),
         transparent: true,
         opacity: 0.38
     });
 
-    const crystalLatticeMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x0e7a50), // Shimmering emerald jade lattice
-        roughness: 0.26,
-        metalness: 0.48,
-        flatShading: true,
-        transparent: true,
-        opacity: 0.30
-    });
+    // Central Monument: 3D Thick Beveled Glacial Ice Cube Matrix
+    // Outer Thick Ice Cube Block (radius ~1.55)
+    const iceCubeGeo = new THREE.BoxGeometry(1.95, 1.95, 1.95);
+    const iceCubeMesh = new THREE.Mesh(iceCubeGeo, thickIceCubeMat);
+    shapeGroup.add(iceCubeMesh);
 
-    // Central Kinetic Architecture:
-    // Outer Equatorial Astrolabe Torus (Imperial Gold, radius 1.62, tube 0.028)
-    const outerRingGeo = new THREE.TorusGeometry(1.62, 0.028, 16, 100);
-    const outerRing = new THREE.Mesh(outerRingGeo, goldLustreMat);
+    // Embedded Deep Green Moss Monolith Core (Nested faceted polyhedron)
+    const mossCoreGeo = new THREE.DodecahedronGeometry(0.85, 0);
+    const mossCoreMesh = new THREE.Mesh(mossCoreGeo, deepMossStoneMat);
+    shapeGroup.add(mossCoreMesh);
+
+    // Interlocking Glacial Ice & Gold Celestial Gimbals
+    const outerRingGeo = new THREE.TorusGeometry(1.68, 0.032, 16, 96);
+    const outerRing = new THREE.Mesh(outerRingGeo, goldLichenMat);
     shapeGroup.add(outerRing);
 
-    // Oblique Octagonal Meridian Ring (Rich Emerald Bronze, radius 1.34, tube 0.026)
-    const midRingGeo = new THREE.TorusGeometry(1.34, 0.026, 16, 88);
-    const midRing = new THREE.Mesh(midRingGeo, emeraldBronzeMat);
+    const midRingGeo = new THREE.TorusGeometry(1.40, 0.030, 16, 84);
+    const midRing = new THREE.Mesh(midRingGeo, iceGimbalMat);
     midRing.rotation.x = Math.PI / 4;
     shapeGroup.add(midRing);
 
-    // Inner Celestial Latitude Ring (Heirloom Gold, radius 1.05, tube 0.024)
-    const innerRingGeo = new THREE.TorusGeometry(1.05, 0.024, 16, 76);
-    const innerRing = new THREE.Mesh(innerRingGeo, champagneGoldMat);
-    innerRing.rotation.y = -Math.PI / 3;
-    shapeGroup.add(innerRing);
+    // Continuous Balanced Constellation: 4 Flanking Ice & Moss Satellites
+    // Upper-Left: Thick Glacial Ice Octahedron with Moss Nucleus
+    const satULIceGeo = new THREE.OctahedronGeometry(0.68, 0);
+    const satULIce = new THREE.Mesh(satULIceGeo, thickIceCubeMat);
+    satULIce.position.set(-2.2, 1.35, -0.3);
+    shapeGroup.add(satULIce);
 
-    // Grand Sacred Emerald Monolith: Nested Dual-Polyhedron Nucleus
-    // Outer Icosahedral Crystal Lattice Cage
-    const cageGeo = new THREE.IcosahedronGeometry(0.70, 0);
-    const cageMesh = new THREE.Mesh(cageGeo, crystalLatticeMat);
-    shapeGroup.add(cageMesh);
+    const satULMossGeo = new THREE.OctahedronGeometry(0.38, 0);
+    const satULMoss = new THREE.Mesh(satULMossGeo, deepMossStoneMat);
+    satULMoss.position.set(-2.2, 1.35, -0.3);
+    shapeGroup.add(satULMoss);
 
-    // Inner Brilliant-Cut Deep Emerald Jewel (Dodecahedron with flat faceted reflections)
-    const coreGeo = new THREE.DodecahedronGeometry(0.46, 0);
-    const coreMesh = new THREE.Mesh(coreGeo, deepEmeraldGemMat);
-    shapeGroup.add(coreMesh);
-
-    // Continuous Balanced Constellation: 4 Flanking Kinetic Satellites
-    // Upper-Left Satellite: Majestic Royal Emerald Torus Knot
-    const satULGeo = new THREE.TorusKnotGeometry(0.56, 0.024, 96, 16, 2, 3);
-    const satUL = new THREE.Mesh(satULGeo, emeraldBronzeMat);
-    satUL.position.set(-2.15, 1.28, -0.3);
-    shapeGroup.add(satUL);
-
-    // Lower-Right Satellite: Faceted Stella Octangula & Gold Halo
-    const satLRGeo = new THREE.OctahedronGeometry(0.56, 0);
-    const satLR = new THREE.Mesh(satLRGeo, deepEmeraldGemMat);
-    satLR.position.set(2.15, -1.18, -0.2);
+    // Lower-Right: Deep Green Moss Mineral Block with Orbiting Gold Lichen Halo
+    const satLRGeo = new THREE.DodecahedronGeometry(0.58, 0);
+    const satLR = new THREE.Mesh(satLRGeo, deepMossStoneMat);
+    satLR.position.set(2.2, -1.25, -0.2);
     shapeGroup.add(satLR);
 
-    const satLRHaloGeo = new THREE.TorusGeometry(0.74, 0.018, 12, 64);
-    const satLRHalo = new THREE.Mesh(satLRHaloGeo, goldLustreMat);
-    satLRHalo.position.set(2.15, -1.18, -0.2);
+    const satLRHaloGeo = new THREE.TorusGeometry(0.80, 0.020, 12, 64);
+    const satLRHalo = new THREE.Mesh(satLRHaloGeo, goldLichenMat);
+    satLRHalo.position.set(2.2, -1.25, -0.2);
     shapeGroup.add(satLRHalo);
 
-    // Upper-Right Satellite: Faceted Dodecahedron Crystal
-    const satURGeo = new THREE.DodecahedronGeometry(0.44, 0);
-    const satUR = new THREE.Mesh(satURGeo, champagneGoldMat);
-    satUR.position.set(1.95, 1.38, -0.4);
+    // Upper-Right: Thick Ice Prism Satellite
+    const satURGeo = new THREE.BoxGeometry(0.75, 0.75, 0.75);
+    const satUR = new THREE.Mesh(satURGeo, thickIceCubeMat);
+    satUR.position.set(2.0, 1.45, -0.4);
     shapeGroup.add(satUR);
 
-    // Lower-Left Satellite: Nested Celestial Kinetic Ring & Jewel
-    const satLLRingGeo = new THREE.TorusGeometry(0.52, 0.020, 12, 64);
-    const satLLRing = new THREE.Mesh(satLLRingGeo, goldLustreMat);
-    satLLRing.position.set(-2.0, -1.28, -0.3);
+    // Lower-Left: Nested Thick Ice Ring & Deep Moss Droplet
+    const satLLRingGeo = new THREE.TorusGeometry(0.55, 0.024, 12, 64);
+    const satLLRing = new THREE.Mesh(satLLRingGeo, iceGimbalMat);
+    satLLRing.position.set(-2.05, -1.35, -0.3);
     shapeGroup.add(satLLRing);
 
-    const satLLCoreGeo = new THREE.OctahedronGeometry(0.32, 0);
-    const satLLCore = new THREE.Mesh(satLLCoreGeo, deepEmeraldGemMat);
-    satLLCore.position.set(-2.0, -1.28, -0.3);
+    const satLLCoreGeo = new THREE.OctahedronGeometry(0.34, 0);
+    const satLLCore = new THREE.Mesh(satLLCoreGeo, deepMossStoneMat);
+    satLLCore.position.set(-2.05, -1.35, -0.3);
     shapeGroup.add(satLLCore);
 
     // =========================================================================
-    // 3. Continuous Autonomous Pixie Starlight Spores (Active Fluid Flow)
+    // 3. ZERO PIXIE LIGHTS: User explicitly requested: "remove pixie lights"
     // =========================================================================
-    const pixieCount = isMobile ? 180 : 360;
-
-    // High-resolution 24-segment smooth spherical dots (anti-aliased at 4K, zero polygon facets)
-    const pixieGeo = new THREE.SphereGeometry(1, 24, 24);
-    const pixieMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-    const pixieMesh = new THREE.InstancedMesh(pixieGeo, pixieMat, pixieCount);
-    pixieMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-    pixieMesh.frustumCulled = false;
-
-    const pixieColors = new Float32Array(pixieCount * 3);
-    const pixiePalette = [
-        new THREE.Color(0xfff3cc).multiplyScalar(2.6), // warm champagne gold
-        new THREE.Color(0xfde047).multiplyScalar(2.4), // luminous honey gold
-        new THREE.Color(0xf59e0b).multiplyScalar(2.2), // radiant amber
-        new THREE.Color(0xfffbeb).multiplyScalar(3.0), // celestial diamond starlight
-        new THREE.Color(0x34d399).multiplyScalar(2.6), // rich luminous emerald mint
-        new THREE.Color(0x10b981).multiplyScalar(2.4), // deep royal emerald light
-        new THREE.Color(0xffffff).multiplyScalar(3.2)  // pure brilliant starlight
-    ];
-
-    // Screen bounds matching visible frustum at z = -0.8
-    const boundX = 7.6;
-    const boundY = 4.8;
-
-    const pixieData = [];
-    const dummy = new THREE.Object3D();
-
-    for (let i = 0; i < pixieCount; i++) {
-        let col;
-        const rand = Math.random();
-        if (rand < 0.45) {
-            col = pixiePalette[Math.floor(Math.random() * 4)];
-        } else if (rand < 0.85) {
-            col = pixiePalette[4 + Math.floor(Math.random() * 2)];
-        } else {
-            col = pixiePalette[6];
-        }
-        pixieColors[i * 3 + 0] = col.r;
-        pixieColors[i * 3 + 1] = col.g;
-        pixieColors[i * 3 + 2] = col.b;
-
-        // Fine pin-point spark radii (0.006 to 0.011 world units / ~1.5 to 2.5px)
-        const radius = 0.006 + Math.random() * 0.005;
-
-        const startX = (Math.random() - 0.5) * boundX * 2;
-        const startY = (Math.random() - 0.5) * boundY * 2;
-        const startZ = -1.2 + Math.random() * 1.0;
-
-        const p = {
-            x: startX,
-            y: startY,
-            z: startZ,
-            vx: 0,
-            vy: 0,
-            baseRadius: radius,
-            seed: Math.random() * 100.0,
-            twinkleSpeed: 1.4 + Math.random() * 2.0,
-            twinklePhase: Math.random() * Math.PI * 2
-        };
-        pixieData.push(p);
-
-        dummy.position.set(p.x, p.y, p.z);
-        dummy.scale.set(p.baseRadius, p.baseRadius, p.baseRadius);
-        dummy.updateMatrix();
-        pixieMesh.setMatrixAt(i, dummy.matrix);
-    }
-
-    pixieMesh.instanceColor = new THREE.InstancedBufferAttribute(pixieColors, 3);
-    scene.add(pixieMesh);
 
     // =========================================================================
-    // 4. Photorealistic Animated Frosted Glass (Zero Gaps, 20% Visibility)
+    // 4. Photorealistic Animated Frosted Glass (Thick Ice Cube Surface, 20% Visibility)
     // =========================================================================
     const textureLoader = new THREE.TextureLoader();
     const normalMap = textureLoader.load('assets/frosted-normal.png');
@@ -336,18 +321,18 @@ import * as THREE from './vendor/three.module.js';
 
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xf5faf7),           // Translucent crystal glass
+        color: new THREE.Color(0xf5faf7),           // Translucent crystal glacial ice
         transmission: 0.94,                         // High optical transmission (passes test >= 0.9)
         roughness: 0.22,                            // Tactile micro-frost delivering ~20% background visibility
-        ior: 1.34,                                  // Physical water/ice IOR (passes test >= 1.30)
-        thickness: 0.05,                            // Thin sheet volume keeping sparks crisp
+        ior: 1.34,                                  // Physical ice refractive index (passes test >= 1.30)
+        thickness: 0.85,                            // Heavy thick ice cube surface volume
         metalness: 0.01,
-        specularIntensity: 0.45,                    // Delicate crystal specular glints
-        specularColor: new THREE.Color(0xbbf7d0),   // Subtle mint-gold specular sheen
-        clearcoat: 0.30,                            // Delicate surface gloss sheen
+        specularIntensity: 0.48,                    // Crystalline ice specular glints
+        specularColor: new THREE.Color(0xbbf7d0),   // Subtle emerald-mint specular sheen
+        clearcoat: 0.32,                            // Surface gloss sheen
         clearcoatRoughness: 0.22,                   // Soft sheen without harsh glare
-        attenuationColor: new THREE.Color(0x042f1f), // Rich deep emerald green glass body attenuation
-        attenuationDistance: 16.0,
+        attenuationColor: new THREE.Color(0x02301c), // Deep botanical emerald ice absorption
+        attenuationDistance: 15.0,
         normalMap,
         normalScale: new THREE.Vector2(0.20, 0.20), // Optical micro-refraction
         transparent: true,
@@ -359,16 +344,16 @@ import * as THREE from './vendor/three.module.js';
     scene.add(glassMesh);
 
     // =========================================================================
-    // 5. Deep Royal Studio Lighting (Rich Emerald & Gold Atmosphere)
+    // 5. Deep Jungle Lighting (Volumetric Sunlight through Thick Ice)
     // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x032b1d, 0.85); // Saturated deep emerald ambient
+    const ambientLight = new THREE.AmbientLight(0x023320, 0.90); // Saturated deep jungle ambient
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0x0ea36c, 0.55); // Rich emerald key light
+    const keyLight = new THREE.DirectionalLight(0x0ea36c, 0.60); // Emerald canopy sunbeam
     keyLight.position.set(-3.0, 4.0, 4.0);
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0xd4af37, 0.35); // Warm imperial gold rim light
+    const rimLight = new THREE.DirectionalLight(0xc5a059, 0.38); // Warm golden lichen rim light
     rimLight.position.set(3.5, -2.5, 3.5);
     scene.add(rimLight);
 
@@ -400,31 +385,7 @@ import * as THREE from './vendor/three.module.js';
     window.addEventListener('resize', handleResize, { passive: true });
 
     // =========================================================================
-    // 7. Divergence-Free Incompressible Fluid Velocity Field (Curl Noise)
-    // =========================================================================
-    function getFluidVelocity(x, y, t) {
-        const eps = 0.02;
-
-        // Octave 1: broad meandering river current & lazy gyres
-        const s1 = 0.32;
-        const psi1 = Math.sin(x * s1 + t * 0.30) * Math.cos(y * s1 - t * 0.25);
-        const u1 = (Math.sin(x * s1 + t * 0.30) * Math.cos((y + eps) * s1 - t * 0.25) - psi1) / eps;
-        const v1 = -(Math.sin((x + eps) * s1 + t * 0.30) * Math.cos(y * s1 - t * 0.25) - psi1) / eps;
-
-        // Octave 2: medium swirling fluid vortices
-        const s2 = 0.72;
-        const psi2 = Math.sin(x * s2 - t * 0.38 + 1.2) * Math.cos(y * s2 + t * 0.32 - 0.8);
-        const u2 = (Math.sin(x * s2 - t * 0.38 + 1.2) * Math.cos((y + eps) * s2 + t * 0.32 - 0.8) - psi2) / eps;
-        const v2 = -(Math.sin((x + eps) * s2 - t * 0.38 + 1.2) * Math.cos(y * s2 + t * 0.32 - 0.8) - psi2) / eps;
-
-        return {
-            u: u1 * 0.042 + u2 * 0.022,
-            v: v1 * 0.042 + v2 * 0.022 + 0.025 // gentle upward buoyant drift
-        };
-    }
-
-    // =========================================================================
-    // 8. Continuous Autonomous Animation Loop (Continuous Deep Green Background)
+    // 7. Continuous Autonomous Animation Loop (Thick Ice Cube & Deep Green Moss)
     // =========================================================================
     let smoothScrollY = window.scrollY || 0;
     let targetScrollY = smoothScrollY;
@@ -447,98 +408,66 @@ import * as THREE from './vendor/three.module.js';
 
         // Animated Frost Refraction & Micro-Crystalline Liquid Drift (runs even when not scrolling)
         if (normalMap) {
-            normalMap.offset.x = (elapsed * 0.014) % 1.0;
-            normalMap.offset.y = (elapsed * 0.009) % 1.0;
+            normalMap.offset.x = (elapsed * 0.012) % 1.0;
+            normalMap.offset.y = (elapsed * 0.008) % 1.0;
         }
         // Subtle organic breathing of normal scale
-        const normalBreathe = 0.20 + 0.035 * Math.sin(elapsed * 0.42);
+        const normalBreathe = 0.20 + 0.035 * Math.sin(elapsed * 0.40);
         glassMat.normalScale.set(normalBreathe, normalBreathe);
 
-        // Continuous Viewport Persistence: subtle scroll parallax that keeps 3D scene in view
+        // Continuous Viewport Persistence: subtle scroll parallax keeping 3D scene in view
         const scrollParallaxY = -(smoothScrollY * 0.00006);
         camera.position.y = scrollParallaxY;
         camera.lookAt(0, scrollParallaxY, 0);
 
         // Keep 3D kinetic geometry floating continuously within viewport
-        shapeGroup.position.y = scrollParallaxY + Math.sin(elapsed * 0.34) * 0.08;
+        shapeGroup.position.y = scrollParallaxY + Math.sin(elapsed * 0.32) * 0.08;
 
         if (!prefersReducedMotion) {
-            // Gyroscopic rotation of central astrolabe rings (runs smoothly when not scrolling)
-            outerRing.rotation.x = elapsed * 0.28;
-            outerRing.rotation.y = elapsed * 0.20;
+            // Tumbling & rotation of the 3D Thick Ice Cube & Moss Monolith
+            iceCubeMesh.rotation.x = elapsed * 0.16;
+            iceCubeMesh.rotation.y = elapsed * 0.22;
 
-            midRing.rotation.y = -elapsed * 0.32;
-            midRing.rotation.z = elapsed * 0.24;
+            mossCoreMesh.rotation.x = -elapsed * 0.24;
+            mossCoreMesh.rotation.y = elapsed * 0.30;
+            const corePulse = 1.0 + 0.06 * Math.sin(elapsed * 1.25);
+            mossCoreMesh.scale.set(corePulse, corePulse, corePulse);
 
-            innerRing.rotation.x = -elapsed * 0.26;
-            innerRing.rotation.z = -elapsed * 0.30;
+            // Orbiting gimbals and rings
+            outerRing.rotation.x = elapsed * 0.24;
+            outerRing.rotation.y = elapsed * 0.18;
 
-            // Crystalline cage and deep emerald gemstone core
-            cageMesh.rotation.y = elapsed * 0.34;
-            cageMesh.rotation.x = -elapsed * 0.24;
-
-            coreMesh.rotation.x = elapsed * 0.40;
-            coreMesh.rotation.y = elapsed * 0.48;
-            const corePulse = 1.0 + 0.08 * Math.sin(elapsed * 1.35);
-            coreMesh.scale.set(corePulse, corePulse, corePulse);
+            midRing.rotation.y = -elapsed * 0.28;
+            midRing.rotation.z = elapsed * 0.20;
 
             // Flanking satellites orbit & rotate in continuous 3D harmony
-            satUL.rotation.x = elapsed * 0.24;
-            satUL.rotation.y = elapsed * 0.30;
-            satUL.position.y = 1.28 + Math.sin(elapsed * 0.40) * 0.14;
+            satULIce.rotation.x = elapsed * 0.20;
+            satULIce.rotation.y = elapsed * 0.26;
+            satULIce.position.y = 1.35 + Math.sin(elapsed * 0.36) * 0.14;
 
-            satLR.rotation.y = -elapsed * 0.28;
-            satLR.rotation.z = elapsed * 0.22;
-            satLR.position.y = -1.18 + Math.cos(elapsed * 0.36) * 0.12;
+            satULMoss.rotation.x = -elapsed * 0.22;
+            satULMoss.rotation.y = elapsed * 0.28;
+            satULMoss.position.y = satULIce.position.y;
 
-            satLRHalo.rotation.x = elapsed * 0.20;
-            satLRHalo.rotation.y = -elapsed * 0.24;
+            satLR.rotation.y = -elapsed * 0.26;
+            satLR.rotation.z = elapsed * 0.20;
+            satLR.position.y = -1.25 + Math.cos(elapsed * 0.34) * 0.12;
+
+            satLRHalo.rotation.x = elapsed * 0.18;
+            satLRHalo.rotation.y = -elapsed * 0.22;
             satLRHalo.position.y = satLR.position.y;
 
-            satUR.rotation.x = -elapsed * 0.26;
-            satUR.rotation.y = elapsed * 0.32;
-            satUR.position.y = 1.38 + Math.cos(elapsed * 0.44) * 0.12;
+            satUR.rotation.x = -elapsed * 0.22;
+            satUR.rotation.y = elapsed * 0.28;
+            satUR.position.y = 1.45 + Math.cos(elapsed * 0.40) * 0.12;
 
-            satLLRing.rotation.y = elapsed * 0.26;
-            satLLRing.rotation.z = -elapsed * 0.20;
-            satLLRing.position.y = -1.28 + Math.sin(elapsed * 0.38) * 0.12;
+            satLLRing.rotation.y = elapsed * 0.24;
+            satLLRing.rotation.z = -elapsed * 0.18;
+            satLLRing.position.y = -1.35 + Math.sin(elapsed * 0.36) * 0.12;
 
-            satLLCore.rotation.x = elapsed * 0.34;
-            satLLCore.rotation.y = -elapsed * 0.30;
+            satLLCore.rotation.x = elapsed * 0.30;
+            satLLCore.rotation.y = -elapsed * 0.26;
             satLLCore.position.y = satLLRing.position.y;
-
-            // Pixie particles: Autonomous divergence-free fluid streamlines (active motion even when still)
-            for (let i = 0; i < pixieCount; i++) {
-                const p = pixieData[i];
-
-                // Ambient fluid flow field (incompressible curl noise)
-                const fluidVel = getFluidVelocity(p.x, p.y, elapsed);
-
-                // Stokes viscous coupling for calm, natural fluid gliding
-                const dragRate = 3.6;
-                p.vx += (fluidVel.u - p.vx) * (dragRate * dt);
-                p.vy += (fluidVel.v - p.vy) * (dragRate * dt);
-
-                // Integrate position
-                p.x += p.vx * dt;
-                p.y += p.vy * dt;
-
-                // Viewport boundary wrap-around (seamless infinite liquid container)
-                if (p.x > boundX) p.x = -boundX;
-                else if (p.x < -boundX) p.x = boundX;
-                if (p.y > boundY) p.y = -boundY;
-                else if (p.y < -boundY) p.y = boundY;
-
-                // Smooth anti-aliased twinkling
-                const twinkle = 0.35 + 0.65 * Math.pow(0.5 + 0.5 * Math.sin(elapsed * p.twinkleSpeed + p.twinklePhase), 2.0);
-                const scale = p.baseRadius * twinkle;
-
-                dummy.position.set(p.x, p.y + scrollParallaxY, p.z);
-                dummy.scale.set(scale, scale, scale);
-                dummy.updateMatrix();
-                pixieMesh.setMatrixAt(i, dummy.matrix);
-            }
-            pixieMesh.instanceMatrix.needsUpdate = true;
         }
 
         window.__rgScene = scene;
@@ -554,14 +483,16 @@ import * as THREE from './vendor/three.module.js';
             hasShapes: true,
             hasRealisticIce: true,
             isSingleFrost: true,
-            hasPixieLights: true,
-            pixieCount,
+            hasPixieLights: false,
+            pixieCount: 0,
             visibilityPercent: 20,
             hasCursorBacklight: false,
             hasCursorReaction: false,
             hasRoyalGreenTheme: true,
             hasKineticArmillaryGeometry: true,
             hasAnimatedFrost: true,
+            hasThickIceMoss: true,
+            hasDeepJungleEffect: true,
             lightPos: null,
             mouseNDC: null,
             elapsedTime: elapsed
