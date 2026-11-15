@@ -837,6 +837,7 @@ async function runFullSuite() {
     await page.close();
   } finally {
     await browser.close();
+    await new Promise(r => setTimeout(r, 1000));
   }
 
   // =========================================================================

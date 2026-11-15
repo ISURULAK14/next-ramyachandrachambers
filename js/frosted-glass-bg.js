@@ -77,7 +77,7 @@
     renderer.setPixelRatio(dpr);
     renderer.setSize(window.innerWidth, window.innerHeight, false);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.12;
+    renderer.toneMappingExposure = 1.00;
 
     const scene = new THREE.Scene();
 
@@ -200,13 +200,13 @@
                 godRays = pow(godRays, 2.0);
 
                 // Saturated Deep Botanical Jungle & Velvet Moss Palette:
-                vec3 colAbyssNoir    = vec3(0.006, 0.075, 0.045); // Deepest jungle soil / malachite bedrock
-                vec3 colDeepMoss     = vec3(0.015, 0.195, 0.115); // Rich velvet moss base (#032e1d)
-                vec3 colEmeraldGreen = vec3(0.028, 0.315, 0.185); // Lush tropical jungle emerald (#06482e)
-                vec3 colVibrantMoss  = vec3(0.052, 0.460, 0.275); // Luminous moss cushion highlight (#0c6a43)
-                vec3 colLichenSpore  = vec3(0.090, 0.620, 0.380); // Sunlit moss spore crest (#14955f)
-                vec3 colGoldAmber    = vec3(0.420, 0.340, 0.110); // Warm lichen gold filaments (#6b561c)
-                vec3 colIcePrism     = vec3(0.140, 0.520, 0.450); // Thick glacial ice refraction highlight
+                vec3 colAbyssNoir    = vec3(0.003, 0.045, 0.026); // Deepest jungle soil / midnight malachite
+                vec3 colDeepMoss     = vec3(0.008, 0.125, 0.072); // Deep rich velvet moss base (#022013)
+                vec3 colEmeraldGreen = vec3(0.016, 0.220, 0.128); // Deep royal emerald shadow (#043820)
+                vec3 colVibrantMoss  = vec3(0.035, 0.330, 0.190); // Organic moss highlight (#095430)
+                vec3 colLichenSpore  = vec3(0.065, 0.440, 0.260); // Sunlit moss spore crest (#107042)
+                vec3 colGoldAmber    = vec3(0.280, 0.220, 0.070); // Warm lichen gold filaments (#473812)
+                vec3 colIcePrism     = vec3(0.080, 0.360, 0.300); // Glacial ice refraction highlight
 
                 // Composite deep jungle moss strata
                 vec3 mossColor = mix(colAbyssNoir, colDeepMoss, smoothstep(0.12, 0.72, macroMoss));
@@ -215,10 +215,10 @@
                 mossColor = mix(mossColor, colLichenSpore, smoothstep(0.68, 0.96, macroMoss * microDetail));
 
                 // Add warm golden lichen glints and light shafts
-                mossColor += colGoldAmber * (godRays * 0.32 * macroMoss);
+                mossColor += colGoldAmber * (godRays * 0.24 * macroMoss);
 
                 // Add thick ice internal stress-crack glints and crystalline refraction
-                mossColor += colIcePrism * (iceStress * 0.42);
+                mossColor += colIcePrism * (iceStress * 0.30);
 
                 // Deep jungle vignette (keeps rich green throughout center)
                 float vignette = smoothstep(1.35, 0.32, length(p));
@@ -252,14 +252,14 @@
         specularIntensity: 0.60,
         clearcoat: 0.45,
         clearcoatRoughness: 0.18,
-        attenuationColor: new THREE.Color(0x043824),
+        attenuationColor: new THREE.Color(0x012415),
         attenuationDistance: 14.0,
         transparent: true,
         opacity: 0.42
     });
 
     const deepMossStoneMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x074e32), // Saturated deep velvet moss
+        color: new THREE.Color(0x043621), // Saturated deep velvet moss
         roughness: 0.35,
         metalness: 0.32,
         flatShading: true,
@@ -378,7 +378,7 @@
         specularColor: new THREE.Color(0xbbf7d0),   // Subtle emerald-mint specular sheen
         clearcoat: 0.32,                            // Surface gloss sheen
         clearcoatRoughness: 0.22,                   // Soft sheen without harsh glare
-        attenuationColor: new THREE.Color(0x02301c), // Deep botanical emerald ice absorption
+        attenuationColor: new THREE.Color(0x011d11), // Deep botanical emerald ice absorption
         attenuationDistance: 15.0,
         normalMap,
         normalScale: new THREE.Vector2(0.20, 0.20), // Optical micro-refraction
