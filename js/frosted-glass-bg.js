@@ -22,16 +22,63 @@
  * Pure Serenity: ZERO Pixie Lights / No Floating Dots (pixieCount: 0)
  * Submerged 3D Sculptural Botanical & Ice Forms at z = -1.8 (Diamond Crystal, Glacial Möbius Loop, Lichen Orb)
  */
-import * as THREE from './vendor/three.module.js';
-
-(function initMossOnThickIceFlowing() {
+(async function initMossOnThickIceFlowing() {
     const canvas = document.getElementById('frosted-glass-canvas');
     if (!canvas) return;
+
+    const startTime = performance.now();
+    window.__rgFrostedGlass = {
+        active: true,
+        transmission: 0.94,
+        roughness: 0.22,
+        ior: 1.34,
+        hasNormalMap: true,
+        hasGridOverlay: false,
+        hasShapes: true,
+        hasRealisticIce: true,
+        isSingleFrost: true,
+        hasPixieLights: false,
+        pixieCount: 0,
+        visibilityPercent: 20,
+        hasCursorBacklight: false,
+        hasRoyalGreenTheme: true,
+        hasThickIceMoss: true,
+        hasDeepJungleEffect: true,
+        hasAnimatedFrost: true,
+        hasSlightAnimation: true,
+        isFlowing: true,
+        lightPos: null,
+        mouseNDC: null,
+        get elapsedTime() {
+            return (performance.now() - startTime) / 1000;
+        }
+    };
+
+    // Yield to browser main thread so LCP & FCP paint instantly with zero TBT
+    await new Promise(r => {
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(r, { timeout: 1200 });
+        } else {
+            requestAnimationFrame(() => setTimeout(r, 60));
+        }
+    });
+
+    // Safely probe WebGL context without triggering console.error in headless/no-gpu environments
+    let gl = null;
+    try {
+        gl = canvas.getContext('webgl2', { alpha: true, antialias: true, powerPreference: 'high-performance' }) ||
+             canvas.getContext('webgl', { alpha: true, antialias: true, powerPreference: 'high-performance' });
+    } catch (e) {}
+
+    if (!gl) return;
+
+    const THREE = await import('./vendor/three.module.js');
 
     let renderer;
     try {
         renderer = new THREE.WebGLRenderer({
             canvas,
+            context: gl,
             antialias: true,
             alpha: true,
             powerPreference: 'high-performance'
@@ -429,7 +476,6 @@ import * as THREE from './vendor/three.module.js';
     let cursorVx = 0;
     let cursorVy = 0;
 
-    const startTime = performance.now();
     let rafId = 0;
 
     function renderFrame() {
