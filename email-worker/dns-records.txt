@@ -1,0 +1,75 @@
+================================================================================
+DNS CONFIGURATION FOR: ramyachandrachambers.com
+PURPOSE: Cloudflare Email Routing + Transparent Outbound Reply Relay (Resend/Brevo)
+================================================================================
+
+--------------------------------------------------------------------------------
+PART 1: CLOUDFLARE DASHBOARD TABLE (Copy-paste values into Cloudflare DNS)
+--------------------------------------------------------------------------------
+
+TYPE    NAME                       VALUE / TARGET                                                               PRIORITY   PROXY STATUS   TTL
+------------------------------------------------------------------------------------------------------------------------------------------------
+MX      @                          route1.mx.cloudflare.net                                                     1          DNS only       Auto
+MX      @                          route2.mx.cloudflare.net                                                     2          DNS only       Auto
+MX      @                          route3.mx.cloudflare.net                                                     3          DNS only       Auto
+
+TXT     @                          v=spf1 include:_spf.mx.cloudflare.net include:spf.brevo.com include:_spf.resend.com ~all        DNS only       Auto
+
+TXT     _dmarc                     v=DMARC1; p=quarantine; adkim=r; aspf=r; pct=100; rua=mailto:ramyachndra@sltnet.lk; ruf=mailto:ramyachndra@sltnet.lk; fo=1;   DNS only       Auto
+
+TXT     _cloudflare-email-routing  verification=ramyachandrachambers.com                                                   DNS only       Auto
+
+# Resend DKIM (Added when domain is added inside https://resend.com/domains)
+CNAME   resend._domainkey          dkim.resend.com                                                              -          DNS only       Auto
+CNAME   bounces                    feedback-smtp.resend.com                                                     -          DNS only       Auto
+
+# Brevo DKIM (Added when domain is added inside https://app.brevo.com/senders/domains)
+TXT     mail._domainkey            k=rsa; p=YOUR_BREVO_PUBLIC_KEY_COPIED_FROM_BREVO_DASHBOARD                    -          DNS only       Auto
+TXT     brevo-code                 brevo-code=YOUR_BREVO_DOMAIN_VERIFICATION_TOKEN                              -          DNS only       Auto
+
+
+--------------------------------------------------------------------------------
+PART 2: STANDARD BIND ZONE FILE SYNTAX (RFC 1035 format)
+--------------------------------------------------------------------------------
+
+$ORIGIN ramyachandrachambers.com.
+$TTL 3600
+
+; --- Cloudflare Inbound Email Routing MX Records ---
+@                      IN  MX     1    route1.mx.cloudflare.net.
+@                      IN  MX     2    route2.mx.cloudflare.net.
+@                      IN  MX     3    route3.mx.cloudflare.net.
+
+; --- Authoritative SPF Record (Cloudflare + Brevo + Resend) ---
+@                      IN  TXT    "v=spf1 include:_spf.mx.cloudflare.net include:spf.brevo.com include:_spf.resend.com ~all"
+
+; --- Hardened DMARC Policy (Quarantine 100%, Relaxed Alignment, Aggregate & Forensic Reports) ---
+_dmarc                 IN  TXT    "v=DMARC1; p=quarantine; adkim=r; aspf=r; pct=100; rua=mailto:ramyachndra@sltnet.lk; ruf=mailto:ramyachndra@sltnet.lk; fo=1;"
+
+; --- Cloudflare Verification Token ---
+_cloudflare-email-routing IN TXT  "verification=ramyachandrachambers.com"
+
+; --- Resend DKIM & Return-Path Records ---
+resend._domainkey      IN  CNAME  dkim.resend.com.
+bounces                IN  CNAME  feedback-smtp.resend.com.
+
+; --- Brevo DKIM ---
+mail._domainkey        IN  TXT    "k=rsa; p=YOUR_BREVO_PUBLIC_KEY_HERE"
+
+
+--------------------------------------------------------------------------------
+SECURITY EXPLANATION OF RECORDS:
+--------------------------------------------------------------------------------
+1. MX route1/2/3.mx.cloudflare.net:
+   Routes all incoming mail directed to @ramyachandrachambers.com into the
+   Cloudflare edge network, where our Email Routing Worker intercepts and processes it.
+
+2. SPF include:_spf.mx.cloudflare.net include:spf.brevo.com include:_spf.resend.com ~all:
+   Authorizes Cloudflare edge (for inbound forward rewrite), Brevo SMTP servers,
+   and Resend SMTP servers to send email on behalf of @ramyachandrachambers.com.
+   Softfail (~all) prevents rejection during transition while guaranteeing deliverability.
+
+3. DMARC p=quarantine; pct=100;:
+   Tells recipient servers (Gmail, Outlook, Yahoo) to protect your domain against
+   phishing and spoofing. Unauthorized emails claiming to be from @ramyachandrachambers.com
+   are quarantined into spam, while reports are delivered directly to your SLT mailbox.

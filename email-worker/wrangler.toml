@@ -1,0 +1,22 @@
+name = "ramyachandra-email-router"
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+DOMAIN = "ramyachandrachambers.com"
+PRIMARY_RECIPIENT = "ramyachndra@sltnet.lk"
+BACKUP_RECIPIENT = ""
+ALLOWED_SENDERS = "ramyachndra@sltnet.lk"
+DEFAULT_SENDER_NAME = "Ramyachandra Gunasekera Chambers"
+DEFAULT_OUTBOUND_ALIAS = "host@ramyachandrachambers.com"
+REQUIRE_AUTH_RESULTS = "true"
+
+# Secrets to be configured via Wrangler CLI (run `npx wrangler secret put <NAME>`):
+# 1. HMAC_SECRET       - A random 64-character hexadecimal string for signing proxy reply addresses.
+# 2. RESEND_API_KEY     - Optional (Primary provider): Resend API key (re_...)
+# 3. BREVO_API_KEY      - Optional (Fallback provider): Brevo API key (xkeysib-...)
+
+# Optional: Cloudflare direct Send Email binding (if activated on account)
+# [[send_email]]
+# name = "SEB"
