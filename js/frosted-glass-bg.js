@@ -169,29 +169,67 @@
                 return sqrt(minDist);
             }
 
+            // Multi-scale Voronoi computing F1 (cushion centers) and F2-F1 (vein networks)
+            vec2 voronoi2(vec2 p) {
+                vec2 n = floor(p);
+                vec2 f = fract(p);
+                float d1 = 8.0;
+                float d2 = 8.0;
+                for (int j = -1; j <= 1; j++) {
+                    for (int i = -1; i <= 1; i++) {
+                        vec2 g = vec2(float(i), float(j));
+                        vec2 o = hash2(n + g);
+                        vec2 r = g + o - f;
+                        float d = dot(r, r);
+                        if (d < d1) {
+                            d2 = d1;
+                            d1 = d;
+                        } else if (d < d2) {
+                            d2 = d;
+                        }
+                    }
+                }
+                return vec2(sqrt(d1), sqrt(d2));
+            }
+
             void main() {
                 vec2 uv = vUv;
                 vec2 p = (uv - 0.5) * vec2(uResolution.x / uResolution.y, 1.0);
 
-                // Primordial autonomous fluid time rate
+                // Primordial autonomous fluid time rate (runs smoothly at 60 FPS while idle)
                 float t = uTime * 0.16 + uScroll * 0.00008;
 
                 // Thick ice internal refraction domain warping
                 vec2 warp;
                 warp.x = fbm(p * 2.4 + vec2(t * 0.35, -t * 0.28));
-                warp.y = fbm(p * 2.4 + vec2(-t * 0.28, t * 0.42) + 3.14);
+                warp.y = fbm(p * 2.4 + vec2(-t * 0.28, t * 0.42) + 3.14159);
 
                 vec2 warpedP = p + warp * 0.26;
 
-                // Multi-scale Deep Jungle Velvet Moss Landscape
+                // Multi-scale Deep Jungle Velvet Moss Synthesis
+                // 1. Spongy cushion clusters (F1 Voronoi + FBM macro strata)
+                vec2 vMacro = voronoi2(warpedP * 5.2 + warp * 0.8);
+                float spongyCushions = smoothstep(0.85, 0.15, vMacro.x);
                 float macroMoss = fbm(warpedP * 1.8 + vec2(t * 0.08, -t * 0.12));
-                float microMoss = cellularMoss(warpedP * 11.0 + warp * 1.4);
-                float microDetail = fbm(warpedP * 26.0);
 
-                // Thick Ice Cube Internal Stress Cracks & Prismatic Caustics
+                // 2. Botanical vein networks (F2 - F1 boundary ridges)
+                float botanicalVeins = smoothstep(0.04, 0.22, vMacro.y - vMacro.x);
+
+                // 3. Organic lichen filaments & micro-spores
+                float microMoss = cellularMoss(warpedP * 11.0 + warp * 1.4);
+                float lichenFilaments = fbm(warpedP * 28.0 + warp * 1.6);
+
+                // Thick Glacial Ice Cube Optics:
+                // Crystalline stress fractures & internal domain warping
                 float iceVein1 = abs(sin((warpedP.x * 3.4 + warpedP.y * 2.2) * 3.8 + t * 0.7));
                 float iceVein2 = abs(cos((warpedP.x * 2.7 - warpedP.y * 3.6) * 3.4 - t * 0.5));
                 float iceStress = smoothstep(0.91, 0.98, 1.0 - (iceVein1 * 0.55 + iceVein2 * 0.45));
+
+                // Prismatic dispersion caustics with chromatic separation
+                float cR = sin((warpedP.x * 4.2 + warpedP.y * 3.1) * 3.6 + t * 0.72);
+                float cG = sin((warpedP.x * 4.2 + warpedP.y * 3.1) * 3.6 + t * 0.70 + 0.08);
+                float cB = sin((warpedP.x * 4.2 + warpedP.y * 3.1) * 3.6 + t * 0.68 + 0.16);
+                vec3 prismaticCaustics = vec3(pow(abs(cR), 8.0), pow(abs(cG), 8.0), pow(abs(cB), 8.0));
 
                 // Volumetric Deep Jungle Light Shafts (Filtering through thick ice)
                 float rayAngle = p.x * 1.7 + p.y * 1.1;
@@ -199,28 +237,32 @@
                 godRays *= sin(rayAngle * 8.6 - t * 0.65) * 0.5 + 0.5;
                 godRays = pow(godRays, 2.0);
 
-                // Saturated Deep Botanical Jungle & Velvet Moss Palette:
-                vec3 colAbyssNoir    = vec3(0.006, 0.075, 0.045); // Deepest jungle soil / malachite bedrock
-                vec3 colDeepMoss     = vec3(0.015, 0.195, 0.115); // Rich velvet moss base (#032e1d)
-                vec3 colEmeraldGreen = vec3(0.028, 0.315, 0.185); // Lush tropical jungle emerald (#06482e)
-                vec3 colVibrantMoss  = vec3(0.052, 0.460, 0.275); // Luminous moss cushion highlight (#0c6a43)
-                vec3 colLichenSpore  = vec3(0.090, 0.620, 0.380); // Sunlit moss spore crest (#14955f)
-                vec3 colGoldAmber    = vec3(0.420, 0.340, 0.110); // Warm lichen gold filaments (#6b561c)
-                vec3 colIcePrism     = vec3(0.140, 0.520, 0.450); // Thick glacial ice refraction highlight
+                // Saturated Botanical Palette:
+                vec3 colBedrockNoir     = vec3(1.0 / 255.0, 21.0 / 255.0, 12.0 / 255.0);   // #01150c bedrock noir
+                vec3 colVelvetMoss      = vec3(3.0 / 255.0, 46.0 / 255.0, 29.0 / 255.0);   // #032e1d dense velvet moss
+                vec3 colTropicalEmerald = vec3(6.0 / 255.0, 72.0 / 255.0, 46.0 / 255.0);   // #06482e tropical emerald
+                vec3 colLuminousMoss    = vec3(12.0 / 255.0, 106.0 / 255.0, 67.0 / 255.0); // #0c6a43 luminous moss cushions
+                vec3 colSunlitSpore     = vec3(20.0 / 255.0, 149.0 / 255.0, 95.0 / 255.0); // #14955f sunlit spore crests
+                vec3 colGoldLichen      = vec3(107.0 / 255.0, 86.0 / 255.0, 28.0 / 255.0); // #6b561c golden lichen filaments
+                vec3 colIceRefract      = vec3(0.120, 0.480, 0.380);                       // Prismatic ice core
 
-                // Composite deep jungle moss strata
-                vec3 mossColor = mix(colAbyssNoir, colDeepMoss, smoothstep(0.12, 0.72, macroMoss));
-                mossColor = mix(mossColor, colEmeraldGreen, smoothstep(0.30, 0.82, macroMoss + microMoss * 0.35));
-                mossColor = mix(mossColor, colVibrantMoss, smoothstep(0.50, 0.92, macroMoss * (1.0 - microMoss * 0.42)));
-                mossColor = mix(mossColor, colLichenSpore, smoothstep(0.68, 0.96, macroMoss * microDetail));
+                // Composite deep jungle moss strata:
+                vec3 mossColor = mix(colBedrockNoir, colVelvetMoss, smoothstep(0.10, 0.65, macroMoss));
+                mossColor = mix(mossColor, colTropicalEmerald, smoothstep(0.25, 0.78, macroMoss * 0.7 + spongyCushions * 0.3));
+                mossColor = mix(mossColor, colLuminousMoss, smoothstep(0.42, 0.88, spongyCushions * (1.0 - microMoss * 0.35)));
+                mossColor = mix(mossColor, colSunlitSpore, smoothstep(0.60, 0.95, spongyCushions * lichenFilaments));
 
-                // Add warm golden lichen glints and light shafts
-                mossColor += colGoldAmber * (godRays * 0.32 * macroMoss);
+                // Layer botanical vein networks (fine darker emerald channel depressions)
+                mossColor = mix(mossColor, colVelvetMoss * 0.85, (1.0 - botanicalVeins) * 0.45);
 
-                // Add thick ice internal stress-crack glints and crystalline refraction
-                mossColor += colIcePrism * (iceStress * 0.42);
+                // Golden lichen filaments and sunlit spore crests highlighted by light shafts
+                mossColor += colGoldLichen * (godRays * 0.35 * macroMoss + lichenFilaments * 0.18 * spongyCushions);
 
-                // Deep jungle vignette (keeps rich green throughout center)
+                // Thick ice internal stress fractures & prismatic dispersion caustics
+                mossColor += colIceRefract * (iceStress * 0.38);
+                mossColor += prismaticCaustics * 0.22;
+
+                // Deep jungle vignette (rich saturated green center)
                 float vignette = smoothstep(1.35, 0.32, length(p));
                 mossColor *= (0.76 + 0.24 * vignette);
 
@@ -259,7 +301,7 @@
     });
 
     const deepMossStoneMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x074e32), // Saturated deep velvet moss
+        color: new THREE.Color(0x06482e), // Exact tropical emerald moss (#06482e)
         roughness: 0.35,
         metalness: 0.32,
         flatShading: true,
