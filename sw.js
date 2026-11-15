@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rgchambers-v18.0.0';
+const CACHE_NAME = 'rgchambers-v19.0.0';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -24,7 +24,7 @@ const PRECACHE_ASSETS = [
   '/css/style.css',
   '/js/main.min.js?v=11.0.0',
   '/js/main.js',
-  '/js/frosted-glass-bg.js?v=12.0.0',
+  '/js/frosted-glass-bg.js?v=13.0.0',
   '/js/vendor/three.module.js',
   '/js/vendor/three.core.js',
   '/assets/frosted-normal.png',

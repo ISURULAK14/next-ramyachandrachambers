@@ -155,12 +155,13 @@ import * as THREE from './vendor/three.module.js';
                 // Autonomous viscous flow time rate (smooth 60 FPS while idle)
                 float t = uTime * 0.075 + uScroll * 0.00012;
 
-                // River-like glacial current advection: steady vertical drift with gentle meanders
+                // River-like glacial current advection: wide stream spanning broadly across viewport
                 vec2 flow = vec2(
-                    sin(p.y * 1.8 + t * 0.7) * 0.14 + cos(p.x * 1.4 - t * 0.45) * 0.07,
-                    -t * 0.32 + cos(p.y * 1.5 + t * 0.5) * 0.09
+                    sin(p.y * 1.3 + t * 0.7) * 0.16 + cos(p.x * 0.7 - t * 0.45) * 0.08,
+                    -t * 0.32 + cos(p.y * 1.1 + t * 0.5) * 0.09
                 );
-                vec2 flowP = p * 1.35 + flow;
+                // Broad horizontal scale expands stream width significantly across screen
+                vec2 flowP = vec2(p.x * 0.68, p.y * 1.10) + flow;
 
                 // Hydrodynamic cursor interaction on flowing moss
                 if (uCursor.z > 0.5) {
@@ -172,40 +173,40 @@ import * as THREE from './vendor/three.module.js';
 
                 // Thick ice internal refraction domain warping
                 vec2 warp;
-                warp.x = fbm(flowP * 2.0 + vec2(t * 0.22, -t * 0.18));
-                warp.y = fbm(flowP * 2.0 + vec2(-t * 0.18, t * 0.26) + 3.14159);
+                warp.x = fbm(flowP * 1.8 + vec2(t * 0.22, -t * 0.18));
+                warp.y = fbm(flowP * 1.8 + vec2(-t * 0.18, t * 0.26) + 3.14159);
                 vec2 warpedP = flowP + warp * 0.28;
 
-                // Procedural Deep Jungle Velvet Moss Synthesis:
+                // Procedural Deep Jungle Velvet Moss Synthesis (Wide Spreading Cushions):
                 // 1. Spongy cushion clusters (F1 Voronoi + FBM macro strata)
-                vec2 vMacro = voronoi2(warpedP * 3.4 + warp * 0.45);
-                float spongyCushions = smoothstep(0.86, 0.12, vMacro.x);
-                float macroMoss = fbm(warpedP * 1.5 + vec2(t * 0.06, -t * 0.10));
+                vec2 vMacro = voronoi2(warpedP * 2.8 + warp * 0.40);
+                float spongyCushions = smoothstep(0.88, 0.10, vMacro.x);
+                float macroMoss = fbm(warpedP * 1.3 + vec2(t * 0.06, -t * 0.10));
 
                 // 2. Botanical vein networks (F2 - F1 boundary ridges)
                 float botanicalVeins = smoothstep(0.04, 0.24, vMacro.y - vMacro.x);
 
                 // 3. Organic lichen filaments & micro-spores
-                vec2 vMicro = voronoi2(warpedP * 7.5 + warp * 0.7);
+                vec2 vMicro = voronoi2(warpedP * 6.5 + warp * 0.65);
                 float microMoss = vMicro.x;
-                float lichenFilaments = fbm(warpedP * 16.0 + warp * 1.1);
+                float lichenFilaments = fbm(warpedP * 14.0 + warp * 1.0);
 
                 // Thick Glacial Ice Sheet Optics:
                 // Crystalline stress fractures flowing through thick ice
-                float iceVein1 = abs(sin((warpedP.x * 2.0 + warpedP.y * 1.5) * 2.3 + t * 0.50));
-                float iceVein2 = abs(cos((warpedP.x * 1.6 - warpedP.y * 2.2) * 2.0 - t * 0.40));
+                float iceVein1 = abs(sin((warpedP.x * 1.6 + warpedP.y * 1.4) * 2.1 + t * 0.50));
+                float iceVein2 = abs(cos((warpedP.x * 1.3 - warpedP.y * 1.9) * 1.8 - t * 0.40));
                 float iceStress = smoothstep(0.92, 0.985, 1.0 - (iceVein1 * 0.55 + iceVein2 * 0.45));
 
                 // Prismatic dispersion caustics with dynamic chromatic separation
-                float cR = sin((warpedP.x * 2.8 + warpedP.y * 2.0) * 2.2 + t * 0.85);
-                float cG = sin((warpedP.x * 2.8 + warpedP.y * 2.0) * 2.2 + t * 0.83 + 0.14);
-                float cB = sin((warpedP.x * 2.8 + warpedP.y * 2.0) * 2.2 + t * 0.81 + 0.28);
+                float cR = sin((warpedP.x * 2.2 + warpedP.y * 1.8) * 2.0 + t * 0.85);
+                float cG = sin((warpedP.x * 2.2 + warpedP.y * 1.8) * 2.0 + t * 0.83 + 0.14);
+                float cB = sin((warpedP.x * 2.2 + warpedP.y * 1.8) * 2.0 + t * 0.81 + 0.28);
                 vec3 prismaticCaustics = vec3(pow(abs(cR), 5.5), pow(abs(cG), 5.5), pow(abs(cB), 5.5));
 
-                // Volumetric Deep Jungle Light Shafts filtering through ice sheet
-                float rayAngle = p.x * 1.2 + p.y * 0.85;
-                float godRay1 = pow(sin(rayAngle * 3.4 + t * 0.45) * 0.5 + 0.5, 2.6);
-                float godRay2 = pow(sin(rayAngle * 6.2 - t * 0.60) * 0.5 + 0.5, 2.8);
+                // Volumetric Deep Jungle Light Shafts (Wide Aperture across Full Stream)
+                float rayAngle = p.x * 0.65 + p.y * 0.85;
+                float godRay1 = pow(sin(rayAngle * 2.8 + t * 0.45) * 0.5 + 0.5, 2.3);
+                float godRay2 = pow(sin(rayAngle * 5.2 - t * 0.60) * 0.5 + 0.5, 2.5);
                 float godRays = godRay1 * 0.65 + godRay2 * 0.45;
 
                 // Calibrated Botanical Moss Palette:
@@ -217,25 +218,33 @@ import * as THREE from './vendor/three.module.js';
                 vec3 colGoldLichen      = vec3(107.0 / 255.0, 86.0 / 255.0, 28.0 / 255.0); // #6b561c golden lichen filaments
                 vec3 colIceRefract      = vec3(0.14, 0.56, 0.42);                          // Crystalline ice core
 
+                // Wide Stream Envelope (Spans wide across horizontal viewport)
+                float meander = sin(p.y * 1.3 + t * 0.4) * 0.16 + sin(p.y * 2.5 - t * 0.3) * 0.06;
+                float distCenter = abs(p.x - meander);
+                float wideStream = smoothstep(1.30, 0.15, distCenter);
+
                 // Composite flowing botanical moss layers:
                 vec3 mossColor = mix(colBedrockNoir, colVelvetMoss, smoothstep(0.08, 0.58, macroMoss));
-                mossColor = mix(mossColor, colTropicalEmerald, smoothstep(0.18, 0.70, macroMoss * 0.65 + spongyCushions * 0.35));
-                mossColor = mix(mossColor, colLuminousMoss, smoothstep(0.32, 0.82, spongyCushions * (1.0 - microMoss * 0.30)));
-                mossColor = mix(mossColor, colSunlitSpore, smoothstep(0.48, 0.90, spongyCushions * lichenFilaments));
+                mossColor = mix(mossColor, colTropicalEmerald, smoothstep(0.16, 0.68, macroMoss * 0.60 + spongyCushions * 0.40) * (0.65 + 0.35 * wideStream));
+                mossColor = mix(mossColor, colLuminousMoss, smoothstep(0.30, 0.80, spongyCushions * (1.0 - microMoss * 0.28)) * (0.60 + 0.40 * wideStream));
+                mossColor = mix(mossColor, colSunlitSpore, smoothstep(0.46, 0.88, spongyCushions * lichenFilaments) * wideStream);
 
                 // Layer botanical vein networks (depressed dark channels between cushions)
-                mossColor = mix(mossColor, colVelvetMoss * 0.75, (1.0 - botanicalVeins) * 0.40);
+                mossColor = mix(mossColor, colVelvetMoss * 0.75, (1.0 - botanicalVeins) * 0.38);
 
-                // Golden lichen filaments illuminated by light shafts
-                mossColor += colGoldLichen * (godRays * 0.40 * macroMoss + lichenFilaments * 0.25 * spongyCushions);
+                // Golden lichen filaments illuminated by wide light shafts
+                mossColor += colGoldLichen * (godRays * 0.40 * macroMoss + lichenFilaments * 0.25 * spongyCushions * wideStream);
 
                 // Thick ice sheet internal stress fractures & prismatic dispersion
                 mossColor += colIceRefract * (iceStress * 0.32);
                 mossColor += prismaticCaustics * 0.20;
 
-                // Deep luxury vignette (seamless continuity with dark navbar and footer)
-                float vignette = smoothstep(1.35, 0.25, length(p));
-                mossColor *= (0.75 + 0.25 * vignette);
+                // Wide stream vignette (soft horizontal falloff so stream width spans across the display)
+                float horizDist = abs(p.x) * 0.54;
+                float vertDist = abs(p.y) * 0.95;
+                float vignetteDist = sqrt(horizDist * horizDist + vertDist * vertDist);
+                float vignette = smoothstep(1.65, 0.45, vignetteDist);
+                mossColor *= (0.80 + 0.20 * vignette);
 
                 gl_FragColor = vec4(mossColor, 1.0);
             }
