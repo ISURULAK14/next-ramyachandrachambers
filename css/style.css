@@ -1905,8 +1905,9 @@ header.site-header {
   filter: drop-shadow(0 4px 18px rgba(226, 194, 117, 0.5)) !important;
 }
 .hero-subtitle {
-  color: var(--text-muted) !important;
-  font-weight: 300 !important;
+  color: #f1f5f9 !important;
+  font-weight: 400 !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85) !important;
 }
 
 /* 7. Stats Ticker */
