@@ -132,14 +132,18 @@ Ensure your Cloudflare DNS table includes the records listed in [`dns-records.tx
 ### 6.2 Composing a Brand-New Outbound Email from SLT Mail
 To initiate a new email thread with a client directly from your SLT mailbox:
 
-#### Method A: Direct Address Syntax (`send+`)
+#### Method A: Direct Address Syntax (`send+` or `compose+`)
 In SLT Mail, compose a new email and set the recipient to:
 ```
 send+<client_username>=<client_domain>@ramyachandrachambers.com
 ```
+or
+```
+compose+<client_username>=<client_domain>@ramyachandrachambers.com
+```
 *Example:* To email `client.name@gmail.com`:
 ```
-To: send+client.name=gmail.com@ramyachandrachambers.com
+To: compose+client.name=gmail.com@ramyachandrachambers.com
 Subject: Legal Deed Consultation - Ramyachandra Gunasekera Chambers
 ```
 

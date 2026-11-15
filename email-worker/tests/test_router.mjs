@@ -182,12 +182,19 @@ async function runTests() {
   console.log('✓ Proxy address regex parsing passed');
 
   console.log('--- TEST 6: Outbound New Compose Patterns ---');
-  // Pattern A: send+
+  // Pattern A1: send+
   const sendAddr = 'send+john.doe=gmail.com@ramyachandrachambers.com';
-  const sendMatch = sendAddr.match(/^send\+([^@]+)@/);
+  const sendMatch = sendAddr.match(/^(?:send|compose)\+([^@]+)@/);
   assert(sendMatch !== null);
-  const targetEmail = sendMatch[1].replace('=', '@');
-  assert.strictEqual(targetEmail, 'john.doe@gmail.com');
+  const targetEmail1 = sendMatch[1].replace('=', '@');
+  assert.strictEqual(targetEmail1, 'john.doe@gmail.com');
+
+  // Pattern A2: compose+
+  const composeAddr = 'compose+sarah.connor=outlook.com@ramyachandrachambers.com';
+  const composeMatch = composeAddr.match(/^(?:send|compose)\+([^@]+)@/);
+  assert(composeMatch !== null);
+  const targetEmail2 = composeMatch[1].replace('=', '@');
+  assert.strictEqual(targetEmail2, 'sarah.connor@outlook.com');
 
   // Pattern B: [TO: ... | FROM: ...]
   const subj1 = '[TO: client@test.com | FROM: deeds@ramyachandrachambers.com] Regarding Property Deed';

@@ -465,12 +465,12 @@ export default {
     }
 
     // =========================================================================
-    // CASE B: OUTBOUND NEW COMPOSE (Recipient starts with "send+" or custom Subject)
+    // CASE B: OUTBOUND NEW COMPOSE (Recipient starts with "send+" / "compose+" or custom Subject)
     // =========================================================================
     const subjectMatch = (parsed.subject || '').match(/^\[TO:\s*([^\]|]+?)\s*(?:\|\s*FROM:\s*([^\]]+?)\s*)?\]\s*(.*)$/i);
-    const isSendPlus = rawTo.startsWith('send+');
+    const isSendOrCompose = rawTo.startsWith('send+') || rawTo.startsWith('compose+');
 
-    if (isSendPlus || subjectMatch) {
+    if (isSendOrCompose || subjectMatch) {
       // Check 1: Whitelist
       const mimeFromAddress = parsed.from?.address?.toLowerCase().trim() || '';
       if (!isAllowedSender(rawFrom, env.ALLOWED_SENDERS) || !isAllowedSender(mimeFromAddress, env.ALLOWED_SENDERS)) {
@@ -488,9 +488,9 @@ export default {
       let fromAlias = defaultOutboundAlias;
       let cleanSubject = parsed.subject || '';
 
-      if (isSendPlus) {
-        // e.g. send+john.doe=gmail.com@ramyachandrachambers.com
-        const sendMatch = rawTo.match(/^send\+([^@]+)@/);
+      if (isSendOrCompose) {
+        // e.g. send+john.doe=gmail.com@ramyachandrachambers.com or compose+john.doe=gmail.com@ramyachandrachambers.com
+        const sendMatch = rawTo.match(/^(?:send|compose)\+([^@]+)@/);
         if (sendMatch) {
           targetClientEmail = sendMatch[1].replace('=', '@').trim().toLowerCase();
         }

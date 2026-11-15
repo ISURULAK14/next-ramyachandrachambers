@@ -4,6 +4,7 @@
   "description": "Production Bidirectional Email Routing & Transparent Reply-Masking System for ramyachandrachambers.com",
   "main": "src/index.ts",
   "scripts": {
+    "test": "node tests/test_router.mjs",
     "build": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "deploy": "wrangler deploy",
