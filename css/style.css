@@ -2140,11 +2140,15 @@ header.site-header {
 
   /* Mobile Hero Subtitle & Body Contrast Enhancement */
   .hero-subtitle {
-    color: #e2e8f0 !important;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75) !important;
+    color: #ffffff !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95), 0 0 2px rgba(0, 0, 0, 0.9) !important;
+    font-weight: 450 !important;
   }
-  .about-lead {
-    color: #f1f5f9 !important;
+  .about-lead,
+  .about-text p,
+  .section-desc {
+    color: #f8fafc !important;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9) !important;
   }
   .section-desc a {
     min-height: 44px !important;
@@ -2158,3 +2162,21 @@ header.site-header {
     justify-content: center !important;
   }
 }
+
+/* High Contrast Subtitles, Descriptions and About Copy */
+.hero-subtitle {
+  color: #ffffff !important;
+  font-weight: 450 !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95), 0 0 2px rgba(0, 0, 0, 0.9) !important;
+}
+.section-desc {
+  color: #f8fafc !important;
+  font-weight: 400 !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9) !important;
+}
+.about-text p {
+  color: #f8fafc !important;
+  font-weight: 400 !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9) !important;
+}
+

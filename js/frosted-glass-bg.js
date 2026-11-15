@@ -256,14 +256,14 @@
                 float godRay2 = pow(sin(rayAngle * 5.2 - t * 0.60) * 0.5 + 0.5, 2.5);
                 float godRays = godRay1 * 0.65 + godRay2 * 0.45;
 
-                // Calibrated Deep Saturated Botanical Moss Palette (Rich Bottle/Forest Emerald):
-                vec3 colBedrockNoir     = vec3(1.0 / 255.0, 32.0 / 255.0, 18.0 / 255.0);   // #012012 deep bedrock noir
-                vec3 colVelvetMoss      = vec3(3.0 / 255.0, 58.0 / 255.0, 32.0 / 255.0);   // #033a20 dense deep velvet moss
-                vec3 colTropicalEmerald = vec3(5.0 / 255.0, 96.0 / 255.0, 52.0 / 255.0);   // #056034 rich deep forest emerald
-                vec3 colLuminousMoss    = vec3(8.0 / 255.0, 132.0 / 255.0, 72.0 / 255.0);  // #088448 saturated botanical moss
-                vec3 colSunlitSpore     = vec3(14.0 / 255.0, 168.0 / 255.0, 88.0 / 255.0); // #0ea858 deep crest highlight (pure deep green)
-                vec3 colGoldLichen      = vec3(92.0 / 255.0, 74.0 / 255.0, 22.0 / 255.0);  // #5c4a16 golden lichen filaments
-                vec3 colIceRefract      = vec3(6.0 / 255.0, 110.0 / 255.0, 68.0 / 255.0);  // Deep glacial emerald core
+                // Calibrated Deeper Imperial Botanical Velvet Moss & Emerald Palette:
+                vec3 colBedrockNoir     = vec3(1.0 / 255.0, 20.0 / 255.0, 12.0 / 255.0);   // #01140c deeper bedrock noir
+                vec3 colVelvetMoss      = vec3(2.0 / 255.0, 42.0 / 255.0, 24.0 / 255.0);   // #022a18 dense deep velvet moss
+                vec3 colTropicalEmerald = vec3(4.0 / 255.0, 68.0 / 255.0, 38.0 / 255.0);   // #044426 rich deeper forest emerald
+                vec3 colLuminousMoss    = vec3(6.0 / 255.0, 98.0 / 255.0, 54.0 / 255.0);   // #066236 botanical emerald moss
+                vec3 colSunlitSpore     = vec3(9.0 / 255.0, 128.0 / 255.0, 70.0 / 255.0);  // #098046 deep crest highlight
+                vec3 colGoldLichen      = vec3(78.0 / 255.0, 60.0 / 255.0, 16.0 / 255.0);  // #4e3c10 golden lichen filaments
+                vec3 colIceRefract      = vec3(4.0 / 255.0, 80.0 / 255.0, 44.0 / 255.0);   // Deep glacial emerald core
 
                 // Wide Stream Envelope (Spans broad across horizontal viewport)
                 float meander = sin(p.y * 1.3 + t * 0.4) * 0.16 + sin(p.y * 2.5 - t * 0.3) * 0.06;
@@ -383,8 +383,8 @@
         specularColor: new THREE.Color(0x34d399),   // Deep emerald ice specular sheen
         clearcoat: 0.28,                            // Glacial ice surface sheen
         clearcoatRoughness: 0.22,                   // Soft sheen without harsh glare
-        attenuationColor: new THREE.Color(0x02381e), // Deep rich forest emerald volume attenuation
-        attenuationDistance: 9.5,                   // Rich volume absorption
+        attenuationColor: new THREE.Color(0x012414), // Deeper forest emerald volume attenuation
+        attenuationDistance: 8.0,                   // Rich volume absorption
         normalMap,
         normalScale: new THREE.Vector2(0.20, 0.20), // Optical micro-refraction
         transparent: true,
@@ -398,14 +398,14 @@
     // =========================================================================
     // 5. Deep Botanical Studio Lighting (NO CURSOR BACKLIGHT)
     // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x012012, 0.80);
+    const ambientLight = new THREE.AmbientLight(0x01140c, 0.75);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0x056034, 0.44);
+    const keyLight = new THREE.DirectionalLight(0x044426, 0.38);
     keyLight.position.set(-3.0, 4.0, 4.0);
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x5c4a16, 0.26);
+    const rimLight = new THREE.DirectionalLight(0x4e3c10, 0.22);
     rimLight.position.set(3.5, -2.5, 3.5);
     scene.add(rimLight);
 
