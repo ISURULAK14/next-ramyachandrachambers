@@ -39,19 +39,14 @@
         }
     };
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // Immediate frame start (no blank canvas delays)
+    await new Promise(r => requestAnimationFrame(r));
 
-    // Yield main thread to allow browser to complete FCP / LCP first frame
-    if ('requestIdleCallback' in window) {
-        await new Promise(r => requestIdleCallback(r, { timeout: 2000 }));
-    } else {
-        await new Promise(r => setTimeout(r, 500));
-    }
-
-    // Safely probe WebGL context without triggering Three.js console.error in headless environments (--disable-gpu)
+    // Safely probe WebGL context without triggering Three.js console.error in headless environments
     let gl = null;
     try {
-        gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+        gl = canvas.getContext('webgl2', { alpha: true, antialias: true, powerPreference: 'high-performance' }) ||
+             canvas.getContext('webgl', { alpha: true, antialias: true, powerPreference: 'high-performance' });
     } catch (e) {}
 
     if (!gl) return;
@@ -291,41 +286,41 @@
         ior: 1.34,
         thickness: 1.2,
         specularColor: new THREE.Color(0xa7f3d0),
-        specularIntensity: 0.60,
-        clearcoat: 0.45,
-        clearcoatRoughness: 0.18,
+        specularIntensity: 0.85,
+        clearcoat: 0.60,
+        clearcoatRoughness: 0.16,
         attenuationColor: new THREE.Color(0x043824),
-        attenuationDistance: 14.0,
+        attenuationDistance: 12.0,
         transparent: true,
-        opacity: 0.42
+        opacity: 0.85
     });
 
     const deepMossStoneMat = new THREE.MeshStandardMaterial({
         color: new THREE.Color(0x06482e), // Exact tropical emerald moss (#06482e)
-        roughness: 0.35,
-        metalness: 0.32,
+        roughness: 0.32,
+        metalness: 0.30,
         flatShading: true,
         transparent: true,
-        opacity: 0.45
+        opacity: 0.92
     });
 
     const goldLichenMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0xc5a059), // Warm botanical gold lichen
-        roughness: 0.28,
-        metalness: 0.82,
+        color: new THREE.Color(0xc5a059), // Warm botanical gold lichen (#6b561c / gold)
+        roughness: 0.25,
+        metalness: 0.85,
         transparent: true,
-        opacity: 0.35
+        opacity: 0.85
     });
 
     const iceGimbalMat = new THREE.MeshPhysicalMaterial({
         color: new THREE.Color(0xe6fbf0),
         transmission: 0.90,
-        roughness: 0.20,
+        roughness: 0.18,
         ior: 1.34,
         thickness: 0.85,
         specularColor: new THREE.Color(0x6ee7b7),
         transparent: true,
-        opacity: 0.38
+        opacity: 0.80
     });
 
     // Central Monument: 3D Thick Beveled Glacial Ice Cube Matrix
@@ -514,52 +509,50 @@
         // Keep 3D kinetic geometry floating continuously within viewport
         shapeGroup.position.y = scrollParallaxY + Math.sin(elapsed * 0.32) * 0.08;
 
-        if (!prefersReducedMotion) {
-            // Tumbling & rotation of the 3D Thick Ice Cube & Moss Monolith
-            iceCubeMesh.rotation.x = elapsed * 0.16;
-            iceCubeMesh.rotation.y = elapsed * 0.22;
+        // Continuous Autonomous Tumbling & 3D Orbital Progression (Runs at 60 FPS while idle)
+        iceCubeMesh.rotation.x = elapsed * 0.16;
+        iceCubeMesh.rotation.y = elapsed * 0.22;
 
-            mossCoreMesh.rotation.x = -elapsed * 0.24;
-            mossCoreMesh.rotation.y = elapsed * 0.30;
-            const corePulse = 1.0 + 0.06 * Math.sin(elapsed * 1.25);
-            mossCoreMesh.scale.set(corePulse, corePulse, corePulse);
+        mossCoreMesh.rotation.x = -elapsed * 0.24;
+        mossCoreMesh.rotation.y = elapsed * 0.30;
+        const corePulse = 1.0 + 0.06 * Math.sin(elapsed * 1.25);
+        mossCoreMesh.scale.set(corePulse, corePulse, corePulse);
 
-            // Orbiting gimbals and rings
-            outerRing.rotation.x = elapsed * 0.24;
-            outerRing.rotation.y = elapsed * 0.18;
+        // Orbiting gimbals and rings
+        outerRing.rotation.x = elapsed * 0.24;
+        outerRing.rotation.y = elapsed * 0.18;
 
-            midRing.rotation.y = -elapsed * 0.28;
-            midRing.rotation.z = elapsed * 0.20;
+        midRing.rotation.y = -elapsed * 0.28;
+        midRing.rotation.z = elapsed * 0.20;
 
-            // Flanking satellites orbit & rotate in continuous 3D harmony
-            satULIce.rotation.x = elapsed * 0.20;
-            satULIce.rotation.y = elapsed * 0.26;
-            satULIce.position.y = 1.35 + Math.sin(elapsed * 0.36) * 0.14;
+        // Flanking satellites orbit & rotate in continuous 3D harmony
+        satULIce.rotation.x = elapsed * 0.20;
+        satULIce.rotation.y = elapsed * 0.26;
+        satULIce.position.y = 1.35 + Math.sin(elapsed * 0.36) * 0.14;
 
-            satULMoss.rotation.x = -elapsed * 0.22;
-            satULMoss.rotation.y = elapsed * 0.28;
-            satULMoss.position.y = satULIce.position.y;
+        satULMoss.rotation.x = -elapsed * 0.22;
+        satULMoss.rotation.y = elapsed * 0.28;
+        satULMoss.position.y = satULIce.position.y;
 
-            satLR.rotation.y = -elapsed * 0.26;
-            satLR.rotation.z = elapsed * 0.20;
-            satLR.position.y = -1.25 + Math.cos(elapsed * 0.34) * 0.12;
+        satLR.rotation.y = -elapsed * 0.26;
+        satLR.rotation.z = elapsed * 0.20;
+        satLR.position.y = -1.25 + Math.cos(elapsed * 0.34) * 0.12;
 
-            satLRHalo.rotation.x = elapsed * 0.18;
-            satLRHalo.rotation.y = -elapsed * 0.22;
-            satLRHalo.position.y = satLR.position.y;
+        satLRHalo.rotation.x = elapsed * 0.18;
+        satLRHalo.rotation.y = -elapsed * 0.22;
+        satLRHalo.position.y = satLR.position.y;
 
-            satUR.rotation.x = -elapsed * 0.22;
-            satUR.rotation.y = elapsed * 0.28;
-            satUR.position.y = 1.45 + Math.cos(elapsed * 0.40) * 0.12;
+        satUR.rotation.x = -elapsed * 0.22;
+        satUR.rotation.y = elapsed * 0.28;
+        satUR.position.y = 1.45 + Math.cos(elapsed * 0.40) * 0.12;
 
-            satLLRing.rotation.y = elapsed * 0.24;
-            satLLRing.rotation.z = -elapsed * 0.18;
-            satLLRing.position.y = -1.35 + Math.sin(elapsed * 0.36) * 0.12;
+        satLLRing.rotation.y = elapsed * 0.24;
+        satLLRing.rotation.z = -elapsed * 0.18;
+        satLLRing.position.y = -1.35 + Math.sin(elapsed * 0.36) * 0.12;
 
-            satLLCore.rotation.x = elapsed * 0.30;
-            satLLCore.rotation.y = -elapsed * 0.26;
-            satLLCore.position.y = satLLRing.position.y;
-        }
+        satLLCore.rotation.x = elapsed * 0.30;
+        satLLCore.rotation.y = -elapsed * 0.26;
+        satLLCore.position.y = satLLRing.position.y;
 
         window.__rgScene = scene;
         renderer.render(scene, camera);
@@ -606,5 +599,7 @@
         }
     });
 
+    // Render first frame immediately, then initiate 60 FPS animation loop
+    renderFrame();
     rafId = requestAnimationFrame(animate);
 })();
