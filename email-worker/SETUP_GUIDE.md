@@ -13,7 +13,7 @@ flowchart TD
     subgraph Inbound Flow
         A["External Client<br>(Gmail/Outlook/Yahoo)"] -->|Emails host@ramyachandrachambers.com| B["Cloudflare MX Edge"]
         B -->|Intercepts & injects HMAC Reply-To| C["Cloudflare Email Worker<br>(ramyachandra-email-router)"]
-        C -->|message.forward()| D["SLT Mail Server<br>(ramyachndra@sltnet.lk)"]
+        C -->|message.forward()| D["SLT Mail Server<br>(ramyachandra@sltnet.lk)"]
     end
 
     subgraph Outbound Reply Flow

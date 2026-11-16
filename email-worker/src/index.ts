@@ -561,7 +561,7 @@ export default {
     forwardHeaders.set('X-Original-To', rawTo);
     forwardHeaders.set('X-Loop-Guard', 'ramyachandrachambers-email-worker');
 
-    // Forward to primary recipient (SLT Mail: ramyachndra@sltnet.lk)
+    // Forward to primary recipient (SLT Mail: ramyachandra@sltnet.lk)
     try {
       await message.forward(primaryRecipient, forwardHeaders);
       console.log(`Inbound email from ${rawFrom} forwarded to ${primaryRecipient} with Reply-To: ${proxyAddress}`);
