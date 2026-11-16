@@ -261,14 +261,14 @@
                 float godRay2 = pow(sin(rayAngle * 6.2 - t * 0.60) * 0.5 + 0.5, 2.8);
                 float godRays = godRay1 * 0.65 + godRay2 * 0.45;
 
-                // Calibrated Botanical Moss & Ice Palette:
-                vec3 colBedrockNoir     = vec3(2.0 / 255.0, 24.0 / 255.0, 16.0 / 255.0);   // #021810 deep uniform emerald noir
-                vec3 colVelvetMoss      = vec3(4.0 / 255.0, 52.0 / 255.0, 34.0 / 255.0);   // #043422 uniform velvet moss
-                vec3 colTropicalEmerald = vec3(7.0 / 255.0, 82.0 / 255.0, 53.0 / 255.0);   // #075235 rich emerald splash
-                vec3 colLuminousMoss    = vec3(14.0 / 255.0, 118.0 / 255.0, 75.0 / 255.0); // #0e764b luminous moss splash
-                vec3 colSunlitSpore     = vec3(22.0 / 255.0, 158.0 / 255.0, 102.0 / 255.0);// #169e66 sunlit spore crests
-                vec3 colGoldLichen      = vec3(118.0 / 255.0, 94.0 / 255.0, 32.0 / 255.0); // #765e20 golden lichen splash
-                vec3 colIceSplash       = vec3(0.12, 0.58, 0.46);                          // Crystalline glacial cyan/emerald splash
+                // Calibrated Imperial Deep Royal Green & Velvet Malachite Palette:
+                vec3 colBedrockNoir     = vec3(1.0 / 255.0, 16.0 / 255.0, 11.0 / 255.0);   // #01100b deep imperial royal green noir
+                vec3 colVelvetMoss      = vec3(3.0 / 255.0, 36.0 / 255.0, 24.0 / 255.0);   // #032418 imperial royal velvet
+                vec3 colTropicalEmerald = vec3(5.0 / 255.0, 58.0 / 255.0, 38.0 / 255.0);   // #053a26 crown jewel malachite
+                vec3 colLuminousMoss    = vec3(9.0 / 255.0, 86.0 / 255.0, 56.0 / 255.0);   // #095638 luminous royal jade
+                vec3 colSunlitSpore     = vec3(16.0 / 255.0, 120.0 / 255.0, 80.0 / 255.0); // #107850 crest jewel gleam
+                vec3 colGoldLichen      = vec3(98.0 / 255.0, 74.0 / 255.0, 27.0 / 255.0);  // #624a1b heirloom gold glint
+                vec3 colIceSplash       = vec3(10.0 / 255.0, 76.0 / 255.0, 58.0 / 255.0);  // #0a4c3a crystalline royal ice caustics
 
                 // Composite flowing botanical moss layers:
                 vec3 mossColor = mix(colBedrockNoir, colVelvetMoss, smoothstep(0.08, 0.56, macroMoss));
@@ -309,7 +309,7 @@
 
     // Form 1: Left Flank - Faceted Botanical Emerald Crystal
     const emeraldMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x06482e),
+        color: new THREE.Color(0x053a26),
         roughness: 0.45,
         metalness: 0.16,
         flatShading: true,
@@ -323,7 +323,7 @@
 
     // Form 2: Mid-Left - Sculptural Glacial Ice Ribbon (Möbius loop)
     const jadeIceMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x043824),
+        color: new THREE.Color(0x032418),
         roughness: 0.38,
         metalness: 0.22,
         transparent: true,
@@ -336,7 +336,7 @@
 
     // Form 3: Center Drifting - Glacial Ice Octahedron Prism
     const icePrismMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x0a583a),
+        color: new THREE.Color(0x095638),
         roughness: 0.35,
         metalness: 0.20,
         flatShading: true,
@@ -363,7 +363,7 @@
 
     // Form 5: Right Flank - Botanical Velvet Dodecahedron Core
     const velvetMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x074e32),
+        color: new THREE.Color(0x06442c),
         roughness: 0.42,
         metalness: 0.18,
         flatShading: true,
@@ -407,7 +407,7 @@
         specularColor: new THREE.Color(0xa7f3d0),   // Mint-emerald ice specular sheen
         clearcoat: 0.32,                            // Glacial ice surface sheen
         clearcoatRoughness: 0.20,                   // Soft sheen without harsh glare
-        attenuationColor: new THREE.Color(0x02301c), // Deep moss emerald ice volume attenuation
+        attenuationColor: new THREE.Color(0x022217), // Deep moss emerald ice volume attenuation
         attenuationDistance: 12.0,                  // Rich volume absorption
         normalMap,
         normalScale: new THREE.Vector2(0.20, 0.20), // Optical micro-refraction
@@ -422,14 +422,14 @@
     // =========================================================================
     // 5. Deep Botanical Studio Lighting (NO CURSOR BACKLIGHT)
     // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x01150c, 0.85);
+    const ambientLight = new THREE.AmbientLight(0x01120c, 0.90);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0x0c6a43, 0.50);
+    const keyLight = new THREE.DirectionalLight(0x095638, 0.52);
     keyLight.position.set(-3.0, 4.0, 4.0);
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x6b561c, 0.32);
+    const rimLight = new THREE.DirectionalLight(0x624a1b, 0.32);
     rimLight.position.set(3.5, -2.5, 3.5);
     scene.add(rimLight);
 
