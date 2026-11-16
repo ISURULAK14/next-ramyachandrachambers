@@ -1,33 +1,27 @@
 /**
- * Ramyachandra Gunasekera Chambers
- * Deep Royal Green Moss & Wave Dynamics Under Thick Frost Texture
+ * Ramyachandra Gunasekera Chambers (Next / Staging)
+ * Sovereign Liquid Emerald Silk & Golden Aurora under Transmissive Crystal Glass
  *
- * Royal Imperial Palette & Botanical Velvet Synthesis:
- *   #01100b (imperial royal green noir bedrock)
- *   #022416 (dense velvet forest moss)
- *   #043a24 (crown jewel royal emerald)
- *   #085836 (luminous royal jade cushions)
- *   #0f7b4c (sunlit spore crests)
- *   #624a1b (heirloom golden lichen filaments)
- *   #0c553e (crystalline glacial frost caustics)
+ * Imperial Haute Palette & Volumetric Double-Warped Fluid Dynamics:
+ *   #010f0a (deepest obsidian emerald noir bedrock)
+ *   #022417 (imperial velvet forest depth)
+ *   #044229 (crown sovereign emerald core)
+ *   #08633e (luminous sovereign jade crests)
+ *   #0f8654 (liquid silk crest sheen)
+ *   #c89f56 (heirloom champagne-gold fluid ribbons)
+ *   #021b1f (deep indigo/teal abyssal undertone)
  *
- * Dynamic Wave Mechanics:
- *   Subtle multi-harmonic fluid wave undulations behind the frost sheet
- *   Layered sinusoidal ocean swells and capillary cross-currents advecting organic moss strata
- *   Autonomous organic 60 FPS wave motion on GPU while idle without scrolling
+ * Transmissive Architectural Crystal Glass (z = 0):
+ *   transmission: 0.94, roughness: 0.20, ior: 1.34, thickness: 0.88, attenuationColor: #022014
+ *   Isotropic hammered crystal texture with organic micro-refraction breathing
  *
- * Realistic Frost & Moss Texture:
- *   Multi-scale Voronoi cushion clusters with botanical capillary veins and micro-nap velvet
- *   Crystalline dendritic frost needles and micro-faceting refracting through glacial ice
- *   Wave-modulated prismatic dispersion caustics separating into R/G/B spectral sheen
+ * Submerged 3D Sculptural Heritage & Celestial Architectural Forms (z = -1.8):
+ *   Gyroscopic Celestial Armillary Ring, Brilliant-Cut Sovereign Emerald,
+ *   Möbius Ribbon of Equity, Heritage Obsidian Monolith, Champagne Gold Astral Knot
  *
- * Foreground Physical Thick Ice Sheet (z = 0):
- *   transmission: 0.94, roughness: 0.20, ior: 1.34, thickness: 0.85, attenuationColor: #022217
- *   Flowing crystalline normal offset drift and optical micro-refraction breathing
- *
- * Zero Pixie Lights (pixieCount: 0) / Submerged 3D Sculptural Botanical & Ice Forms at z = -1.8
+ * Continuous 60 FPS autonomous GPU animation loop with zero cursor spotlight.
  */
-(async function initMossOnThickIceFlowing() {
+(async function initSilkAuroraFlutedGlass() {
     const canvas = document.getElementById('frosted-glass-canvas');
     if (!canvas) return;
 
@@ -92,13 +86,13 @@
         return; // Graceful fallback to CSS base
     }
 
-    // High Sharpness: Support high-DPI Retina/4K displays (desktop 2.0, mobile 1.0 for peak Lighthouse score)
+    // High Sharpness: Support high-DPI Retina/4K displays (desktop 2.0, mobile 1.0 for peak Core Web Vitals)
     const isMobile = window.innerWidth <= 768;
     const dpr = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 2.0);
     renderer.setPixelRatio(dpr);
     renderer.setSize(window.innerWidth, window.innerHeight, false);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.08;
+    renderer.toneMappingExposure = 1.06;
 
     const scene = new THREE.Scene();
 
@@ -119,7 +113,7 @@
     }
 
     // =========================================================================
-    // 1. Procedural Deep Royal Green Moss, Subtle Wave Animation & Frost Texture
+    // 1. Procedural Sovereign Liquid Emerald Silk Aurora & Golden Fluid Ribbons
     // =========================================================================
     const bgZ = -2.8;
     const bgGeo = new THREE.PlaneGeometry(1, 1);
@@ -149,7 +143,7 @@
             uniform vec3 uCursor;
             uniform vec2 uCursorVel;
 
-            // Analytic procedural noise synthesis for multi-scale botanical moss & flowing ice
+            // Fast procedural hash and smooth noise
             vec2 hash2(vec2 p) {
                 p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
                 return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
@@ -169,36 +163,13 @@
             float fbm(vec2 p) {
                 float v = 0.0;
                 float a = 0.5;
-                mat2 rot = mat2(0.877, 0.479, -0.479, 0.877);
+                mat2 rot = mat2(0.85, 0.52, -0.52, 0.85);
                 for (int i = 0; i < 3; i++) {
                     v += a * noise(p);
-                    p = rot * p * 2.02 + vec2(1.3, 0.8);
+                    p = rot * p * 2.04 + vec2(1.4, 0.9);
                     a *= 0.5;
                 }
                 return v;
-            }
-
-            // Multi-scale Voronoi: F1 (cushion centers) and F2-F1 (vein ridges)
-            vec2 voronoi2(vec2 p) {
-                vec2 n = floor(p);
-                vec2 f = fract(p);
-                float d1 = 8.0;
-                float d2 = 8.0;
-                for (int j = -1; j <= 1; j++) {
-                    for (int i = -1; i <= 1; i++) {
-                        vec2 g = vec2(float(i), float(j));
-                        vec2 o = hash2(n + g) * 0.5 + 0.5;
-                        vec2 r = g + o - f;
-                        float d = dot(r, r);
-                        if (d < d1) {
-                            d2 = d1;
-                            d1 = d;
-                        } else if (d < d2) {
-                            d2 = d;
-                        }
-                    }
-                }
-                return vec2(sqrt(d1), sqrt(d2));
             }
 
             void main() {
@@ -206,122 +177,87 @@
                 vec2 p = (uv - 0.5) * vec2(uResolution.x / uResolution.y, 1.0);
 
                 // Autonomous viscous flow time rate (smooth 60 FPS while idle across whole screen)
-                float t = uTime * 0.10 + uScroll * 0.00014;
+                float t = uTime * 0.11 + uScroll * 0.00014;
 
-                // =============================================================
-                // Dynamic Subtle Wave Animation Behind Frost:
-                // Harmonic ocean-like undulations flowing through deep moss layers
-                // =============================================================
-                float waveSwell1 = sin(p.x * 1.8 + p.y * 1.2 + t * 0.46) * cos(p.y * 1.5 - t * 0.38);
-                float waveSwell2 = sin(p.x * 2.4 - p.y * 1.8 + t * 0.54 + 1.57) * 0.55;
-                float waveRipple = cos((p.x + p.y) * 3.4 - t * 0.62) * 0.35;
-                float waveElevation = (waveSwell1 * 0.50 + waveSwell2 * 0.35 + waveRipple * 0.15);
-
-                vec2 waveDisplacement = vec2(
-                    cos(p.y * 1.9 + t * 0.48) * 0.10 + sin(p.x * 1.5 - t * 0.36) * 0.07,
-                    sin(p.x * 1.7 + t * 0.52) * 0.10 + cos(p.y * 1.4 + t * 0.42) * 0.07
-                ) + vec2(waveElevation * 0.06, waveElevation * 0.05);
-
-                vec2 waveP = p * 1.32 + waveDisplacement;
-
-                // Hydrodynamic cursor interaction on flowing waves
+                // Hydrodynamic cursor interaction on flowing liquid silk
+                vec2 cOffset = vec2(0.0);
                 if (uCursor.z > 0.5) {
                     vec2 cPos = uCursor.xy * 0.5 * vec2(uResolution.x / uResolution.y, 1.0);
                     float cDist = length(p - cPos);
-                    float cInfluence = exp(-cDist * cDist * 18.0);
-                    waveP += uCursorVel * cInfluence * 0.18;
+                    float cInfluence = exp(-cDist * cDist * 16.0);
+                    cOffset = uCursorVel * cInfluence * 0.20;
                 }
 
-                // Domain warping mimicking thick ice refraction across undulating waves
-                vec2 warp;
-                warp.x = fbm(waveP * 2.0 + vec2(t * 0.18, -t * 0.14));
-                warp.y = fbm(waveP * 2.0 + vec2(-t * 0.14, t * 0.20) + 3.14159);
-                vec2 warpedP = waveP + warp * 0.30;
+                // Underlying majestic ocean swell displacement
+                vec2 waveSwell = vec2(
+                    sin(p.y * 1.5 + t * 0.42) * 0.12 + cos(p.x * 1.8 - t * 0.35) * 0.06,
+                    cos(p.x * 1.4 - t * 0.38) * 0.10 + sin(p.y * 1.6 + t * 0.45) * 0.06
+                );
+
+                vec2 flowP = p * 1.35 + waveSwell + cOffset;
 
                 // =============================================================
-                // Realistic Velvet Moss Texture Synthesis:
+                // Double Domain Warping for Viscous Liquid Silk & Aurora Strata:
+                // Produces ultra-smooth, organic, billowing fluid folds
                 // =============================================================
-                // 1. Spongy cushion clusters (Voronoi F1 + FBM macro strata)
-                vec2 vMacro = voronoi2(warpedP * 3.2 + warp * 0.45);
-                float spongyCushions = smoothstep(0.85, 0.12, vMacro.x);
-                float macroMoss = fbm(warpedP * 1.5 + vec2(t * 0.06, -t * 0.10));
+                vec2 q = vec2(
+                    fbm(flowP + vec2(0.0, 0.0) + vec2(t * 0.16, -t * 0.12)),
+                    fbm(flowP + vec2(5.2, 1.3) + vec2(-t * 0.14, t * 0.18))
+                );
 
-                // 2. Botanical capillary veins (F2 - F1 boundary channels between cushions)
-                float botanicalVeins = smoothstep(0.04, 0.24, vMacro.y - vMacro.x);
+                vec2 r = vec2(
+                    fbm(flowP + 3.2 * q + vec2(1.7, 9.2) + vec2(t * 0.14, -t * 0.10)),
+                    fbm(flowP + 3.2 * q + vec2(8.3, 2.8) + vec2(-t * 0.12, t * 0.16))
+                );
 
-                // 3. Realistic velvet moss nap & micro-foliage
-                float microNap = noise(warpedP * 12.0);
-                float lichenFilaments = noise(warpedP * 20.0 + warp * 1.2);
+                float fluidElevation = fbm(flowP + 2.8 * r);
 
-                // =============================================================
-                // Realistic Frost & Crystalline Texture:
-                // =============================================================
-                // Dendritic crystalline frost needles branching across the ice pane
-                float frostGrain = noise(warpedP * 18.0 + vec2(t * 0.03, -t * 0.03));
-                float frostNeedle1 = abs(sin((warpedP.x * 4.6 + warpedP.y * 3.2) * 2.2 + frostGrain * 2.8));
-                float frostNeedle2 = abs(cos((warpedP.x * 3.0 - warpedP.y * 4.4) * 2.4 - frostGrain * 2.4));
-                float frostDendrites = smoothstep(0.88, 0.985, 1.0 - (frostNeedle1 * 0.52 + frostNeedle2 * 0.48));
+                // Gentle anisotropic silk sheen along the fluid flow gradient
+                float silkSheen = pow(max(0.0, fluidElevation * 1.2 - length(q) * 0.4), 2.5);
 
-                // Glacial ice stress micro-fractures flowing with the wave current
-                float iceStress1 = abs(sin((warpedP.x * 2.2 + warpedP.y * 1.6) * 2.4 + t * 0.48));
-                float iceStress2 = abs(cos((warpedP.x * 1.8 - warpedP.y * 2.3) * 2.1 - t * 0.38));
-                float iceStress = smoothstep(0.92, 0.985, 1.0 - (iceStress1 * 0.55 + iceStress2 * 0.45));
+                // Delicate heirloom champagne-gold filament ribbons flowing in the crests
+                float goldRibbon = smoothstep(0.68, 0.88, fluidElevation) * (1.0 - length(r) * 0.5);
 
-                // Prismatic dispersion caustics with dynamic wave-modulated chromatic separation
-                float cR = sin((warpedP.x * 2.8 + warpedP.y * 2.0) * 2.2 + t * 0.85 + waveElevation * 1.2);
-                float cG = sin((warpedP.x * 2.8 + warpedP.y * 2.0) * 2.2 + t * 0.83 + 0.14 + waveElevation * 1.2);
-                float cB = sin((warpedP.x * 2.8 + warpedP.y * 2.0) * 2.2 + t * 0.81 + 0.28 + waveElevation * 1.2);
-                vec3 prismaticCaustics = vec3(pow(abs(cR), 5.5), pow(abs(cG), 5.5), pow(abs(cB), 5.5));
+                // Deep chiaroscuro god rays filtered through the volumetric fluid
+                float rayAngle = p.x * 1.1 + p.y * 0.85;
+                float godRay = pow(sin(rayAngle * 2.8 + t * 0.40 + fluidElevation * 1.1) * 0.5 + 0.5, 2.6) * 0.35;
 
-                // Volumetric deep royal emerald god rays filtered through ice waves
-                float rayAngle = p.x * 1.2 + p.y * 0.85;
-                float godRay1 = pow(sin(rayAngle * 3.4 + t * 0.45 + waveElevation * 0.8) * 0.5 + 0.5, 2.6);
-                float godRay2 = pow(sin(rayAngle * 6.2 - t * 0.60 - waveElevation * 0.6) * 0.5 + 0.5, 2.8);
-                float godRays = godRay1 * 0.65 + godRay2 * 0.45;
+                // Prismatic chromatic dispersion along high-curvature fluid contours
+                float prismR = sin(fluidElevation * 6.28 + t * 0.70);
+                float prismG = sin(fluidElevation * 6.28 + t * 0.68 + 0.18);
+                float prismB = sin(fluidElevation * 6.28 + t * 0.66 + 0.36);
+                vec3 prismSheen = vec3(pow(abs(prismR), 5.5), pow(abs(prismG), 5.5), pow(abs(prismB), 5.5)) * 0.16;
 
                 // =============================================================
-                // Calibrated Imperial Deep Royal Green & Velvet Moss Palette:
+                // Bespoke Imperial Emerald & Liquid Silk Haute Palette:
                 // =============================================================
-                vec3 colBedrockNoir     = vec3(1.0 / 255.0, 16.0 / 255.0, 11.0 / 255.0);   // #01100b deep imperial royal green noir
-                vec3 colVelvetForest    = vec3(2.0 / 255.0, 34.0 / 255.0, 22.0 / 255.0);   // #022216 imperial royal velvet forest
-                vec3 colRoyalEmerald    = vec3(4.0 / 255.0, 56.0 / 255.0, 36.0 / 255.0);   // #043824 crown jewel royal emerald
-                vec3 colLuminousJade    = vec3(8.0 / 255.0, 84.0 / 255.0, 54.0 / 255.0);   // #085436 luminous royal jade cushions
-                vec3 colSunlitSpore     = vec3(14.0 / 255.0, 118.0 / 255.0, 76.0 / 255.0); // #0e764c crest jewel spore gleam
-                vec3 colGoldLichen      = vec3(96.0 / 255.0, 74.0 / 255.0, 26.0 / 255.0);  // #604a1a heirloom gold lichen glint
-                vec3 colGlacialFrost    = vec3(18.0 / 255.0, 102.0 / 255.0, 76.0 / 255.0); // #12664c crystalline frost needles
-                vec3 colIceCaustics     = vec3(12.0 / 255.0, 80.0 / 255.0, 62.0 / 255.0);  // #0c503e royal ice caustics
+                vec3 colObsidianVoid   = vec3(1.0 / 255.0, 15.0 / 255.0, 10.0 / 255.0);   // #010f0a deepest obsidian noir
+                vec3 colVelvetNoir     = vec3(2.0 / 255.0, 36.0 / 255.0, 23.0 / 255.0);   // #022417 imperial velvet forest
+                vec3 colSovereignCore  = vec3(4.0 / 255.0, 66.0 / 255.0, 41.0 / 255.0);   // #044229 crown sovereign emerald
+                vec3 colLuminousJade   = vec3(8.0 / 255.0, 99.0 / 255.0, 62.0 / 255.0);   // #08633e luminous sovereign jade
+                vec3 colSilkCrest      = vec3(15.0 / 255.0, 134.0 / 255.0, 84.0 / 255.0); // #0f8654 liquid silk specular crest
+                vec3 colChampagneGold  = vec3(200.0 / 255.0, 159.0 / 255.0, 86.0 / 255.0);// #c89f56 heirloom champagne gold
+                vec3 colTealUnderflow  = vec3(2.0 / 255.0, 27.0 / 255.0, 31.0 / 255.0);   // #021b1f deep teal shadow
 
-                float waveShade = waveElevation * 0.22;
+                // Layered fluid composition
+                vec3 color = mix(colObsidianVoid, colVelvetNoir, smoothstep(0.08, 0.42, fluidElevation));
+                color = mix(color, colSovereignCore, smoothstep(0.30, 0.68, fluidElevation));
+                color = mix(color, colLuminousJade, smoothstep(0.55, 0.85, fluidElevation));
+                color = mix(color, colSilkCrest, silkSheen * 0.50);
 
-                // Composite flowing botanical moss layers:
-                vec3 mossColor = mix(colBedrockNoir, colVelvetForest, smoothstep(0.06, 0.54, macroMoss + waveShade));
-                mossColor = mix(mossColor, colRoyalEmerald, smoothstep(0.16, 0.66, macroMoss * 0.60 + spongyCushions * 0.40 + waveShade));
-                mossColor = mix(mossColor, colLuminousJade, smoothstep(0.28, 0.78, spongyCushions * (1.0 - microNap * 0.20)));
-                mossColor = mix(mossColor, colSunlitSpore, smoothstep(0.42, 0.86, spongyCushions * lichenFilaments * (1.0 + waveShade)));
+                // Deep teal undercurrent in fluid hollows
+                color = mix(color, colTealUnderflow, smoothstep(0.0, 0.30, 1.0 - fluidElevation) * 0.40);
 
-                // Botanical micro-nap velvet texture (tactile velvet pile on cushions)
-                mossColor += colRoyalEmerald * (microNap * 0.16 * spongyCushions);
+                // Volumetric god ray illumination
+                color += colLuminousJade * godRay;
 
-                // Depressed dark capillary vein networks weaving between cushions
-                mossColor = mix(mossColor, colVelvetForest * 0.75, (1.0 - botanicalVeins) * 0.40);
+                // Heirloom champagne-gold ribbons
+                color += colChampagneGold * (goldRibbon * 0.42);
 
-                // Wave crest highlighting (subtle luminous jade brightening on the wave crests)
-                mossColor += colLuminousJade * (max(0.0, waveElevation) * 0.20 * spongyCushions);
+                // Prismatic chromatic dispersion
+                color += prismSheen * smoothstep(0.4, 0.9, fluidElevation);
 
-                // Delicate golden lichen filament accents in wave troughs and light crests
-                mossColor += colGoldLichen * (godRays * 0.32 * macroMoss + lichenFilaments * 0.22 * spongyCushions);
-
-                // Frost Texture Integration:
-                // Crystalline dendritic frost needles branching over the moss
-                mossColor += colGlacialFrost * (frostDendrites * 0.38);
-
-                // Ice stress fractures & wave caustics
-                mossColor += colIceCaustics * (iceStress * 0.32);
-
-                // Prismatic dispersion caustics with wave modulation
-                mossColor += prismaticCaustics * (0.18 + max(0.0, waveElevation) * 0.10);
-
-                gl_FragColor = vec4(mossColor, 1.0);
+                gl_FragColor = vec4(color, 1.0);
             }
         `
     });
@@ -331,7 +267,7 @@
     scene.add(bgMesh);
 
     // =========================================================================
-    // 2. Submerged 3D Sculptural Botanical & Ice Forms (Full Viewport Spread at z = -1.8)
+    // 2. Submerged 3D Sculptural Heritage & Celestial Architectural Forms (z = -1.8)
     // =========================================================================
     const shapeGroup = new THREE.Group();
     shapeGroup.position.z = -1.8;
@@ -339,81 +275,79 @@
 
     const shapes = [];
 
-    // Form 1: Left Flank - Faceted Botanical Emerald Crystal
-    const emeraldMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x053a26),
-        roughness: 0.45,
-        metalness: 0.16,
+    // Form 1: Left Flank - Gyroscopic Celestial Armillary Ring (Celestial Equity)
+    const goldRingMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0x6b531e),
+        roughness: 0.32,
+        metalness: 0.42,
+        transparent: true,
+        opacity: 0.25
+    });
+    const armillaryRing = new THREE.Mesh(new THREE.TorusGeometry(0.85, 0.05, 32, 64), goldRingMat);
+    armillaryRing.position.set(-2.2, 0.9, -0.4);
+    shapeGroup.add(armillaryRing);
+    shapes.push({ mesh: armillaryRing, basePos: [-2.2, 0.9, -0.4], speedX: 0.08, speedY: 0.11, phase: 0 });
+
+    // Form 2: Mid-Left - Möbius Ribbon of Justice (Continuous Golden/Jade Infinity Loop)
+    const mobiusMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0x064228),
+        roughness: 0.36,
+        metalness: 0.28,
+        transparent: true,
+        opacity: 0.23
+    });
+    const mobiusLoop = new THREE.Mesh(new THREE.TorusKnotGeometry(0.85, 0.042, 128, 20, 2, 3), mobiusMat);
+    mobiusLoop.position.set(-0.9, -0.6, -0.5);
+    shapeGroup.add(mobiusLoop);
+    shapes.push({ mesh: mobiusLoop, basePos: [-0.9, -0.6, -0.5], speedX: 0.06, speedY: 0.09, phase: 3.14 });
+
+    // Form 3: Center Drifting - Brilliant-Cut Sovereign Emerald Octahedron
+    const emeraldCutMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0x095638),
+        roughness: 0.30,
+        metalness: 0.22,
         flatShading: true,
         transparent: true,
         opacity: 0.24
     });
-    const icosahedron = new THREE.Mesh(new THREE.IcosahedronGeometry(0.85, 0), emeraldMat);
-    icosahedron.position.set(-2.2, 0.9, -0.4);
-    shapeGroup.add(icosahedron);
-    shapes.push({ mesh: icosahedron, basePos: [-2.2, 0.9, -0.4], speedX: 0.08, speedY: 0.11, phase: 0 });
+    const emeraldOcta = new THREE.Mesh(new THREE.OctahedronGeometry(0.78, 0), emeraldCutMat);
+    emeraldOcta.position.set(0.1, 0.3, -0.6);
+    shapeGroup.add(emeraldOcta);
+    shapes.push({ mesh: emeraldOcta, basePos: [0.1, 0.3, -0.6], speedX: -0.07, speedY: 0.08, phase: 1.0 });
 
-    // Form 2: Mid-Left - Sculptural Glacial Ice Ribbon (Möbius loop)
-    const jadeIceMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x032418),
-        roughness: 0.38,
-        metalness: 0.22,
+    // Form 4: Mid-Right - Champagne Gold Astral Knot (Heirloom Starlight)
+    const astralKnotMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0x755922),
+        roughness: 0.35,
+        metalness: 0.36,
         transparent: true,
         opacity: 0.22
     });
-    const torusKnot = new THREE.Mesh(new THREE.TorusKnotGeometry(0.85, 0.040, 128, 20, 2, 3), jadeIceMat);
-    torusKnot.position.set(-0.9, -0.6, -0.5);
-    shapeGroup.add(torusKnot);
-    shapes.push({ mesh: torusKnot, basePos: [-0.9, -0.6, -0.5], speedX: 0.06, speedY: 0.09, phase: 3.14 });
+    const astralKnot = new THREE.Mesh(new THREE.IcosahedronGeometry(0.72, 1), astralKnotMat);
+    astralKnot.position.set(1.2, -0.7, -0.4);
+    shapeGroup.add(astralKnot);
+    shapes.push({ mesh: astralKnot, basePos: [1.2, -0.7, -0.4], speedX: -0.07, speedY: 0.08, phase: 1.57 });
 
-    // Form 3: Center Drifting - Glacial Ice Octahedron Prism
-    const icePrismMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x095638),
-        roughness: 0.35,
+    // Form 5: Right Flank - Heritage Monolith Prism (Faceted Dodecahedron)
+    const monolithMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(0x05482e),
+        roughness: 0.38,
         metalness: 0.20,
         flatShading: true,
         transparent: true,
-        opacity: 0.22
-    });
-    const octahedron = new THREE.Mesh(new THREE.OctahedronGeometry(0.75, 0), icePrismMat);
-    octahedron.position.set(0.1, 0.3, -0.6);
-    shapeGroup.add(octahedron);
-    shapes.push({ mesh: octahedron, basePos: [0.1, 0.3, -0.6], speedX: -0.07, speedY: 0.08, phase: 1.0 });
-
-    // Form 4: Mid-Right - Warm Golden Lichen Astral Sphere
-    const goldMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x4a3812),
-        roughness: 0.48,
-        metalness: 0.28,
-        transparent: true,
-        opacity: 0.20
-    });
-    const goldOrb = new THREE.Mesh(new THREE.SphereGeometry(0.70, 32, 32), goldMat);
-    goldOrb.position.set(1.2, -0.7, -0.4);
-    shapeGroup.add(goldOrb);
-    shapes.push({ mesh: goldOrb, basePos: [1.2, -0.7, -0.4], speedX: -0.07, speedY: 0.08, phase: 1.57 });
-
-    // Form 5: Right Flank - Botanical Velvet Dodecahedron Core
-    const velvetMat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(0x06442c),
-        roughness: 0.42,
-        metalness: 0.18,
-        flatShading: true,
-        transparent: true,
         opacity: 0.24
     });
-    const dodecahedron = new THREE.Mesh(new THREE.DodecahedronGeometry(0.80, 0), velvetMat);
-    dodecahedron.position.set(2.2, 0.8, -0.5);
-    shapeGroup.add(dodecahedron);
-    shapes.push({ mesh: dodecahedron, basePos: [2.2, 0.8, -0.5], speedX: 0.09, speedY: -0.07, phase: 2.4 });
+    const monolithPrism = new THREE.Mesh(new THREE.DodecahedronGeometry(0.82, 0), monolithMat);
+    monolithPrism.position.set(2.2, 0.8, -0.5);
+    shapeGroup.add(monolithPrism);
+    shapes.push({ mesh: monolithPrism, basePos: [2.2, 0.8, -0.5], speedX: 0.08, speedY: -0.07, phase: 2.4 });
 
     // =========================================================================
-    // 3. ZERO PIXIE LIGHTS: User explicitly requested: "no pixie lights"
+    // 3. ZERO PIXIE PARTICLES (Mandatory Clean Editorial Discipline)
     // =========================================================================
-    // (Completely omitted pixie particles, dots, and spore meshes)
 
     // =========================================================================
-    // 4. Foreground Physical Thick Ice Sheet (Zero Gaps, 100% Seamless Coverage)
+    // 4. Foreground Transmissive Architectural Crystal Glass Sheet (z = 0)
     // =========================================================================
     const textureLoader = new THREE.TextureLoader();
     const normalMap = textureLoader.load('assets/frosted-normal.png');
@@ -425,24 +359,25 @@
     if (renderer.capabilities && renderer.capabilities.getMaxAnisotropy) {
         normalMap.anisotropy = renderer.capabilities.getMaxAnisotropy();
     }
+    // High-end balanced isotropic hammered glass texture (smooth, natural, zero horizontal raster lines)
     normalMap.repeat.set(6.0, 6.0);
 
     const glassGeo = new THREE.PlaneGeometry(1, 1);
     const glassMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xf0fdf4),           // Translucent crystal ice
-        transmission: 0.94,                         // High optical transmission (passes test >= 0.9)
-        roughness: 0.20,                            // Tactile micro-frost delivering ~20% visibility of underlying scene
-        ior: 1.34,                                  // Physical water/ice IOR (passes test >= 1.30)
-        thickness: 0.85,                            // Thick physical ice slab volume
+        color: new THREE.Color(0xf0fdf5),           // Translucent crystalline glass
+        transmission: 0.94,                         // High optical transmission
+        roughness: 0.20,                            // Satin sheen delivering ~20% visibility of underlying scene
+        ior: 1.34,                                  // Refractive index
+        thickness: 0.88,                            // Heavy architectural glass slab
         metalness: 0.02,
-        specularIntensity: 0.45,                    // Crystal specular glints
-        specularColor: new THREE.Color(0xa7f3d0),   // Mint-emerald ice specular sheen
-        clearcoat: 0.32,                            // Glacial ice surface sheen
-        clearcoatRoughness: 0.20,                   // Soft sheen without harsh glare
-        attenuationColor: new THREE.Color(0x022217), // Deep moss emerald ice volume attenuation
-        attenuationDistance: 12.0,                  // Rich volume absorption
+        specularIntensity: 0.50,                    // Crisp crystalline specular reflections
+        specularColor: new THREE.Color(0xa7f3d0),   // Mint-emerald crystal sheen
+        clearcoat: 0.32,                            // Architectural glass clearcoat
+        clearcoatRoughness: 0.18,                   // Glare-free polish
+        attenuationColor: new THREE.Color(0x022014), // Deep emerald glass volume attenuation
+        attenuationDistance: 13.0,                  // Rich volume absorption
         normalMap,
-        normalScale: new THREE.Vector2(0.20, 0.20), // Optical micro-refraction
+        normalScale: new THREE.Vector2(0.18, 0.18), // Soft tactile micro-refraction
         transparent: true,
         opacity: 1.0
     });
@@ -452,17 +387,17 @@
     scene.add(glassMesh);
 
     // =========================================================================
-    // 5. Deep Botanical Studio Lighting (NO CURSOR BACKLIGHT)
+    // 5. Bespoke Royal Studio Lighting (ZERO CURSOR BACKLIGHT)
     // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x01120c, 0.90);
+    const ambientLight = new THREE.AmbientLight(0x01100a, 0.92);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0x085836, 0.52);
-    keyLight.position.set(-3.0, 4.0, 4.0);
+    const keyLight = new THREE.DirectionalLight(0x0a643e, 0.52);
+    keyLight.position.set(-3.2, 4.2, 4.0);
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x624a1b, 0.32);
-    rimLight.position.set(3.5, -2.5, 3.5);
+    const rimLight = new THREE.DirectionalLight(0xa07d38, 0.32);
+    rimLight.position.set(3.8, -2.8, 3.5);
     scene.add(rimLight);
 
     // =========================================================================
@@ -493,7 +428,7 @@
     window.addEventListener('resize', handleResize, { passive: true });
 
     // =========================================================================
-    // 7. Continuous Autonomous Animation Loop (Moss & Waves on Thick Ice Flowing)
+    // 7. Continuous Autonomous Animation Loop (Liquid Silk Aurora & Crystal Glass)
     // =========================================================================
     let smoothScrollY = window.scrollY || 0;
     let targetScrollY = smoothScrollY;
@@ -543,13 +478,13 @@
         smoothScrollY += (targetScrollY - smoothScrollY) * 0.08;
         bgUniforms.uScroll.value = smoothScrollY;
 
-        // Flowing Ice Sheet: Normal map offset drifts steadily with subtle wave breathing
+        // Subtle vertical normal drift and optical micro-refraction breathing
         if (normalMap) {
-            normalMap.offset.y = -(elapsed * 0.016) % 1.0;
-            normalMap.offset.x = (Math.sin(elapsed * 0.24) * 0.007) % 1.0;
+            normalMap.offset.y = -(elapsed * 0.012) % 1.0;
+            normalMap.offset.x = (Math.sin(elapsed * 0.20) * 0.005) % 1.0;
         }
 
-        const normalBreathe = 0.20 + 0.035 * Math.sin(elapsed * 0.45);
+        const normalBreathe = 0.18 + 0.025 * Math.sin(elapsed * 0.40);
         glassMat.normalScale.set(normalBreathe, normalBreathe);
 
         if (mouseActive) {
@@ -575,7 +510,7 @@
         const normX = mouseActive ? smoothMouseNDC.x : 0;
         const normY = mouseActive ? smoothMouseNDC.y : 0;
 
-        camera.position.x = normX * 0.14;
+        camera.position.x = normX * 0.12;
         camera.position.y = normY * 0.08 - (smoothScrollY * 0.0004);
         camera.lookAt(0, -(smoothScrollY * 0.0004), 0);
 
@@ -583,8 +518,8 @@
             const s = shapes[i];
             s.mesh.rotation.x = elapsed * s.speedX;
             s.mesh.rotation.y = elapsed * s.speedY;
-            s.mesh.position.y = s.basePos[1] + Math.sin(elapsed * 0.38 + s.phase) * 0.08;
-            s.mesh.position.x = s.basePos[0] + Math.cos(elapsed * 0.30 + s.phase) * 0.04;
+            s.mesh.position.y = s.basePos[1] + Math.sin(elapsed * 0.35 + s.phase) * 0.08;
+            s.mesh.position.x = s.basePos[0] + Math.cos(elapsed * 0.28 + s.phase) * 0.04;
         }
 
         window.__rgScene = scene;
