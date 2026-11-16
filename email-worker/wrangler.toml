@@ -5,11 +5,11 @@ compatibility_flags = ["nodejs_compat"]
 
 [vars]
 DOMAIN = "ramyachandrachambers.com"
-PRIMARY_RECIPIENT = "ramyachndra@sltnet.lk"
+PRIMARY_RECIPIENT = "ramyachandra@sltnet.lk"
 BACKUP_RECIPIENT = ""
-ALLOWED_SENDERS = "ramyachndra@sltnet.lk"
+ALLOWED_SENDERS = "ramyachandra@sltnet.lk, ramyachndra@sltnet.lk"
 DEFAULT_SENDER_NAME = "Ramyachandra Gunasekera Chambers"
-DEFAULT_OUTBOUND_ALIAS = "host@ramyachandrachambers.com"
+DEFAULT_OUTBOUND_ALIAS = "info@ramyachandrachambers.com"
 REQUIRE_AUTH_RESULTS = "true"
 
 # Secrets to be configured via Wrangler CLI (run `npx wrangler secret put <NAME>`):

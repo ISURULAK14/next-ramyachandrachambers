@@ -1,7 +1,7 @@
 # Bidirectional Email Routing & Transparent Reply-Masking System
 **Domain:** `ramyachandrachambers.com`  
-**Chambers Mailbox (Primary):** `ramyachndra@sltnet.lk` (SLT Webmail)  
-**Public Chambers Alias:** `host@ramyachandrachambers.com` (and any `*@ramyachandrachambers.com`)  
+**Chambers Mailbox (Primary):** `ramyachandra@sltnet.lk` (SLT Webmail)  
+**Public Chambers Mailbox:** `info@ramyachandrachambers.com` (and any `*@ramyachandrachambers.com`)  
 **Technology:** Cloudflare Email Workers (`cloudflare:email`), Web Crypto API, `postal-mime`, Resend / Brevo Outbound API
 
 ---
@@ -86,14 +86,17 @@ npx wrangler deploy
 2. **Enable Email Routing** if not already enabled. Cloudflare will automatically verify MX and SPF records.
 3. In the **Destination Addresses** tab:
    - Click **Add destination address**.
-   - Enter `ramyachndra@sltnet.lk`.
+   - Enter `ramyachandra@sltnet.lk`.
    - Check the SLT mailbox for the Cloudflare verification email and click the confirmation link.
    - *(Optional)* Add a backup Gmail address (e.g., `backup@gmail.com`) and verify it.
 4. In the **Routing Rules** tab:
    - Click **Create rule**.
-   - **Match**: `Catch-all rule` (matches all incoming emails to `*@ramyachandrachambers.com`).
-   - **Action**: `Send to a Worker`.
-   - **Destination**: Select `ramyachandra-email-router`.
+   - **Rule 1 (Dedicated Custom Address)**:
+     - Match: `Custom address` -> `info@ramyachandrachambers.com`
+     - Action: `Send to a Worker` -> select `ramyachandra-email-router` (or `Forward to` -> `ramyachandra@sltnet.lk`)
+   - **Rule 2 (Catch-all)**:
+     - Match: `Catch-all rule` (matches all incoming emails to `*@ramyachandrachambers.com`).
+     - Action: `Send to a Worker` -> select `ramyachandra-email-router`.
    - Click **Save**.
 
 ---
@@ -108,7 +111,7 @@ Ensure your Cloudflare DNS table includes the records listed in [`dns-records.tx
    ```
 2. **DMARC Record (TXT _dmarc)**:
    ```
-   v=DMARC1; p=quarantine; adkim=r; aspf=r; pct=100; rua=mailto:ramyachndra@sltnet.lk; ruf=mailto:ramyachndra@sltnet.lk; fo=1;
+   v=DMARC1; p=quarantine; adkim=r; aspf=r; pct=100; rua=mailto:ramyachandra@sltnet.lk; ruf=mailto:ramyachandra@sltnet.lk; fo=1;
    ```
 3. **DKIM Record (from Resend / Brevo)**:
    - In Resend Dashboard -> Domains -> Add `ramyachandrachambers.com`.
@@ -116,18 +119,18 @@ Ensure your Cloudflare DNS table includes the records listed in [`dns-records.tx
 
 ---
 
-## 6. Daily Usage Instructions for SLT Mail (`ramyachndra@sltnet.lk`)
+## 6. Daily Usage Instructions for SLT Mail (`ramyachandra@sltnet.lk`)
 
 ### 6.1 Receiving & Replying to Client Inquiries
-1. When a client emails `host@ramyachandrachambers.com` (or any chambers address), Cloudflare forwards the email directly to `ramyachndra@sltnet.lk`.
+1. When a client emails `info@ramyachandrachambers.com` (or any chambers address), Cloudflare forwards the email directly to `ramyachandra@sltnet.lk`.
 2. Inside SLT Mail, simply hit the normal **Reply** button.
 3. The `To:` field is automatically set to the signed proxy address:
    `reply+<client_b64>.<alias_b64>.<hmac>@ramyachandrachambers.com`
 4. Type your legal response, attach documents/deeds as needed, and click **Send**.
 5. **Client's View**:
-   - The client receives the email from `"Ramyachandra Gunasekera Chambers" <host@ramyachandrachambers.com>`.
+   - The client receives the email from `"Ramyachandra Gunasekera Chambers" <info@ramyachandrachambers.com>`.
    - The original thread headers (`In-Reply-To`, `References`) are preserved so the email stays in the same conversation thread.
-   - `ramyachndra@sltnet.lk` and all SLTnet internal routing headers are **100% invisible**.
+   - `ramyachandra@sltnet.lk` and all SLTnet internal routing headers are **100% invisible**.
 
 ### 6.2 Composing a Brand-New Outbound Email from SLT Mail
 To initiate a new email thread with a client directly from your SLT mailbox:

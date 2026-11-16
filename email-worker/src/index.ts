@@ -315,7 +315,7 @@ async function notifyFailure(
 ): Promise<void> {
   const failurePayload: OutboundPayload = {
     fromName: 'System Mailer Daemon',
-    fromEmail: env.DEFAULT_OUTBOUND_ALIAS || `host@${env.DOMAIN}`,
+    fromEmail: env.DEFAULT_OUTBOUND_ALIAS || `info@${env.DOMAIN}`,
     toEmail: targetRecipient,
     subject: `[DELIVERY FAILURE] Could not send email to ${failedTo}`,
     html: `
@@ -360,7 +360,7 @@ export default {
     const allowedSendersList = env.ALLOWED_SENDERS.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
     const requireAuth = env.REQUIRE_AUTH_RESULTS !== 'false';
     const defaultSenderName = env.DEFAULT_SENDER_NAME || 'Ramyachandra Gunasekera Chambers';
-    const defaultOutboundAlias = env.DEFAULT_OUTBOUND_ALIAS || `host@${domain}`;
+    const defaultOutboundAlias = env.DEFAULT_OUTBOUND_ALIAS || `info@${domain}`;
 
     // Read full raw MIME message for body/attachment parsing
     const rawBuffer = await new Response(message.raw).arrayBuffer();

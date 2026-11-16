@@ -7,7 +7,8 @@ function createServer() {
   return http.createServer((req, res) => {
     let reqPath = req.url.split('?')[0].split('#')[0];
     if (reqPath === '/') reqPath = '/index.html';
-    const filePath = path.join('.', reqPath);
+    const ROOT = path.join(__dirname, '..');
+    const filePath = path.join(ROOT, reqPath);
     if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
       const ext = path.extname(filePath);
       const mimeMap = {
@@ -80,7 +81,7 @@ async function runE2ETests() {
     // A. Email Hydration
     const emailHydrated = await page.evaluate(() => {
       const email = document.querySelector('.protected-email');
-      return email && email.href === 'mailto:ramyachandra@sltnet.lk' && email.textContent.trim() === 'ramyachandra@sltnet.lk';
+      return email && email.href === 'mailto:info@ramyachandrachambers.com' && email.textContent.trim() === 'info@ramyachandrachambers.com';
     });
     assert(emailHydrated, 'Email anti-scraping hydration injects valid mailto & text');
 

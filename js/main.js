@@ -6,8 +6,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Email Protection / Anti-Scraping Hydration
     document.querySelectorAll('.protected-email').forEach(el => {
-        const u = el.getAttribute('data-user') || 'ramyachandra';
-        const d = el.getAttribute('data-domain') || 'sltnet.lk';
+        const u = el.getAttribute('data-user') || 'info';
+        const d = el.getAttribute('data-domain') || 'ramyachandrachambers.com';
         el.href = `mailto:${u}@${d}`;
         el.textContent = `${u}@${d}`;
     });

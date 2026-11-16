@@ -15,7 +15,7 @@ MX      @                          route3.mx.cloudflare.net                     
 
 TXT     @                          v=spf1 include:_spf.mx.cloudflare.net include:spf.brevo.com include:_spf.resend.com ~all        DNS only       Auto
 
-TXT     _dmarc                     v=DMARC1; p=quarantine; adkim=r; aspf=r; pct=100; rua=mailto:ramyachndra@sltnet.lk; ruf=mailto:ramyachndra@sltnet.lk; fo=1;   DNS only       Auto
+TXT     _dmarc                     v=DMARC1; p=quarantine; adkim=r; aspf=r; pct=100; rua=mailto:ramyachandra@sltnet.lk; ruf=mailto:ramyachandra@sltnet.lk; fo=1;   DNS only       Auto
 
 TXT     _cloudflare-email-routing  verification=ramyachandrachambers.com                                                   DNS only       Auto
 
@@ -44,7 +44,7 @@ $TTL 3600
 @                      IN  TXT    "v=spf1 include:_spf.mx.cloudflare.net include:spf.brevo.com include:_spf.resend.com ~all"
 
 ; --- Hardened DMARC Policy (Quarantine 100%, Relaxed Alignment, Aggregate & Forensic Reports) ---
-_dmarc                 IN  TXT    "v=DMARC1; p=quarantine; adkim=r; aspf=r; pct=100; rua=mailto:ramyachndra@sltnet.lk; ruf=mailto:ramyachndra@sltnet.lk; fo=1;"
+_dmarc                 IN  TXT    "v=DMARC1; p=quarantine; adkim=r; aspf=r; pct=100; rua=mailto:ramyachandra@sltnet.lk; ruf=mailto:ramyachandra@sltnet.lk; fo=1;"
 
 ; --- Cloudflare Verification Token ---
 _cloudflare-email-routing IN TXT  "verification=ramyachandrachambers.com"
