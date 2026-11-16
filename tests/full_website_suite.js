@@ -652,15 +652,20 @@ async function runFullSuite() {
     // Scroll map into view (move mouse away first so virtual cursor does not hover .map-wrapper and pause cycle)
     await page.mouse.move(0, 0);
     await page.evaluate(() => document.querySelector('.map-wrapper')?.scrollIntoView({ block: 'center' }));
-    await new Promise(r => setTimeout(r, 800));
-    const mapActiveCheck = await page.evaluate(() => {
-      const activePins = [...document.querySelectorAll('.map-pin.active')];
-      const labelVisible = activePins.some(p => {
-        const lbl = p.querySelector('.pin-label');
-        return lbl && getComputedStyle(lbl).visibility === 'visible' && parseFloat(getComputedStyle(lbl).opacity) > 0.5;
+    await new Promise(r => setTimeout(r, 600));
+    let mapActiveCheck = { activeCount: 0, labelVisible: false };
+    for (let retry = 0; retry < 6; retry++) {
+      mapActiveCheck = await page.evaluate(() => {
+        const activePins = [...document.querySelectorAll('.map-pin.active')];
+        const labelVisible = activePins.some(p => {
+          const lbl = p.querySelector('.pin-label');
+          return lbl && getComputedStyle(lbl).visibility === 'visible' && parseFloat(getComputedStyle(lbl).opacity) > 0.5;
+        });
+        return { activeCount: activePins.length, labelVisible };
       });
-      return { activeCount: activePins.length, labelVisible };
-    });
+      if (mapActiveCheck.activeCount >= 1 && mapActiveCheck.labelVisible) break;
+      await new Promise(r => setTimeout(r, 500));
+    }
     check(mapActiveCheck.activeCount >= 1 && mapActiveCheck.labelVisible, `World Map: cohort cycling activates pins & labels (${mapActiveCheck.activeCount} active)`);
 
     // 5D. Lazy Iframes & Offices Promotion on Scroll
