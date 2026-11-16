@@ -331,6 +331,7 @@ async function runFullSuite() {
 
   const browser = await puppeteer.launch({
     headless: 'new',
+    protocolTimeout: 120000,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
 
@@ -855,6 +856,7 @@ async function runFullSuite() {
     const desktopConfig = lhMod.desktopConfig;
     const lhBrowser = await puppeteer.launch({
       headless: 'new',
+      protocolTimeout: 120000,
       args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu', '--remote-debugging-port=9229']
     });
     for (const mode of ['mobile', 'desktop']) {

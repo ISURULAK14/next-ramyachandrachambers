@@ -202,8 +202,35 @@
             window.addEventListener(ev, loadClarity, { once: true, passive: true });
         });
     </script>
+    <style id="rg-critical-base">
+      html {
+        background-color: #03120e !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: hidden !important;
+      }
+      body {
+        background-color: transparent !important;
+        color: #f8fafc !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: hidden !important;
+      }
+      #frosted-glass-canvas {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: -1 !important;
+        pointer-events: none !important;
+        display: block !important;
+      }
+    </style>
 </head>
 <body>
+    <canvas id="frosted-glass-canvas" aria-hidden="true"></canvas>
+
     <!-- RG Legal Crest Preloader -->
     <div class="rg-preloader" aria-hidden="true">
         <div class="rg-preloader-content">
@@ -369,5 +396,6 @@
             </div>
         </div>
     </footer>
+    <script type="module" src="js/frosted-glass-bg.min.js?v=15.0.0"></script>
 </body>
 </html>

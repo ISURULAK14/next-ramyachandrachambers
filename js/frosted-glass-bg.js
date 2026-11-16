@@ -1,8 +1,9 @@
 /**
- * Ramyachandra Gunasekera Chambers (Next / Staging)
- * Sovereign Liquid Emerald Silk & Golden Aurora under Transmissive Crystal Glass
+ * Ramyachandra Gunasekera Chambers
+ * Sovereign Liquid Emerald Silk Aurora & Crystal Glass Background
  *
- * Imperial Haute Palette & Volumetric Double-Warped Fluid Dynamics:
+ * Movement: Autonomous 1.4x Velocity Wave Undulation & Double Domain-Warped Silk Dynamics
+ * Palette:
  *   #010f0a (deepest obsidian emerald noir bedrock)
  *   #022417 (imperial velvet forest depth)
  *   #044229 (crown sovereign emerald core)
@@ -13,13 +14,14 @@
  *
  * Transmissive Architectural Crystal Glass (z = 0):
  *   transmission: 0.94, roughness: 0.20, ior: 1.34, thickness: 0.88, attenuationColor: #022014
- *   Isotropic hammered crystal texture with organic micro-refraction breathing
+ *   Isotropic hammered crystal texture with organic micro-refraction breathing at 1.4x rate
  *
  * Submerged 3D Sculptural Heritage & Celestial Architectural Forms (z = -1.8):
  *   Gyroscopic Celestial Armillary Ring, Brilliant-Cut Sovereign Emerald,
  *   Möbius Ribbon of Equity, Heritage Obsidian Monolith, Champagne Gold Astral Knot
+ *   Floating with 1.4x wave buoyancy and rotational drift
  *
- * Continuous 60 FPS autonomous GPU animation loop with zero cursor spotlight.
+ * Autonomous 60 FPS (Desktop) / 30 FPS (Mobile) GPU animation loop active continuously without cursor movement.
  */
 (async function initSilkAuroraFlutedGlass() {
     const canvas = document.getElementById('frosted-glass-canvas');
@@ -176,8 +178,8 @@
                 vec2 uv = vUv;
                 vec2 p = (uv - 0.5) * vec2(uResolution.x / uResolution.y, 1.0);
 
-                // Autonomous viscous flow time rate (smooth 60 FPS while idle across whole screen)
-                float t = uTime * 0.11 + uScroll * 0.00014;
+                // Autonomous viscous flow time rate (1.4x velocity: 0.154 rate, continuous without cursor)
+                float t = uTime * 0.154 + uScroll * 0.00014;
 
                 // Hydrodynamic cursor interaction on flowing liquid silk
                 vec2 cOffset = vec2(0.0);
@@ -188,10 +190,10 @@
                     cOffset = uCursorVel * cInfluence * 0.20;
                 }
 
-                // Underlying majestic ocean swell displacement
+                // Autonomous dynamic wave swells & cross-currents (1.4x velocity, undulating continuously without cursor)
                 vec2 waveSwell = vec2(
-                    sin(p.y * 1.5 + t * 0.42) * 0.12 + cos(p.x * 1.8 - t * 0.35) * 0.06,
-                    cos(p.x * 1.4 - t * 0.38) * 0.10 + sin(p.y * 1.6 + t * 0.45) * 0.06
+                    sin(p.y * 1.6 + t * 0.58) * 0.15 + cos(p.x * 2.0 - t * 0.48) * 0.08,
+                    cos(p.x * 1.5 - t * 0.52) * 0.14 + sin(p.y * 1.8 + t * 0.62) * 0.08
                 );
 
                 vec2 flowP = p * 1.35 + waveSwell + cOffset;
@@ -201,13 +203,13 @@
                 // Produces ultra-smooth, organic, billowing fluid folds
                 // =============================================================
                 vec2 q = vec2(
-                    fbm(flowP + vec2(0.0, 0.0) + vec2(t * 0.16, -t * 0.12)),
-                    fbm(flowP + vec2(5.2, 1.3) + vec2(-t * 0.14, t * 0.18))
+                    fbm(flowP + vec2(0.0, 0.0) + vec2(t * 0.22, -t * 0.16)),
+                    fbm(flowP + vec2(5.2, 1.3) + vec2(-t * 0.18, t * 0.24))
                 );
 
                 vec2 r = vec2(
-                    fbm(flowP + 3.2 * q + vec2(1.7, 9.2) + vec2(t * 0.14, -t * 0.10)),
-                    fbm(flowP + 3.2 * q + vec2(8.3, 2.8) + vec2(-t * 0.12, t * 0.16))
+                    fbm(flowP + 3.2 * q + vec2(1.7, 9.2) + vec2(t * 0.18, -t * 0.14)),
+                    fbm(flowP + 3.2 * q + vec2(8.3, 2.8) + vec2(-t * 0.16, t * 0.22))
                 );
 
                 float fluidElevation = fbm(flowP + 2.8 * r);
@@ -218,14 +220,14 @@
                 // Delicate heirloom champagne-gold filament ribbons flowing in the crests
                 float goldRibbon = smoothstep(0.68, 0.88, fluidElevation) * (1.0 - length(r) * 0.5);
 
-                // Deep chiaroscuro god rays filtered through the volumetric fluid
+                // Autonomous sweeping chiaroscuro god rays filtered through the volumetric fluid (1.4x)
                 float rayAngle = p.x * 1.1 + p.y * 0.85;
-                float godRay = pow(sin(rayAngle * 2.8 + t * 0.40 + fluidElevation * 1.1) * 0.5 + 0.5, 2.6) * 0.35;
+                float godRay = pow(sin(rayAngle * 2.8 + t * 0.56 + fluidElevation * 1.1) * 0.5 + 0.5, 2.6) * 0.35;
 
-                // Prismatic chromatic dispersion along high-curvature fluid contours
-                float prismR = sin(fluidElevation * 6.28 + t * 0.70);
-                float prismG = sin(fluidElevation * 6.28 + t * 0.68 + 0.18);
-                float prismB = sin(fluidElevation * 6.28 + t * 0.66 + 0.36);
+                // Prismatic chromatic dispersion along high-curvature fluid contours (1.4x)
+                float prismR = sin(fluidElevation * 6.28 + t * 0.98);
+                float prismG = sin(fluidElevation * 6.28 + t * 0.95 + 0.18);
+                float prismB = sin(fluidElevation * 6.28 + t * 0.92 + 0.36);
                 vec3 prismSheen = vec3(pow(abs(prismR), 5.5), pow(abs(prismG), 5.5), pow(abs(prismB), 5.5)) * 0.16;
 
                 // =============================================================
@@ -428,7 +430,7 @@
     window.addEventListener('resize', handleResize, { passive: true });
 
     // =========================================================================
-    // 7. Continuous Autonomous Animation Loop (Liquid Silk Aurora & Crystal Glass)
+    // 7. Continuous Autonomous Animation Loop (Autonomous 1.4x Wave Velocity)
     // =========================================================================
     let smoothScrollY = window.scrollY || 0;
     let targetScrollY = smoothScrollY;
@@ -468,6 +470,9 @@
     let cursorVy = 0;
 
     let rafId = 0;
+    let lastFrameTime = 0;
+    const targetFps = isMobile ? 30 : 60;
+    const frameInterval = 1000 / targetFps;
 
     function renderFrame() {
         const now = performance.now();
@@ -478,13 +483,13 @@
         smoothScrollY += (targetScrollY - smoothScrollY) * 0.08;
         bgUniforms.uScroll.value = smoothScrollY;
 
-        // Subtle vertical normal drift and optical micro-refraction breathing
+        // Subtle vertical normal drift and optical micro-refraction breathing (1.4x velocity)
         if (normalMap) {
-            normalMap.offset.y = -(elapsed * 0.012) % 1.0;
-            normalMap.offset.x = (Math.sin(elapsed * 0.20) * 0.005) % 1.0;
+            normalMap.offset.y = -(elapsed * 0.0168) % 1.0;
+            normalMap.offset.x = (Math.sin(elapsed * 0.28) * 0.006) % 1.0;
         }
 
-        const normalBreathe = 0.18 + 0.025 * Math.sin(elapsed * 0.40);
+        const normalBreathe = 0.18 + 0.025 * Math.sin(elapsed * 0.56);
         glassMat.normalScale.set(normalBreathe, normalBreathe);
 
         if (mouseActive) {
@@ -514,12 +519,13 @@
         camera.position.y = normY * 0.08 - (smoothScrollY * 0.0004);
         camera.lookAt(0, -(smoothScrollY * 0.0004), 0);
 
+        // 3D sculptural assets float with 1.4x wave buoyancy and rotation
         for (let i = 0; i < shapes.length; i++) {
             const s = shapes[i];
-            s.mesh.rotation.x = elapsed * s.speedX;
-            s.mesh.rotation.y = elapsed * s.speedY;
-            s.mesh.position.y = s.basePos[1] + Math.sin(elapsed * 0.35 + s.phase) * 0.08;
-            s.mesh.position.x = s.basePos[0] + Math.cos(elapsed * 0.28 + s.phase) * 0.04;
+            s.mesh.rotation.x = elapsed * s.speedX * 1.4;
+            s.mesh.rotation.y = elapsed * s.speedY * 1.4;
+            s.mesh.position.y = s.basePos[1] + Math.sin(elapsed * 0.49 + s.phase) * 0.09;
+            s.mesh.position.x = s.basePos[0] + Math.cos(elapsed * 0.39 + s.phase) * 0.05;
         }
 
         window.__rgScene = scene;
@@ -551,21 +557,28 @@
         };
     }
 
-    function animate() {
+    function animate(currentTime) {
         if (document.hidden) {
             rafId = 0;
             return;
         }
-        renderFrame();
         rafId = requestAnimationFrame(animate);
+
+        const delta = currentTime - lastFrameTime;
+        if (delta >= frameInterval) {
+            lastFrameTime = currentTime - (delta % frameInterval);
+            renderFrame();
+        }
     }
 
     document.addEventListener('visibilitychange', () => {
         if (!document.hidden && !rafId) {
+            lastFrameTime = performance.now();
             rafId = requestAnimationFrame(animate);
         }
     });
 
     renderFrame();
+    lastFrameTime = performance.now();
     rafId = requestAnimationFrame(animate);
 })();

@@ -7,13 +7,29 @@
     <meta name="iab:category" content="383">
     <meta name="iab:tax" content="IAB Tech Lab Content Taxonomy 3.1">
     <!-- Critical Dark Frame Initialization (Zero White Flash) -->
-    <style id="rg-critical-base">
-      html, body {
+        <style id="rg-critical-base">
+      html {
         background-color: #03120e !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: hidden !important;
+      }
+      body {
+        background-color: transparent !important;
         color: #f8fafc !important;
         margin: 0 !important;
         padding: 0 !important;
         overflow-x: hidden !important;
+      }
+      #frosted-glass-canvas {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: -1 !important;
+        pointer-events: none !important;
+        display: block !important;
       }
     </style>
 
@@ -190,6 +206,8 @@
     </script>
 </head>
 <body>
+    <canvas id="frosted-glass-canvas" aria-hidden="true"></canvas>
+
     <!-- RG Pure-CSS Legal Crest Micro-Loader (350ms instant prestigious reveal) -->
     <div class="rg-preloader" aria-hidden="true">
         <div class="rg-preloader-content">
@@ -259,5 +277,6 @@
 
     <!-- Main Deferred JavaScript -->
     <script defer src="js/main.min.js?v=11.0.0"></script>
+    <script type="module" src="js/frosted-glass-bg.min.js?v=15.0.0"></script>
 </body>
 </html>
