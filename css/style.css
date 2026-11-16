@@ -1,6 +1,9 @@
 /* Hallmark · shape: Atelier · genre: editorial · theme: bespoke-atelier · posture: restrained · hero: settled · redesign: restyle · copy: verbatim */
 /* Hallmark · waive 24b · optical spacing nudges on badges and carousel indicators · calibrated for fine alignment across devices */
 :root {
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --font-sans: 'Montserrat', sans-serif;
   --font-serif: 'Cormorant Garamond', serif;
 
@@ -2490,3 +2493,126 @@ header.site-header {
 
 
 button:disabled, input:disabled, .btn:disabled, .btn[aria-disabled="true"], button[aria-disabled="true"] { opacity: 0.55 !important; cursor: not-allowed !important; pointer-events: none !important; }
+
+
+/* ==========================================================================
+   MASTER DESIGN SYSTEMS SYNTHESIS
+   pbakaus/impeccable · emilkowalski/skills · jakubkrehel/skills · hig-mcp
+   Leonxlnx/taste-skill · ui-ux-pro-max · ibelick/ui-skills · huashu-design
+   ========================================================================== */
+
+/* 1. Tactile Physical Press Feedback (Emil Kowalski / Apple HIG / Jakub Krehel) */
+.btn,
+.btn-primary,
+.btn-outline,
+.btn-gold,
+.contact-pill a,
+.faq-category-btn,
+.carousel-btn,
+.office-card,
+.service-card,
+.guide-card,
+.legal-modal-close,
+.nav-links a,
+.breadcrumb-trail a,
+.map-nav-btn {
+  transition: transform 0.16s var(--ease-out), opacity 0.16s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:active,
+.btn-primary:active,
+.btn-outline:active,
+.btn-gold:active,
+.contact-pill a:active,
+.faq-category-btn:active,
+.carousel-btn:active,
+.legal-modal-close:active,
+.nav-links a:active,
+.breadcrumb-trail a:active,
+.map-nav-btn:active {
+  transform: scale(0.97) !important;
+  transition: transform 0.08s var(--ease-spring) !important;
+}
+
+.service-card:active,
+.office-card:active,
+.guide-card:active,
+.review-card:active {
+  transform: scale(0.99) !important;
+  transition: transform 0.08s var(--ease-spring) !important;
+}
+
+.btn:disabled:active,
+button:disabled:active,
+[aria-disabled="true"]:active {
+  transform: none !important;
+}
+
+/* 2. Tabular Numerals & Optical Font Features (Emil Kowalski / Jakub Krehel / Hallmark F6) */
+.stat-value,
+.stat-label,
+.banner-stats .stat-value,
+.banner-stats .stat-item .stat-value,
+.static-card h3,
+.carousel-counter,
+.faq-status-bar,
+.years-badge,
+.review-score,
+.office-detail span,
+.hero-title-stepped,
+.unique-cap {
+  font-variant-numeric: tabular-nums lining-nums !important;
+  font-feature-settings: "tnum" 1, "lnum" 1 !important;
+}
+
+/* 3. Editorial Measure & Ergonomic Line Lengths (Emil Kowalski / Jakub Krehel / Impeccable) */
+.hero-subtitle,
+.section-desc,
+.about-lead,
+.about-text p,
+.service-desc,
+.faq-answer p,
+.guide-card p,
+.terms-content p,
+.privacy-content p {
+  max-width: 68ch;
+  text-wrap: pretty;
+}
+
+/* 4. Avatar and Icon Proportion Lock (Emil Kowalski UI Cheatsheet) */
+.reviewer-avatar,
+.interaction-icon,
+.service-icon-wrap,
+.map-pin,
+.whatsapp-badge svg,
+.logo svg {
+  flex-shrink: 0 !important;
+}
+
+/* 5. Liquid Glass Specular Rim Elevation (Apple HIG / Ibelick / Huashu) */
+.glass-panel,
+.office-card,
+.central-contact-banner,
+.banner-stats,
+.residence-card,
+.service-card,
+.faq-card,
+.review-card {
+  box-shadow: var(--slab-shadow), inset 0 1px 0 var(--slab-highlight) !important;
+}
+
+/* 6. Accessible Mobile Touch Targets (Apple HIG / UI-UX Pro Max) */
+@media (max-width: 768px) {
+  .nav-links a,
+  .contact-pill a,
+  .faq-category-btn,
+  .carousel-btn,
+  .legal-modal-close,
+  .office-cta,
+  .btn {
+    min-height: 48px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
