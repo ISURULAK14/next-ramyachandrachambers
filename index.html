@@ -3,24 +3,29 @@
 <head>
     <!-- Critical Dark Frame Initialization (Zero White Flash) -->
     <style id="rg-critical-base">
+      /* Hallmark · shape: Atelier · genre: editorial · theme: bespoke-atelier · posture: restrained · hero: settled · redesign: restyle · copy: verbatim */
+      :root {
+        --text-primary: #f8faf9;
+        --bg-base: #03120e;
+      }
       html {
-        background-color: #03120e !important;
+        background-color: var(--bg-base) !important;
         margin: 0 !important;
         padding: 0 !important;
-        overflow-x: hidden !important;
+        overflow-x: clip !important;
       }
       body {
         background-color: transparent !important;
-        color: #f8fafc !important;
+        color: var(--text-primary) !important;
         margin: 0 !important;
         padding: 0 !important;
-        overflow-x: hidden !important;
+        overflow-x: clip !important;
       }
       #frosted-glass-canvas {
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
-        width: 100vw !important;
+        width: 100% !important;
         height: 100vh !important;
         z-index: -1 !important;
         pointer-events: none !important;
@@ -49,7 +54,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=optional">
     </noscript>
 
-    <style>.global-ambient-system.cursor-pixel-fieldpositionfixed !importantinset0 !importantwidth100vw !importantheight100vh !importantpointer-eventsnone !importantz-index0 !importantoverflowhidden !important.ambient-cosmos-canvaspositionabsolute !importantinset0 !importantwidth100% !importantheight100% !importantpointer-eventsnone !important.rg-preloaderdisplaynone !important.rg-preloader-contentdisplayflexflex-directioncolumnalign-itemscentergap1.25rem.rg-preloader-emblemwidth44pxheight44pxfilterdrop-shadow(0 4px 14px rgba(212175550.4))animationrgEmblemPulse 1.2s ease-in-out infinite alternate.rg-preloader-trackwidth120pxheight2pxbackgroundrgba(2141831240.15)border-radius2pxoverflowhiddenpositionrelative.rg-preloader-barpositionabsolutetop0left0height100%width100%backgroundlinear-gradient(90degtransparent#d4af37#f4d08atransparent)animationrgShimmer 0.6s ease-in-out infinite@keyframes rgShimmer0%transformtranslateX(-100%)100%transformtranslateX(100%)@keyframes rgEmblemPulse0%transformscale(0.98)opacity0.9100%transformscale(1.02)opacity1@keyframes rgCurtainReveal0%opacity1visibilityvisible100%opacity0visibilityhidden#home .hero-container@keyframes rgHeroFadeIn0%opacity0.85transformtranslateY(6px)100%opacity1transformtranslateY(0)@media (prefers-reduced-motionreduce).rg-preloaderdisplaynone !important@font-facefont-family'Cormorant Garamond'font-stylenormalfont-weight700font-displayswapsrcurl('https//fonts.gstatic.com/s/cormorantgaramond/v21/co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_hg9KnTOig.woff2') format('woff2')unicode-rangeU+0000-00FFU+0131U+0152-0153U+02BB-02BCU+02C6U+02DAU+02DCU+0304U+0308U+0329U+2000-206FU+20ACU+2122U+2191U+2193U+2212U+2215U+FEFFU+FFFD@font-facefont-family'Montserrat'font-stylenormalfont-weight600font-displayswapsrcurl('https//fonts.gstatic.com/s/montserrat/v31/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2') format('woff2')unicode-rangeU+0000-00FFU+0131U+0152-0153U+02BB-02BCU+02C6U+02DAU+02DCU+0304U+0308U+0329U+2000-206FU+20ACU+2122U+2191U+2193U+2212U+2215U+FEFFU+FFFDroot--bg-primary#03120e--bg-surface#06231c--bg-cardrgba(1644360.75)--accent-main#e2c275--accent-light#fae8b4--accent-emerald#10b981--text-primary#f8fafc--text-secondary#cbd5e1--font-serif'Cinzel''Cormorant Garamond'Georgiaserif--font-sans'Plus Jakarta Sans''Montserrat'system-uisans-serif--title-shadow0 16px 36px rgba(0000.85)**before*afterbox-sizingborder-boxmargin0padding0htmlfont-size16pxscroll-behaviorsmooth-webkit-text-size-adjust100%background-colorvar(--bg-primary)bodybackground-colorvar(--bg-primary)colorvar(--text-primary)font-familyvar(--font-sans)min-height100vhline-height1.6overflow-xhidden-webkit-font-smoothingantialiased-moz-osx-font-smoothinggrayscale.sr-onlypositionabsolutewidth1pxheight1pxpadding0margin-1pxoverflowhiddencliprect(0000)border0.site-header.site-navpositionfixed !importanttop0 !importantleft0right0z-index10000 !importantmin-height74pxpadding1rem 0.header-container.nav-containerwidth100%max-width1600pxmargin0 autodisplayflexjustify-contentspace-betweenalign-itemscenterpadding0 clamp(1.25rem3vw3.25rem)min-height42px.nav-linksdisplayflexlist-stylenonegap1.5remmargin0padding0@media (max-width600px)nav.site-navpositionfixed !importanttop0 !importantleft0 !importantright0 !importantz-index100000 !importantmin-height84px !importantheightauto !importantpaddingmax(.45remenv(safe-area-inset-top)) 0 .4rem !important.nav-containermin-height0 !importantdisplayflex !importantflex-directioncolumn !importantalign-itemsstretch !importantjustify-contentcenter !importantgap.3rem !importantpadding0 !important.nav-container .logojustify-contentcenterwidth100%font-size1.25remletter-spacing0.5pxpadding0 .75rem !importantmin-height48px !importantdisplayinline-flex !importantalign-itemscenter !important.nav-linkswidth100% !importantmin-width0 !importantdisplayflex !importantflex-wrapnowrap !importantoverflow-xauto !importantjustify-contentflex-start !importantgap.4rem !importantpadding.25rem .75rem .45rem !important-webkit-overflow-scrollingtouch.nav-links liflex0 0 auto !important.nav-links adisplayinline-flex !importantalign-itemscenter !importantjustify-contentcenter !importantwhite-spacenowrap !importantpadding.6rem 1.15rem !importantfont-size.78rem !importantline-height1.25 !importantmin-height48px !importantborder-radius24px !important#homepadding-top10.8rem !importantpadding-bottom3rem !important#home.hero-sectionmin-height100vhdisplayflexflex-directioncolumnalign-itemscenterjustify-contentcenterpadding8rem 2rem 4rempositionrelativetext-aligncenter.hero-containermax-width1120pxmargin0 autowidth100%positionrelativez-index10.hero-titlefont-familyvar(--font-serif)font-sizeclamp(3.0rem5.2vw4.6rem) !importantmax-width1120pxmargin-bottom1.5remcolorvar(--text-primary)text-shadowvar(--title-shadow)line-height.98letter-spacing1px.hero-title-steppeddisplayflexflex-directioncolumnalign-itemscentergap.08emwidthmin(100%1120px)margin-inlineautoline-height.98--title-stepclamp(3.0rem5.8vw6.2rem).hero-title-stepped .title-wordpositionrelativedisplayblockmin-height1emwhite-spacenowraptext-aligncentertext-shadow0 14px 34px rgba(000.56)colorvar(--text-primary)will-changetransform.hero-title-stepped .title-word-onetransformtranslateX(calc(var(--title-step) * -1)) !important.hero-title-stepped .title-word-twotransformtranslateX(0) !important.hero-title-stepped .title-word-threetransformtranslateX(calc(var(--title-step) * 1.04)) !important.hero-title-stepped .unique-cap.unique-capfont-size1.15emmargin-right.04emletter-spacing0colorvar(--cap-color#e2c275)backgroundlinear-gradient(135deg#ffffff 0%#f4d08a 40%#dfb35d 80%#c49a38 100%)-webkit-background-cliptext-webkit-text-fill-colortransparentfilterdrop-shadow(0 4px 16px rgba(2141831240.4))font-weight700displayinline-blocktransformtranslateY(3px)@media (max-width768px).hero-title-steppedwidth100% !importantmax-width100% !importantfont-sizeclamp(2.35rem9.8vw3.4rem) !importantgap.08em !importantline-height1.05 !important--title-stepclamp(1.0rem4.4vw1.8rem) !important.hero-title-stepped .title-word-threetransformtranslateX(calc(var(--title-step) * 1.7)) !important.hero-subtitlefont-sizeclamp(1rem2.5vw1.25rem)color#ffffff !importanttext-shadow0 2px 14px rgba(0000.95) !importantmax-width720pxmargin0 auto 2remfont-weight450 !important.section-desccolor#ffffff !importanttext-shadow0 2px 14px rgba(0000.95),0 0 2px rgba(0000.9) !importantfont-weight450 !important.about-text pcolor#ffffff !importanttext-shadow0 2px 14px rgba(0000.95),0 0 2px rgba(0000.9) !importantfont-weight450 !important.banner-statsdisplaygrid !importantgrid-template-columnsrepeat(41fr) !importantalign-itemsstretch !importantgapclamp(0.45rem1.5vw1.25rem) !importantwidthmin(98vw65.5rem) !importantmax-widthmin(98vw1048px) !importantmargin0 auto 2.5rem auto !important.stat-itemdisplayflex !importantflex-directioncolumn !importantalign-itemscenter !importantjustify-contentflex-start !importanttext-aligncenter !importantmin-width0 !importantwidth100% !important.stat-valuefont-familyvar(--font-serif)font-sizeclamp(1.56rem4.25vw2.94rem) !importantfont-weight700colorvar(--accent-main)line-height1.15white-spacenowrapfont-variant-numerictabular-nums.stat-labelfont-familyvar(--font-sans)font-sizeclamp(0.625rem1.60vw0.925rem) !importantfont-weight600colorvar(--text-secondary)text-transformuppercaseletter-spacingclamp(0.2px0.05em0.8px)margin-top0.35rem@media (max-width768px).banner-statswidth100% !importantmax-width100% !importantgrid-template-columnsrepeat(21fr) !importantgap1.2rem 0.75rem !importantpadding1.25rem 0.85rem !importantmargin0 auto 2rem auto !importantbox-sizingborder-box !important.banner-stats .stat-itemwidth100% !importantmin-width0 !importantpadding0.65rem 0.35rem !important.banner-stats .stat-valuefont-sizeclamp(2.1rem7.5vw2.7rem) !importantline-height1.1 !important.banner-stats .stat-labelfont-size0.72rem !importantletter-spacing0.75px !importantline-height1.35 !important.legal-modal-backdrop.consultation-modal-backdrop[role="dialog"].modaldisplaynone !importantopacity0 !importantvisibilityhidden !importantpointer-eventsnone !importantpositionfixed !importanttop0 !importantleft0 !importantwidth100vw !importantheight100vh !importantz-index100005 !important.legal-modal-backdrop.active.legal-modal-backdrop.is-open.consultation-modal-backdrop.active.consultation-modal-backdrop.is-open[role="dialog"].active[role="dialog"].is-open.modal.active.modal.is-opendisplayflex !importantopacity1 !importantvisibilityvisible !importantpointer-eventsauto !important.btndisplayinline-flexalign-itemscenterjustify-contentcenterpadding0.85rem 1.75remborder-radius30pxfont-weight600text-decorationnonemin-height48pxmin-width48pxtransitiontransform 0.2sbackground 0.2s.btn-primarybackgroundlinear-gradient(135deg#dfb35d#b88d3b)color#05101c.btn-secondarybackgroundrgba(2552552550.08)color#fffborder1px solid rgba(2552552550.2)</style>
+    <style>/* Hallmark · shape: Atelier · genre: editorial · theme: bespoke-atelier · posture: restrained · hero: settled · redesign: restyle · copy: verbatim */ .global-ambient-system.cursor-pixel-fieldpositionfixed !importantinset0 !importantwidth100% !importantheight100vh !importantpointer-eventsnone !importantz-index0 !importantoverflowhidden !important.ambient-cosmos-canvaspositionabsolute !importantinset0 !importantwidth100% !importantheight100% !importantpointer-eventsnone !important.rg-preloaderdisplaynone !important.rg-preloader-contentdisplayflexflex-directioncolumnalign-itemscentergap1.25rem.rg-preloader-emblemwidth44pxheight44pxfilterdrop-shadow(0 4px 14px rgba(212175550.4))animationrgEmblemPulse 1.2s ease-in-out infinite alternate.rg-preloader-trackwidth120pxheight2pxbackgroundrgba(2141831240.15)border-radius2pxoverflowhiddenpositionrelative.rg-preloader-barpositionabsolutetop0left0height100%width100%backgroundlinear-gradient(90degtransparent#d4af37#f4d08atransparent)animationrgShimmer 0.6s ease-in-out infinite@keyframes rgShimmer0%transformtranslateX(-100%)100%transformtranslateX(100%)@keyframes rgEmblemPulse0%transformscale(0.98)opacity0.9100%transformscale(1.02)opacity1@keyframes rgCurtainReveal0%opacity1visibilityvisible100%opacity0visibilityhidden#home .hero-container@keyframes rgHeroFadeIn0%opacity0.85transformtranslateY(6px)100%opacity1transformtranslateY(0)@media (prefers-reduced-motionreduce).rg-preloaderdisplaynone !important@font-facefont-family'Cormorant Garamond'font-stylenormalfont-weight700font-displayswapsrcurl('https//fonts.gstatic.com/s/cormorantgaramond/v21/co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_hg9KnTOig.woff2') format('woff2')unicode-rangeU+0000-00FFU+0131U+0152-0153U+02BB-02BCU+02C6U+02DAU+02DCU+0304U+0308U+0329U+2000-206FU+20ACU+2122U+2191U+2193U+2212U+2215U+FEFFU+FFFD@font-facefont-family'Montserrat'font-stylenormalfont-weight600font-displayswapsrcurl('https//fonts.gstatic.com/s/montserrat/v31/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2') format('woff2')unicode-rangeU+0000-00FFU+0131U+0152-0153U+02BB-02BCU+02C6U+02DAU+02DCU+0304U+0308U+0329U+2000-206FU+20ACU+2122U+2191U+2193U+2212U+2215U+FEFFU+FFFDroot--bg-primary#03120e--bg-surface#06231c--bg-cardrgba(1644360.75)--accent-main#e2c275--accent-light#fae8b4--accent-emerald#10b981--text-primary#f8fafc--text-secondary#cbd5e1--font-serif'Cinzel''Cormorant Garamond'Georgiaserif--font-sans'Plus Jakarta Sans''Montserrat'system-uisans-serif--title-shadow0 16px 36px rgba(0000.85)**before*afterbox-sizingborder-boxmargin0padding0htmlfont-size16pxscroll-behaviorsmooth-webkit-text-size-adjust100%background-colorvar(--bg-primary)bodybackground-colorvar(--bg-primary)colorvar(--text-primary)font-familyvar(--font-sans)min-height100vhline-height1.6overflow-xclip-webkit-font-smoothingantialiased-moz-osx-font-smoothinggrayscale.sr-onlypositionabsolutewidth1pxheight1pxpadding0margin-1pxoverflowhiddencliprect(0000)border0.site-header.site-navpositionfixed !importanttop0 !importantleft0right0z-index10000 !importantmin-height74pxpadding1rem 0.header-container.nav-containerwidth100%max-width1600pxmargin0 autodisplayflexjustify-contentspace-betweenalign-itemscenterpadding0 clamp(1.25rem3vw3.25rem)min-height42px.nav-linksdisplayflexlist-stylenonegap1.5remmargin0padding0@media (max-width600px)nav.site-navpositionfixed !importanttop0 !importantleft0 !importantright0 !importantz-index100000 !importantmin-height84px !importantheightauto !importantpaddingmax(.45remenv(safe-area-inset-top)) 0 .4rem !important.nav-containermin-height0 !importantdisplayflex !importantflex-directioncolumn !importantalign-itemsstretch !importantjustify-contentcenter !importantgap.3rem !importantpadding0 !important.nav-container .logojustify-contentcenterwidth100%font-size1.25remletter-spacing0.5pxpadding0 .75rem !importantmin-height48px !importantdisplayinline-flex !importantalign-itemscenter !important.nav-linkswidth100% !importantmin-width0 !importantdisplayflex !importantflex-wrapnowrap !importantoverflow-xauto !importantjustify-contentflex-start !importantgap.4rem !importantpadding.25rem .75rem .45rem !important-webkit-overflow-scrollingtouch.nav-links liflex0 0 auto !important.nav-links adisplayinline-flex !importantalign-itemscenter !importantjustify-contentcenter !importantwhite-spacenowrap !importantpadding.6rem 1.15rem !importantfont-size.78rem !importantline-height1.25 !importantmin-height48px !importantborder-radius24px !important#homepadding-top10.8rem !importantpadding-bottom3rem !important#home.hero-sectionmin-height100vhdisplayflexflex-directioncolumnalign-itemscenterjustify-contentcenterpadding8rem 2rem 4rempositionrelativetext-aligncenter.hero-containermax-width1120pxmargin0 autowidth100%positionrelativez-index10.hero-titlefont-familyvar(--font-serif)font-sizeclamp(3.0rem5.2vw4.6rem) !importantmax-width1120pxmargin-bottom1.5remcolorvar(--text-primary)text-shadowvar(--title-shadow)line-height.98letter-spacing1px.hero-title-steppeddisplayflexflex-directioncolumnalign-itemscentergap.08emwidthmin(100%1120px)margin-inlineautoline-height.98--title-stepclamp(3.0rem5.8vw6.2rem).hero-title-stepped .title-wordpositionrelativedisplayblockmin-height1emwhite-spacenowraptext-aligncentertext-shadow0 14px 34px rgba(000.56)colorvar(--text-primary)will-changetransform.hero-title-stepped .title-word-onetransformtranslateX(calc(var(--title-step) * -1)) !important.hero-title-stepped .title-word-twotransformtranslateX(0) !important.hero-title-stepped .title-word-threetransformtranslateX(calc(var(--title-step) * 1.04)) !important.hero-title-stepped .unique-cap.unique-capfont-size1.15emmargin-right.04emletter-spacing0colorvar(--cap-color#e2c275)backgroundlinear-gradient(135deg#ffffff 0%#f4d08a 40%#dfb35d 80%#c49a38 100%)-webkit-background-cliptext-webkit-text-fill-colortransparentfilterdrop-shadow(0 4px 16px rgba(2141831240.4))font-weight700displayinline-blocktransformtranslateY(3px)@media (max-width768px).hero-title-steppedwidth100% !importantmax-width100% !importantfont-sizeclamp(2.35rem9.8vw3.4rem) !importantgap.08em !importantline-height1.05 !important--title-stepclamp(1.0rem4.4vw1.8rem) !important.hero-title-stepped .title-word-threetransformtranslateX(calc(var(--title-step) * 1.7)) !important.hero-subtitlefont-sizeclamp(1rem2.5vw1.25rem)color#ffffff !importanttext-shadow0 2px 14px rgba(0000.95) !importantmax-width720pxmargin0 auto 2remfont-weight450 !important.section-desccolor#ffffff !importanttext-shadow0 2px 14px rgba(0000.95),0 0 2px rgba(0000.9) !importantfont-weight450 !important.about-text pcolor#ffffff !importanttext-shadow0 2px 14px rgba(0000.95),0 0 2px rgba(0000.9) !importantfont-weight450 !important.banner-statsdisplaygrid !importantgrid-template-columnsrepeat(41fr) !importantalign-itemsstretch !importantgapclamp(0.45rem1.5vw1.25rem) !importantwidthmin(98vw65.5rem) !importantmax-widthmin(98vw1048px) !importantmargin0 auto 2.5rem auto !important.stat-itemdisplayflex !importantflex-directioncolumn !importantalign-itemscenter !importantjustify-contentflex-start !importanttext-aligncenter !importantmin-width0 !importantwidth100% !important.stat-valuefont-familyvar(--font-serif)font-sizeclamp(1.56rem4.25vw2.94rem) !importantfont-weight700colorvar(--accent-main)line-height1.15white-spacenowrapfont-variant-numerictabular-nums.stat-labelfont-familyvar(--font-sans)font-sizeclamp(0.625rem1.60vw0.925rem) !importantfont-weight600colorvar(--text-secondary)text-transformuppercaseletter-spacingclamp(0.2px0.05em0.8px)margin-top0.35rem@media (max-width768px).banner-statswidth100% !importantmax-width100% !importantgrid-template-columnsrepeat(21fr) !importantgap1.2rem 0.75rem !importantpadding1.25rem 0.85rem !importantmargin0 auto 2rem auto !importantbox-sizingborder-box !important.banner-stats .stat-itemwidth100% !importantmin-width0 !importantpadding0.65rem 0.35rem !important.banner-stats .stat-valuefont-sizeclamp(2.1rem7.5vw2.7rem) !importantline-height1.1 !important.banner-stats .stat-labelfont-size0.72rem !importantletter-spacing0.75px !importantline-height1.35 !important.legal-modal-backdrop.consultation-modal-backdrop[role="dialog"].modaldisplaynone !importantopacity0 !importantvisibilityhidden !importantpointer-eventsnone !importantpositionfixed !importanttop0 !importantleft0 !importantwidth100% !importantheight100vh !importantz-index100005 !important.legal-modal-backdrop.active.legal-modal-backdrop.is-open.consultation-modal-backdrop.active.consultation-modal-backdrop.is-open[role="dialog"].active[role="dialog"].is-open.modal.active.modal.is-opendisplayflex !importantopacity1 !importantvisibilityvisible !importantpointer-eventsauto !important.btndisplayinline-flexalign-itemscenterjustify-contentcenterpadding0.85rem 1.75remborder-radius30pxfont-weight600text-decorationnonemin-height48pxmin-width48pxtransitiontransform 0.2sbackground 0.2s.btn-primarybackgroundlinear-gradient(135deg#dfb35d#b88d3b)color#05101c.btn-secondarybackgroundrgba(2552552550.08)color#fffborder1px solid rgba(2552552550.2)</style>
 
           <!-- Optimized Non-Blocking Google Analytics (Zero TBT Penalty) -->
   <script>
@@ -345,7 +350,7 @@
         "https://www.srilankabarlaw.org/member/ramyachandra-gunasekera",
         "https://maps.google.com/?cid=126488349202"
       ],
-      "description": "Senior practicing Attorney-at-Law, Notary Public, and Registered Company Secretary with over 35 years of legal practice in the District Court, Magistrate's Court, and Southern Province Courts of Sri Lanka."
+      "description": "Senior practicing Attorney-at-Law, Notary Public, and Registered Company Secretary with over 35 years of legal practice in the District Court, Magistrate’s Court, and Southern Province Courts of Sri Lanka."
     },
     {
       "@type": [
@@ -771,7 +776,7 @@
           "name": "What court cases in Matara and Kotavila Courts are handled by the chambers?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The chambers provides courtroom representation across all civil and criminal court cases (උසාවි නඩු) before the Matara District Court, Magistrate's Court of Matara, Kotavila Court Complex, and Civil Appellate High Court of the Southern Province, handling land partition actions, boundary disputes, debt recovery, injunctions, bail, and criminal trials."
+            "text": "The chambers provides courtroom representation across all civil and criminal court cases (උසාවි නඩු) before the Matara District Court, Magistrate’s Court of Matara, Kotavila Court Complex, and Civil Appellate High Court of the Southern Province, handling land partition actions, boundary disputes, debt recovery, injunctions, bail, and criminal trials."
           }
         },
         {
@@ -866,7 +871,7 @@
     <!-- RG Pure-CSS Legal Crest Micro-Loader (350ms instant prestigious reveal) -->
     <div class="rg-preloader" aria-hidden="true">
         <div class="rg-preloader-content">
-            <svg class="rg-preloader-emblem" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="#d4af37" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 44px; height: 44px; stroke: #d4af37; color: #d4af37; flex-shrink: 0;">
+            <svg class="rg-preloader-emblem" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 44px; height: 44px; stroke: currentColor; color: var(--accent-main); flex-shrink: 0;">
                 <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
                 <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
                 <path d="M7 21h10"/>
@@ -898,7 +903,7 @@
     <nav id="main-nav" class="site-nav">
             <div class="nav-container">
                 <a href="/" data-target="#home" data-page="index.html" class="logo" aria-label="RG Chambers - Home">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 28px; height: 28px; max-width: 28px; fill: none; stroke: #d4af37; color: #d4af37; flex-shrink: 0;" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 28px; height: 28px; max-width: 28px; fill: none; stroke: currentColor; color: var(--accent-main); flex-shrink: 0;" aria-hidden="true">
                     <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
                     <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
                     <path d="M7 21h10"/>
@@ -931,8 +936,8 @@
                 <div class="hero-aurora-band"></div>
             </div>
 
-            <h1 class="hero-title hero-title-stepped" aria-label="Ramyachandra Gunasekera Chambers — Attorney & Legal Services Matara">
-                <span class="sr-only">Attorney & Corporate Legal Services Matara — </span>
+            <h1 class="hero-title hero-title-stepped" aria-label="Ramyachandra Gunasekera Chambers: Attorney &amp; Legal Services Matara">
+                <span class="sr-only">Attorney &amp; Corporate Legal Services Matara: </span>
                 <span class="title-word title-word-one"><span class="unique-cap">R</span>amyachandra<span class="sr-only"> </span></span>
                 <span class="title-word title-word-two"><span class="unique-cap">G</span>unasekera<span class="sr-only"> </span></span>
                 <span class="title-word title-word-three"><span class="unique-cap">C</span>hambers</span>
@@ -967,7 +972,7 @@
         <section id="about">
             <div class="about-content-wrapper">
                 <div class="about-text section-header left-aligned reveal reveal-slide-right">
-                    <span class="section-tag">About the Firm</span>
+                    
                     <h2 class="section-title serif">35+ Years of Dedicated Legal Services in Sri Lanka</h2>
                     <p>Called to the Bar in 1988, Ramyachandra Gunasekera Chambers provides comprehensive legal, notarial, and corporate secretarial services with over three and a half decades of distinguished standing.</p>
                     <p>The firm is dedicated to offering reliable legal and corporate counsel to its clients across the Southern Province and beyond, ensuring meticulous attention to detail and unwavering professional integrity.</p>
@@ -977,7 +982,7 @@
                         <source srcset="photo.webp" type="image/webp">
                         <img src="photo.gif" srcset="photo.webp 560w" alt="Ramyachandra Gunasekera - Attorney-at-Law, Notary Public, Registered Company Secretary" width="560" height="560" loading="lazy" decoding="async">
                     </picture>
-                    <div class="about-photo-caption">RAMYACHANDRA GUNASEKERA</div>
+                    <div class="about-photo-caption">Ramyachandra Gunasekera · Head of Chambers</div>
                 </div>
             </div>
         </section>
@@ -985,7 +990,7 @@
         <!-- Services Section -->
         <section id="services">
             <div class="section-header reveal reveal-slide-up">
-                <span class="section-tag">Core Services</span>
+                
                 <h2 class="section-title serif">Corporate Legal Services, Deeds and Agreements in Matara, Sri Lanka</h2>
                 <p class="section-desc">Six core areas, refined over thirty-five years of instruction from landowners, families, employers and companies across the Southern Province.</p>
             </div>
@@ -1057,9 +1062,9 @@
                     </div>
                     <div class="accordion-content">
                         <div class="accordion-inner">
-                            <p>Representation and defense before the High Courts, District Courts, and Magistrate's Courts of Matara, Galle, Tangalle, and Hambantota.</p>
+                            <p>Representation and defense before the High Courts, District Courts, and Magistrate’s Courts of Matara, Galle, Tangalle, and Hambantota.</p>
                             <ul>
-                                <li>Magistrate's Court criminal defense &amp; trials</li>
+                                <li>Magistrate’s Court criminal defense &amp; trials</li>
                                 <li>Bail applications &amp; High Court revisions</li>
                                 <li>Land &amp; boundary actions</li>
                                 <li>Contract &amp; debt recovery</li>
@@ -1113,14 +1118,14 @@
         <!-- Practice Areas Section -->
         <section id="practice-areas">
             <div class="section-header reveal reveal-slide-up">
-                <span class="section-tag">Further Details</span>
+                
                 <h2 class="section-title serif">Core Practice Areas: Deeds and Agreements & Legal Counsel in Sri Lanka</h2>
             </div>
 
             <div class="static-cards-container">
                 <div class="static-card glass-panel reveal reveal-scale">
                     <h3 class="serif">Attorney-At-Law &amp; Foreign Investment Consultancy</h3>
-                    <p><strong>Legal Representation in all Sri Lankan Courts:</strong> Providing robust advocacy and comprehensive legal representation across the full hierarchy of the Sri Lankan judicial system. Services include criminal defense, bail applications, civil litigation, fundamental rights applications, testamentary proceedings, alternative dispute resolution, and foreign investment consultancy.</p>
+                    <p><strong>Legal Representation in all Sri Lankan Courts:</strong> Providing seasoned trial advocacy and comprehensive legal representation across the full hierarchy of the Sri Lankan judicial system. Services include criminal defense, bail applications, civil litigation, fundamental rights applications, testamentary proceedings, alternative dispute resolution, and foreign investment consultancy.</p>
                 </div>
 
                 <div class="static-card glass-panel reveal reveal-scale" style="transition-delay: 0.15s;">
@@ -1143,7 +1148,7 @@
         <!-- Testimonials / Clients Worldwide Section -->
         <section id="testimonials">
             <div class="section-header reveal reveal-slide-up">
-                <span class="section-tag">Testimonials</span>
+                
                 <h2 class="section-title serif">Clients Worldwide</h2>
                 <p class="section-desc">Serving a diverse array of clients globally, transcending borders with uncompromised legal and corporate services.</p>
             </div>
@@ -1208,7 +1213,7 @@
                             <span class="google-stars" aria-label="4.6 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
                         </div>
                         <a href="https://www.google.com/search?q=ramyachandra+gunasekera" target="_blank" rel="noopener noreferrer" class="google-maps-btn" aria-label="22 Reviews: Verified Google reviews for Matara Fort Office">
-                            22 Reviews &rarr;
+                            Read 22 Google Reviews
                         </a>
                     </div>
 
@@ -1216,7 +1221,7 @@
                     <div class="google-reviews-carousel">
                         <div class="google-review-slide is-active" data-index="0">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">AP</div>
+                                <div class="reviewer-avatar">AP</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Angelo Pederzani</div>
                                     <div class="review-date">Local Guide &bull; 5.0 &#9733; Google Review</div>
@@ -1231,7 +1236,7 @@
 
                         <div class="google-review-slide" data-index="1">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #065f46, #10b981);">RG</div>
+                                <div class="reviewer-avatar">RG</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Radostin Georgiev</div>
                                     <div class="review-date">10+ Yr Client &bull; 5.0 &#9733; Google Review</div>
@@ -1246,7 +1251,7 @@
 
                         <div class="google-review-slide" data-index="2">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #7c2d12, #ea580c);">NN</div>
+                                <div class="reviewer-avatar">NN</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Navindu Nethmina</div>
                                     <div class="review-date">Local Guide &bull; 5.0 &#9733; Google Review</div>
@@ -1261,7 +1266,7 @@
 
                         <div class="google-review-slide" data-index="3">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #4c1d95, #8b5cf6);">SS</div>
+                                <div class="reviewer-avatar">SS</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Soulspasrilanka</div>
                                     <div class="review-date">Commercial Client &bull; 5.0 &#9733; Google Review</div>
@@ -1276,7 +1281,7 @@
 
                         <div class="google-review-slide" data-index="4">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #0e7490, #06b6d4);">SD</div>
+                                <div class="reviewer-avatar">SD</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Supun Dimantha</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1291,7 +1296,7 @@
 
                         <div class="google-review-slide" data-index="5">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #831843, #ec4899);">RV</div>
+                                <div class="reviewer-avatar">RV</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Romana Viskupicova</div>
                                     <div class="review-date">11+ Yr Foreign Client &bull; 5.0 &#9733; Google Review</div>
@@ -1306,7 +1311,7 @@
 
                         <div class="google-review-slide" data-index="6">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #854d0e, #eab308);">MP</div>
+                                <div class="reviewer-avatar">MP</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Malith Gunasinha Prasanna</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1321,7 +1326,7 @@
 
                         <div class="google-review-slide" data-index="7">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">SG</div>
+                                <div class="reviewer-avatar">SG</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">M.V.G Sadupa D. Gunasekara</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1336,14 +1341,14 @@
 
                         <div class="google-review-slide" data-index="8">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #065f46, #10b981);">TJ</div>
+                                <div class="reviewer-avatar">TJ</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Thusitha Jagathpriya</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
                                 </div>
                                 <div class="review-stars-single">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
                             </div>
-                            <p class="review-body">&ldquo;Very good and kind lawyer....&rdquo;</p>
+                            <p class="review-body">&ldquo;Very good and kind lawyer…&rdquo;</p>
                             <div class="review-location-tag" style="margin-top: 1.1rem; font-size: 0.78rem; color: var(--accent-main); display: flex; align-items: center; gap: 0.45rem;">
                                 <span>&#128205;</span> Fort Head Office &bull; Civil Counsel
                             </div>
@@ -1351,7 +1356,7 @@
 
                         <div class="google-review-slide" data-index="9">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #7c2d12, #ea580c);">SJ</div>
+                                <div class="reviewer-avatar">SJ</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Sumeda Jayawardhana</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1366,7 +1371,7 @@
 
                         <div class="google-review-slide" data-index="10">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #4c1d95, #8b5cf6);">DU</div>
+                                <div class="reviewer-avatar">DU</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Danush Uththamawadu</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1381,7 +1386,7 @@
 
                         <div class="google-review-slide" data-index="11">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #0e7490, #06b6d4);">OG</div>
+                                <div class="reviewer-avatar">OG</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Ometh Gunasekara</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1390,13 +1395,13 @@
                             </div>
                             <p class="review-body">&ldquo;Extremely kind, ethical, and experienced legal guidance. A premier law chamber in the Southern Province.&rdquo;</p>
                             <div class="review-location-tag" style="margin-top: 1.1rem; font-size: 0.78rem; color: var(--accent-main); display: flex; align-items: center; gap: 0.45rem;">
-                                <span>&#128205;</span> Matara District &amp; Magistrate's Courts Complex
+                                <span>&#128205;</span> Matara District &amp; Magistrate’s Courts Complex
                             </div>
                         </div>
 
                         <div class="google-review-slide" data-index="12">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #831843, #ec4899);">TG</div>
+                                <div class="reviewer-avatar">TG</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Thejan Gunasekara</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1411,7 +1416,7 @@
 
                         <div class="google-review-slide" data-index="13">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #854d0e, #eab308);">GP</div>
+                                <div class="reviewer-avatar">GP</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Gayan Prasanga</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1426,7 +1431,7 @@
 
                         <div class="google-review-slide" data-index="14">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">SH</div>
+                                <div class="reviewer-avatar">SH</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Sahiru Hettiarachchi</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1441,7 +1446,7 @@
 
                         <div class="google-review-slide" data-index="15">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #065f46, #10b981);">MM</div>
+                                <div class="reviewer-avatar">MM</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Muditha Mahanama</div>
                                     <div class="review-date">Commercial Client &bull; 5.0 &#9733; Google Review</div>
@@ -1456,7 +1461,7 @@
 
                         <div class="google-review-slide" data-index="16">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #7c2d12, #ea580c);">RW</div>
+                                <div class="reviewer-avatar">RW</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Ruwan Weerasuriya</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1471,7 +1476,7 @@
 
                         <div class="google-review-slide" data-index="17">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #4c1d95, #8b5cf6);">MI</div>
+                                <div class="reviewer-avatar">MI</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Milan Ivan</div>
                                     <div class="review-date">Foreign Investor &bull; 5.0 &#9733; Google Review</div>
@@ -1486,7 +1491,7 @@
 
                         <div class="google-review-slide" data-index="18">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #0e7490, #06b6d4);">UG</div>
+                                <div class="reviewer-avatar">UG</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">US Gadgets Zone</div>
                                     <div class="review-date">Commercial Client &bull; 5.0 &#9733; Google Review</div>
@@ -1501,7 +1506,7 @@
 
                         <div class="google-review-slide" data-index="19">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #831843, #ec4899);">SB</div>
+                                <div class="reviewer-avatar">SB</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Saman Bandaranaike</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1516,7 +1521,7 @@
 
                         <div class="google-review-slide" data-index="20">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">KS</div>
+                                <div class="reviewer-avatar">KS</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">K. M. Senanayake</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1531,7 +1536,7 @@
 
                         <div class="google-review-slide" data-index="21">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #065f46, #10b981);">DW</div>
+                                <div class="reviewer-avatar">DW</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">D. H. Wickramasinghe</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1596,7 +1601,7 @@
                             <span class="google-stars" aria-label="5.0 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
                         </div>
                         <a href="https://maps.google.com/maps?cid=16869560020899983859" target="_blank" rel="noopener noreferrer" class="google-maps-btn" aria-label="15 Reviews: Verified Google reviews for Kamburugamuwa Branch">
-                            15 Reviews &rarr;
+                            Read 15 Google Reviews
                         </a>
                     </div>
 
@@ -1604,7 +1609,7 @@
                     <div class="google-reviews-carousel">
                         <div class="google-review-slide is-active" data-index="0">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">RG</div>
+                                <div class="reviewer-avatar">RG</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Radostin Georgiev</div>
                                     <div class="review-date">10+ Yr Client &bull; 5.0 &#9733; Google Review</div>
@@ -1619,7 +1624,7 @@
 
                         <div class="google-review-slide" data-index="1">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #065f46, #10b981);">SS</div>
+                                <div class="reviewer-avatar">SS</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Soulspasrilanka</div>
                                     <div class="review-date">Commercial Client &bull; 5.0 &#9733; Google Review</div>
@@ -1634,7 +1639,7 @@
 
                         <div class="google-review-slide" data-index="2">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #831843, #ec4899);">RV</div>
+                                <div class="reviewer-avatar">RV</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Romana Viskupicova</div>
                                     <div class="review-date">11+ Yr Foreign Client &bull; 5.0 &#9733; Google Review</div>
@@ -1649,7 +1654,7 @@
 
                         <div class="google-review-slide" data-index="3">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #7c2d12, #ea580c);">SG</div>
+                                <div class="reviewer-avatar">SG</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">M.V.G Sadupa D. Gunasekara</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1664,14 +1669,14 @@
 
                         <div class="google-review-slide" data-index="4">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #4c1d95, #8b5cf6);">TJ</div>
+                                <div class="reviewer-avatar">TJ</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Thusitha Jagathpriya</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
                                 </div>
                                 <div class="review-stars-single">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
                             </div>
-                            <p class="review-body">&ldquo;Very good and kind lawyer....&rdquo;</p>
+                            <p class="review-body">&ldquo;Very good and kind lawyer…&rdquo;</p>
                             <div class="review-location-tag" style="margin-top: 1.1rem; font-size: 0.78rem; color: var(--accent-main); display: flex; align-items: center; gap: 0.45rem;">
                                 <span>&#128205;</span> Kamburugamuwa Branch &bull; Civil Counsel
                             </div>
@@ -1679,7 +1684,7 @@
 
                         <div class="google-review-slide" data-index="5">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #854d0e, #eab308);">SJ</div>
+                                <div class="reviewer-avatar">SJ</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Sumeda Jayawardhana</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1694,7 +1699,7 @@
 
                         <div class="google-review-slide" data-index="6">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #0e7490, #06b6d4);">GP</div>
+                                <div class="reviewer-avatar">GP</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Gayan Prasanga</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1709,7 +1714,7 @@
 
                         <div class="google-review-slide" data-index="7">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">SH</div>
+                                <div class="reviewer-avatar">SH</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Sahiru Hettiarachchi</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1724,7 +1729,7 @@
 
                         <div class="google-review-slide" data-index="8">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #854d0e, #eab308);">OG</div>
+                                <div class="reviewer-avatar">OG</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Ometh Gunasekara</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1739,7 +1744,7 @@
 
                         <div class="google-review-slide" data-index="9">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #4c1d95, #8b5cf6);">DU</div>
+                                <div class="reviewer-avatar">DU</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">danush uththamawadu</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1754,7 +1759,7 @@
 
                         <div class="google-review-slide" data-index="10">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #065f46, #10b981);">MM</div>
+                                <div class="reviewer-avatar">MM</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Muditha Mahanama</div>
                                     <div class="review-date">Commercial Client &bull; 5.0 &#9733; Google Review</div>
@@ -1769,7 +1774,7 @@
 
                         <div class="google-review-slide" data-index="11">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #7c2d12, #ea580c);">RW</div>
+                                <div class="reviewer-avatar">RW</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Ruwan Weerasuriya</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1784,7 +1789,7 @@
 
                         <div class="google-review-slide" data-index="12">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #831843, #ec4899);">MI</div>
+                                <div class="reviewer-avatar">MI</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Milan Ivan</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1799,7 +1804,7 @@
 
                         <div class="google-review-slide" data-index="13">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #0e7490, #06b6d4);">UG</div>
+                                <div class="reviewer-avatar">UG</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">US Gadgets Zone</div>
                                     <div class="review-date">Commercial Client &bull; 5.0 &#9733; Google Review</div>
@@ -1814,7 +1819,7 @@
 
                         <div class="google-review-slide" data-index="14">
                             <div class="review-meta">
-                                <div class="reviewer-avatar" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">SB</div>
+                                <div class="reviewer-avatar">SB</div>
                                 <div class="reviewer-info">
                                     <div class="reviewer-name">Saman Bandaranaike</div>
                                     <div class="review-date">Verified Client &bull; 5.0 &#9733; Google Review</div>
@@ -1862,7 +1867,7 @@
         <!-- Contact Section -->
         <section id="contact">
             <div class="section-header reveal reveal-slide-up">
-                <span class="section-tag">Our Offices</span>
+                
                 <h2 class="section-title serif">Where to find us.</h2>
                 <p class="section-desc">Matara lawyers contact number: <a href="tel:+94412239429" style="color:var(--accent-main);font-weight:600;">+94 41 22 39 429</a> &middot; Mobile/WhatsApp: <a href="tel:+94714236429" style="color:var(--accent-main);font-weight:600;">071 4236429</a>. Instructions taken at either chambers across Southern Province &amp; nationwide courts.</p>
             </div>
@@ -1876,7 +1881,7 @@
                     <span class="contact-icon">&#128241;</span>
                     <a href="tel:+94714236429">071 4236429</a>
                     <span class="whatsapp-badge">
-                        <svg viewBox="0 0 24 24"><path d="M12.031 0C5.383 0 0 5.383 0 12.031c0 2.128.552 4.195 1.6 6.009L.416 22.188l4.28-1.121a11.968 11.968 0 005.735 1.455c6.647 0 12.03-5.383 12.03-12.031S18.678 0 12.031 0zm0 20.485c-1.802 0-3.568-.484-5.116-1.401l-.367-.218-3.181.834.848-3.1-2.4-.383a9.98 9.98 0 01-1.528-5.286c0-5.513 4.49-10.003 10.003-10.003 5.514 0 10.003 4.49 10.003 10.003s-4.489 10.003-10.003 10.003zm5.498-7.518c-.302-.151-1.785-.882-2.062-.983-.277-.101-.479-.151-.68.151-.201.302-.78 1.007-.957 1.209-.176.201-.353.226-.655.075-.302-.151-1.275-.47-2.428-1.5-.898-.802-1.503-1.794-1.68-2.096-.176-.302-.019-.465.132-.616.136-.136.302-.353.453-.529.151-.176.201-.302.302-.504.101-.201.05-.378-.025-.529-.075-.151-.68-1.637-.932-2.242-.244-.59-.493-.51-.68-.52-.176-.01-.378-.01-.58-.01-.201 0-.529.076-.806.378-.277.302-1.058 1.033-1.058 2.518 0 1.486 1.083 2.922 1.234 3.123.151.201 2.128 3.25 5.156 4.557.719.31 1.28.495 1.718.634.721.23 1.378.197 1.895.12.578-.087 1.785-.729 2.037-1.434.252-.705.252-1.31.176-1.434-.075-.124-.277-.2-.579-.351z"/></svg>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.031 0C5.383 0 0 5.383 0 12.031c0 2.128.552 4.195 1.6 6.009L.416 22.188l4.28-1.121a11.968 11.968 0 005.735 1.455c6.647 0 12.03-5.383 12.03-12.031S18.678 0 12.031 0zm0 20.485c-1.802 0-3.568-.484-5.116-1.401l-.367-.218-3.181.834.848-3.1-2.4-.383a9.98 9.98 0 01-1.528-5.286c0-5.513 4.49-10.003 10.003-10.003 5.514 0 10.003 4.49 10.003 10.003s-4.489 10.003-10.003 10.003zm5.498-7.518c-.302-.151-1.785-.882-2.062-.983-.277-.101-.479-.151-.68.151-.201.302-.78 1.007-.957 1.209-.176.201-.353.226-.655.075-.302-.151-1.275-.47-2.428-1.5-.898-.802-1.503-1.794-1.68-2.096-.176-.302-.019-.465.132-.616.136-.136.302-.353.453-.529.151-.176.201-.302.302-.504.101-.201.05-.378-.025-.529-.075-.151-.68-1.637-.932-2.242-.244-.59-.493-.51-.68-.52-.176-.01-.378-.01-.58-.01-.201 0-.529.076-.806.378-.277.302-1.058 1.033-1.058 2.518 0 1.486 1.083 2.922 1.234 3.123.151.201 2.128 3.25 5.156 4.557.719.31 1.28.495 1.718.634.721.23 1.378.197 1.895.12.578-.087 1.785-.729 2.037-1.434.252-.705.252-1.31.176-1.434-.075-.124-.277-.2-.579-.351z"/></svg>
                         WhatsApp
                     </span>
                 </div>
@@ -1885,8 +1890,7 @@
             <div class="contact-grid">
                 <!-- Head Office -->
                 <div class="office-card office-card-1 glass-panel reveal reveal-slide-up">
-                    <span class="office-tag">Head Office</span>
-                    <h3 class="office-name serif">Matara Fort</h3>
+                    <h3 class="office-name serif">Head Office: Matara Fort</h3>
                     <div class="office-reviews">
                         <span class="stars">&#9733; &#9733; &#9733; &#9733; &#9733;</span>
                         <a href="https://www.google.com/search?q=ramyachandra+gunasekera" target="_blank" rel="noopener noreferrer" aria-label="4.6 · 22 Google reviews for Matara Fort Office">4.6 &middot; 22 Google reviews</a>
@@ -1919,8 +1923,7 @@
 
                 <!-- Branch Office -->
                 <div class="office-card office-card-2 glass-panel reveal reveal-slide-up" style="transition-delay: 0.2s;">
-                    <span class="office-tag">Branch Office</span>
-                    <h3 class="office-name serif">Kamburugamuwa (Mirissa)</h3>
+                    <h3 class="office-name serif">Branch Office: Kamburugamuwa (Mirissa)</h3>
                     <div class="office-reviews">
                         <span class="stars">&#9733; &#9733; &#9733; &#9733; &#9733;</span>
                         <a href="https://maps.google.com/maps?cid=16869560020899983859" target="_blank" rel="noopener noreferrer" aria-label="5.0 · 15 Google reviews for Kamburugamuwa Branch Office">5.0 &middot; 15 Google reviews</a>
@@ -1962,8 +1965,7 @@
             <!-- Residence Card -->
             <div class="residence-card office-card office-card-residence glass-panel reveal reveal-slide-up">
                 <div class="residence-card-copy">
-                    <span class="office-tag">Residence</span>
-                    <h3 class="office-name serif">Colombo 7</h3>
+                    <h3 class="office-name serif">Counsel Residence: Colombo 7</h3>
                     <div class="office-detail">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <path d="M20 10.5c0 5-8 10.5-8 10.5S4 15.5 4 10.5a8 8 0 1 1 16 0Z"></path>
@@ -2006,7 +2008,7 @@
 
             <!-- Right: Copyright -->
             <div class="footer-legal">
-                <p class="footer-copyright">&copy; 2026 RAMYACHANDRA GUNASEKERA<br>CHAMBERS.</p>
+                <p class="footer-copyright">&copy; 2026 Ramyachandra Gunasekera Chambers. All rights reserved.</p>
             </div>
         </div>
     </footer>
