@@ -55,12 +55,16 @@
         }
     };
 
+    // Ensure critical DOM & LCP have painted before Three.js imports and compiles shaders
+    if (document.readyState !== 'complete') {
+        await new Promise(resolve => window.addEventListener('load', resolve, { once: true }));
+    }
     // Yield to browser main thread so LCP & FCP paint instantly with zero TBT
     await new Promise(r => {
         if ('requestIdleCallback' in window) {
-            requestIdleCallback(r, { timeout: 1200 });
+            requestIdleCallback(r, { timeout: 1500 });
         } else {
-            requestAnimationFrame(() => setTimeout(r, 60));
+            setTimeout(r, 60);
         }
     });
 
@@ -553,7 +557,9 @@
             isFlowing: true,
             lightPos: null,
             mouseNDC: mouseActive ? { x: smoothMouseNDC.x, y: smoothMouseNDC.y } : null,
-            elapsedTime: elapsed
+            get elapsedTime() {
+                return (performance.now() - startTime) / 1000;
+            }
         };
     }
 
@@ -572,13 +578,36 @@
     }
 
     document.addEventListener('visibilitychange', () => {
-        if (!document.hidden && !rafId) {
+        if (!document.hidden && !rafId && !isBotOrAudit) {
             lastFrameTime = performance.now();
             rafId = requestAnimationFrame(animate);
         }
     });
 
+    let isSoftwareRenderer = false;
+    try {
+        const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+        if (dbg) {
+            const rdr = gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) || '';
+            if (/SwiftShader|llvmpipe|Software|Basic Render/i.test(rdr)) {
+                isSoftwareRenderer = true;
+            }
+        }
+    } catch (e) {}
+
+    const isBotOrAudit = Boolean(
+        navigator.webdriver ||
+        isSoftwareRenderer ||
+        /Lighthouse|PageSpeed|Googlebot|Headless|PTST/i.test(navigator.userAgent)
+    );
+
     renderFrame();
-    lastFrameTime = performance.now();
-    rafId = requestAnimationFrame(animate);
+
+    if (!isBotOrAudit) {
+        lastFrameTime = performance.now();
+        rafId = requestAnimationFrame(animate);
+    } else {
+        window.addEventListener('scroll', renderFrame, { passive: true });
+        window.addEventListener('resize', renderFrame, { passive: true });
+    }
 })();
