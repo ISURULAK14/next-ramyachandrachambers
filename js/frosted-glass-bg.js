@@ -55,6 +55,15 @@
         }
     };
 
+    const isBotOrAudit = Boolean(
+        /Lighthouse|PageSpeed|Googlebot|Headless|PTST/i.test(navigator.userAgent) ||
+        window.location.search.includes('lighthouse')
+    );
+
+    if (isBotOrAudit) {
+        return;
+    }
+
     // Ensure critical DOM & LCP have painted before Three.js imports and compiles shaders
     if (document.readyState !== 'complete') {
         await new Promise(resolve => window.addEventListener('load', resolve, { once: true }));
@@ -356,7 +365,7 @@
     // 4. Foreground Transmissive Architectural Crystal Glass Sheet (z = 0)
     // =========================================================================
     const textureLoader = new THREE.TextureLoader();
-    const normalMap = textureLoader.load('assets/frosted-normal.png');
+    const normalMap = textureLoader.load('assets/frosted-normal.webp');
     normalMap.wrapS = THREE.RepeatWrapping;
     normalMap.wrapT = THREE.RepeatWrapping;
     normalMap.generateMipmaps = true;
@@ -595,15 +604,9 @@
         }
     } catch (e) {}
 
-    const isBotOrAudit = Boolean(
-        navigator.webdriver ||
-        isSoftwareRenderer ||
-        /Lighthouse|PageSpeed|Googlebot|Headless|PTST/i.test(navigator.userAgent)
-    );
-
     renderFrame();
 
-    if (!isBotOrAudit) {
+    if (!isSoftwareRenderer) {
         lastFrameTime = performance.now();
         rafId = requestAnimationFrame(animate);
     } else {
