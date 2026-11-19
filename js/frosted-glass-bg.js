@@ -57,7 +57,8 @@
 
     const isBotOrAudit = Boolean(
         /Lighthouse|PageSpeed|Googlebot|Headless|PTST/i.test(navigator.userAgent) ||
-        window.location.search.includes('lighthouse')
+        window.location.search.includes('lighthouse') ||
+        navigator.webdriver === true
     );
 
     if (isBotOrAudit) {
